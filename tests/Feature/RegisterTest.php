@@ -1,11 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Auth\User;
+use HasinHayder\TyroLogin\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Hash;
-
-beforeEach(function () {
-    $this->artisan('migrate');
-});
 
 it('shows the registration form', function () {
     $response = $this->get('/register');

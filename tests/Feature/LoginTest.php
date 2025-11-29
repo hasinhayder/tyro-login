@@ -1,12 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Auth\User;
+use HasinHayder\TyroLogin\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Hash;
-
-beforeEach(function () {
-    // Create users table if not exists
-    $this->artisan('migrate');
-});
 
 it('shows the login form', function () {
     $response = $this->get('/login');

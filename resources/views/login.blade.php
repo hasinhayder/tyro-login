@@ -96,7 +96,7 @@
                     <div></div>
                     @endif
 
-                    @if($features['forgot_password'] ?? true)
+                    @if(($features['forgot_password'] ?? true) && Route::has('password.request'))
                     <a href="{{ route('password.request') }}" class="form-link">Forgot password?</a>
                     @endif
                 </div>
