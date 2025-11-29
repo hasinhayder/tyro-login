@@ -32,17 +32,6 @@
                 <p>Enter your details below to create your account</p>
             </div>
 
-            <!-- Error Messages -->
-            @if ($errors->any())
-            <div class="error-list">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
-
             <!-- Registration Form -->
             <form method="POST" action="{{ route('tyro-login.register.submit') }}">
                 @csrf

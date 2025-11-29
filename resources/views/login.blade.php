@@ -32,17 +32,6 @@
                 <p>Enter your email and password below to log in</p>
             </div>
 
-            <!-- Error Messages -->
-            @if ($errors->any())
-            <div class="error-list">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
-
             <!-- Login Form -->
             <form method="POST" action="{{ route('tyro-login.login.submit') }}">
                 @csrf
