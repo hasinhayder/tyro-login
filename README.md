@@ -13,8 +13,9 @@
 - 🎨 **Multiple Layouts** - Centered, split-left, and split-right layouts
 - 🖼️ **Beautiful Design** - Modern, professional UI out of the box
 - 🔧 **Highly Configurable** - Customize colors, logos, redirects, and more
-- 🔐 **Secure by Default** - Rate limiting, CSRF protection, and proper validation
+- 🔐 **Secure by Default** - Rate limiting, lockout protection, CSRF protection, and proper validation
 - 🔗 **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
+- 🌓 **Dark/Light Theme** - Automatic theme detection with manual toggle
 - 📱 **Fully Responsive** - Works perfectly on all devices
 - ⚡ **Zero Build Step** - No npm or webpack required, just install and use
 
@@ -64,9 +65,9 @@ After installation, you can customize the package by editing `config/tyro-login.
 
 ```php
 'redirects' => [
-    'after_login' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGIN', '/dashboard'),
+    'after_login' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGIN', '/'),
     'after_logout' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGOUT', '/login'),
-    'after_register' => env('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', '/dashboard'),
+    'after_register' => env('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', '/'),
 ],
 ```
 
@@ -100,6 +101,29 @@ If you have [hasinhayder/tyro](https://github.com/hasinhayder/tyro) installed, T
     'decay_minutes' => env('TYRO_LOGIN_DECAY_MINUTES', 1),
 ],
 ```
+
+### Lockout Protection
+
+When enabled, users will be locked out after too many failed login attempts. The lockout state is stored in cache (no database required), and the cache is automatically cleared when the lockout expires.
+
+```php
+'lockout' => [
+    'enabled' => env('TYRO_LOGIN_LOCKOUT_ENABLED', true),
+    'max_attempts' => env('TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS', 5),
+    'duration_minutes' => env('TYRO_LOGIN_LOCKOUT_DURATION', 15),
+    'message' => 'Too many failed login attempts. Please try again in :minutes minutes.',
+    'title' => 'Account Temporarily Locked',
+    'subtitle' => 'For your security, we\'ve temporarily locked your account.',
+],
+```
+
+**Features:**
+- No database required – uses cache
+- Configurable number of attempts before lockout
+- Configurable lockout duration
+- Customizable lockout page message and title
+- Automatic cache cleanup when lockout expires
+- Real-time countdown timer on lockout page
 
 ## 🎨 Layout Examples
 
@@ -158,7 +182,8 @@ Tyro Login registers the following routes:
 | POST | `/login` | `tyro-login.login.submit` | Handle login |
 | GET | `/register` | `tyro-login.register` | Show registration form |
 | POST | `/register` | `tyro-login.register.submit` | Handle registration |
-| POST | `/logout` | `tyro-login.logout` | Handle logout |
+| GET/POST | `/logout` | `tyro-login.logout` | Handle logout |
+| GET | `/lockout` | `tyro-login.lockout` | Show lockout page |
 
 ### Customizing Route Prefix
 
@@ -173,6 +198,7 @@ Tyro Login registers the following routes:
 
 - **CSRF Protection** - All forms include CSRF tokens
 - **Rate Limiting** - Configurable brute-force protection
+- **Lockout Protection** - Temporarily lock accounts after failed attempts (cache-based, no database)
 - **Password Hashing** - Uses Laravel's secure hashing
 - **Session Regeneration** - Prevents session fixation attacks
 - **Input Validation** - Server-side validation with proper error messages

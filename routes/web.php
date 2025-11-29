@@ -22,6 +22,10 @@ Route::middleware('guest')->group(function () {
     Route::post(config('tyro-login.routes.login', 'login'), [LoginController::class, 'login'])
         ->name('login.submit');
 
+    // Lockout route
+    Route::get('lockout', [LoginController::class, 'showLockout'])
+        ->name('lockout');
+
     // Registration routes
     if (config('tyro-login.registration.enabled', true)) {
         Route::get(config('tyro-login.routes.register', 'register'), [RegisterController::class, 'showRegistrationForm'])
@@ -34,6 +38,7 @@ Route::middleware('guest')->group(function () {
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
-    Route::post(config('tyro-login.routes.logout', 'logout'), [LoginController::class, 'logout'])
+    // Logout accessible via both GET and POST
+    Route::match(['get', 'post'], config('tyro-login.routes.logout', 'logout'), [LoginController::class, 'logout'])
         ->name('logout');
 });

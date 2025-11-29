@@ -69,9 +69,9 @@ return [
     |
     */
     'redirects' => [
-        'after_login' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGIN', '/dashboard'),
+        'after_login' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGIN', '/'),
         'after_logout' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGOUT', '/login'),
-        'after_register' => env('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', '/dashboard'),
+        'after_register' => env('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', '/'),
     ],
 
     /*
@@ -158,5 +158,36 @@ return [
         'enabled' => env('TYRO_LOGIN_RATE_LIMITING', true),
         'max_attempts' => env('TYRO_LOGIN_MAX_ATTEMPTS', 5),
         'decay_minutes' => env('TYRO_LOGIN_DECAY_MINUTES', 1),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Lockout Settings
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, users will be locked out after too many failed login
+    | attempts. The lockout state is stored in cache (no database required).
+    | After the lockout duration expires, the user can try again and the
+    | cache will be automatically cleared.
+    |
+    */
+    'lockout' => [
+        // Whether lockout feature is enabled
+        'enabled' => env('TYRO_LOGIN_LOCKOUT_ENABLED', true),
+
+        // Number of failed attempts before lockout
+        'max_attempts' => env('TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS', 3),
+
+        // Lockout duration in minutes
+        'duration_minutes' => env('TYRO_LOGIN_LOCKOUT_DURATION', 2),
+
+        // Message shown on lockout page (supports :minutes placeholder)
+        'message' => env('TYRO_LOGIN_LOCKOUT_MESSAGE', 'Too many failed login attempts. Please try again in :minutes minutes.'),
+
+        // Lockout page title
+        'title' => env('TYRO_LOGIN_LOCKOUT_TITLE', 'Account Temporarily Locked'),
+
+        // Lockout page subtitle
+        'subtitle' => env('TYRO_LOGIN_LOCKOUT_SUBTITLE', 'For your security, we\'ve temporarily locked your account.'),
     ],
 ];

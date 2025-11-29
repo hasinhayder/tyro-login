@@ -18,7 +18,7 @@ it('can register a new user', function () {
         'password_confirmation' => 'password123',
     ]);
 
-    $response->assertRedirect(config('tyro-login.redirects.after_register', '/dashboard'));
+    $response->assertRedirect(config('tyro-login.redirects.after_register', '/'));
     
     $this->assertDatabaseHas('users', [
         'name' => 'New User',
