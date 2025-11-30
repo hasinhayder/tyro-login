@@ -169,14 +169,20 @@ return [
         'verify_email' => [
             'title' => env('TYRO_LOGIN_VERIFY_EMAIL_TITLE', 'Verify Your Email'),
             'subtitle' => env('TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE', 'We\'ve sent a verification link to your email address.'),
+            'background_title' => env('TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE', 'Check Your Email'),
+            'background_description' => env('TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION', 'We\'ve sent a verification link to your email address. Click the link to verify your account.'),
         ],
         'forgot_password' => [
             'title' => env('TYRO_LOGIN_FORGOT_PASSWORD_TITLE', 'Forgot Password?'),
             'subtitle' => env('TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE', 'Enter your email and we\'ll send you a reset link.'),
+            'background_title' => env('TYRO_LOGIN_FORGOT_PASSWORD_BG_TITLE', 'Forgot Your Password?'),
+            'background_description' => env('TYRO_LOGIN_FORGOT_PASSWORD_BG_DESCRIPTION', 'No worries! Enter your email and we\'ll send you a link to reset your password.'),
         ],
         'reset_password' => [
             'title' => env('TYRO_LOGIN_RESET_PASSWORD_TITLE', 'Reset Password'),
             'subtitle' => env('TYRO_LOGIN_RESET_PASSWORD_SUBTITLE', 'Enter your new password below.'),
+            'background_title' => env('TYRO_LOGIN_RESET_PASSWORD_BG_TITLE', 'Reset Your Password'),
+            'background_description' => env('TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION', 'Create a new secure password for your account.'),
         ],
     ],
 

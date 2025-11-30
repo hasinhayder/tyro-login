@@ -5,8 +5,8 @@
     @if(in_array($layout, ['split-left', 'split-right']))
     <div class="background-panel" style="background-image: url('{{ $backgroundImage }}');">
         <div class="background-panel-content">
-            <h1>Check Your Email</h1>
-            <p>We've sent a verification link to your email address. Click the link to verify your account.</p>
+            <h1>{{ $pageContent['background_title'] ?? 'Check Your Email' }}</h1>
+            <p>{{ $pageContent['background_description'] ?? 'We\'ve sent a verification link to your email address. Click the link to verify your account.' }}</p>
         </div>
     </div>
     @endif
