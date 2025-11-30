@@ -5,8 +5,8 @@
     @if(in_array($layout, ['split-left', 'split-right']))
     <div class="background-panel" style="background-image: url('{{ $backgroundImage }}');">
         <div class="background-panel-content">
-            <h1>{{ $pageContent['background_title'] ?? 'Welcome Back!' }}</h1>
-            <p>{{ $pageContent['background_description'] ?? 'Sign in to access your account and continue where you left off. We\'re glad to see you again.' }}</p>
+            <h1>Forgot Your Password?</h1>
+            <p>No worries! Enter your email and we'll send you a link to reset your password.</p>
         </div>
     </div>
     @endif
@@ -28,12 +28,28 @@
 
             <!-- Header -->
             <div class="form-header">
-                <h2>Log in to your account</h2>
-                <p>Enter your email and password below to log in</p>
+                <h2>{{ $pageContent['title'] ?? 'Forgot Password?' }}</h2>
+                <p>{{ $pageContent['subtitle'] ?? 'Enter your email and we\'ll send you a reset link.' }}</p>
             </div>
 
-            <!-- Login Form -->
-            <form method="POST" action="{{ route('tyro-login.login.submit') }}">
+            <!-- Success Message -->
+            @if(session('success'))
+            <div class="success-message">
+                <p>{{ session('success') }}</p>
+            </div>
+            @endif
+
+            <!-- Error Message -->
+            @if(session('error'))
+            <div class="error-list">
+                <ul>
+                    <li>{{ session('error') }}</li>
+                </ul>
+            </div>
+            @endif
+
+            <!-- Forgot Password Form -->
+            <form method="POST" action="{{ route('tyro-login.password.email') }}">
                 @csrf
 
                 <!-- Email Field -->
@@ -55,61 +71,46 @@
                     @enderror
                 </div>
 
-                <!-- Password Field -->
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        class="form-input @error('password') is-invalid @enderror" 
-                        required 
-                        autocomplete="current-password"
-                        placeholder="Password"
-                    >
-                    @error('password')
-                        <span class="error-message">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <!-- Remember Me & Forgot Password -->
-                <div class="form-options">
-                    @if($features['remember_me'] ?? true)
-                    <div class="checkbox-group">
-                        <input 
-                            type="checkbox" 
-                            id="remember" 
-                            name="remember" 
-                            class="checkbox-input"
-                            {{ old('remember') ? 'checked' : '' }}
-                        >
-                        <label for="remember" class="checkbox-label">Remember me</label>
-                    </div>
-                    @else
-                    <div></div>
-                    @endif
-
-                    @if($features['forgot_password'] ?? true)
-                    <a href="{{ route('tyro-login.password.request') }}" class="form-link">Forgot password?</a>
-                    @endif
-                </div>
-
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary">
-                    Log in
+                    Send Reset Link
                 </button>
             </form>
 
-            <!-- Register Link -->
-            @if($registrationEnabled ?? true)
+            <!-- Back to Login -->
             <div class="form-footer">
                 <p>
-                    Don't have an account? 
-                    <a href="{{ route('tyro-login.register') }}" class="form-link">Sign up</a>
+                    Remember your password? 
+                    <a href="{{ route('tyro-login.login') }}" class="form-link">Back to Login</a>
                 </p>
             </div>
-            @endif
         </div>
     </div>
 </div>
+
+<style>
+    .success-message {
+        background-color: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    html.dark .success-message {
+        background-color: #052e16;
+        border-color: #166534;
+    }
+
+    .success-message p {
+        color: #059669;
+        font-size: 0.875rem;
+        margin: 0;
+    }
+
+    html.dark .success-message p {
+        color: #34d399;
+    }
+</style>
 @endsection

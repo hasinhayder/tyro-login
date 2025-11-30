@@ -14,6 +14,8 @@
 - 🖼️ **Beautiful Design** - Modern, professional UI out of the box
 - 🔧 **Highly Configurable** - Customize colors, logos, redirects, and more
 - 🔐 **Secure by Default** - Lockout protection, CSRF protection, and proper validation
+- 📧 **Email Verification** - Optional email verification for new registrations
+- 🔑 **Password Reset** - Built-in forgot password and reset functionality
 - 🔗 **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
 - 🌓 **Dark/Light Theme** - Automatic theme detection with manual toggle
 - 📱 **Fully Responsive** - Works perfectly on all devices
@@ -80,6 +82,47 @@ After installation, you can customize the package by editing `config/tyro-login.
     'require_email_verification' => env('TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION', false),
 ],
 ```
+
+### Email Verification
+
+When email verification is enabled, users won't be logged in automatically after registration. Instead, they'll be redirected to a verification notice page and a verification link will be generated.
+
+```php
+'registration' => [
+    'require_email_verification' => env('TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION', true),
+],
+
+'verification' => [
+    'expire' => env('TYRO_LOGIN_VERIFICATION_EXPIRE', 60), // Token expires in 60 minutes
+],
+```
+
+**How it works:**
+1. User registers → Redirected to verification notice page
+2. Verification URL is logged to Laravel logs and error_log (for development)
+3. User clicks the link → Email is verified and user is logged in
+4. Users can request a new verification email from the notice page
+
+**For Development:** The verification URL is printed to your Laravel logs and error_log, so you can easily test without setting up email.
+
+### Password Reset
+
+Tyro Login includes a complete password reset flow with beautiful, consistent UI.
+
+```php
+'password_reset' => [
+    'expire' => env('TYRO_LOGIN_PASSWORD_RESET_EXPIRE', 60), // Token expires in 60 minutes
+],
+```
+
+**How it works:**
+1. User clicks "Forgot Password?" on login page
+2. User enters email → Reset link is generated
+3. Reset URL is logged to Laravel logs and error_log (for development)
+4. User clicks the link → Shown password reset form
+5. User enters new password → Password updated and user is logged in
+
+**For Development:** The reset URL is printed to your Laravel logs and error_log, so you can easily test without setting up email.
 
 ### Tyro Integration
 
@@ -174,6 +217,13 @@ Tyro Login registers the following routes:
 | POST | `/register` | `tyro-login.register.submit` | Handle registration |
 | GET/POST | `/logout` | `tyro-login.logout` | Handle logout |
 | GET | `/lockout` | `tyro-login.lockout` | Show lockout page |
+| GET | `/email/verify` | `tyro-login.verification.notice` | Show verification notice |
+| GET | `/email/verify/{token}` | `tyro-login.verification.verify` | Verify email |
+| POST | `/email/resend` | `tyro-login.verification.resend` | Resend verification email |
+| GET | `/forgot-password` | `tyro-login.password.request` | Show forgot password form |
+| POST | `/forgot-password` | `tyro-login.password.email` | Send reset link |
+| GET | `/reset-password/{token}` | `tyro-login.password.reset` | Show reset form |
+| POST | `/reset-password` | `tyro-login.password.update` | Reset password |
 
 ### Customizing Route Prefix
 
@@ -188,6 +238,8 @@ Tyro Login registers the following routes:
 
 - **CSRF Protection** - All forms include CSRF tokens
 - **Lockout Protection** - Temporarily lock accounts after failed attempts (cache-based, no database)
+- **Email Verification** - Optional email verification for new registrations
+- **Secure Password Reset** - Time-limited, signed URLs for password reset
 - **Password Hashing** - Uses Laravel's secure hashing
 - **Session Regeneration** - Prevents session fixation attacks
 - **Input Validation** - Server-side validation with proper error messages

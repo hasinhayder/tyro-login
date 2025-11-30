@@ -55,7 +55,18 @@ class RegisterController extends Controller
         // Assign Tyro role if package is installed
         $this->assignTyroRole($user);
 
-        // Auto-login if enabled
+        // Check if email verification is required
+        if (config('tyro-login.registration.require_email_verification', false)) {
+            // Generate verification URL and log it for development
+            VerificationController::generateVerificationUrl($user);
+
+            // Store email in session for the verification notice page
+            $request->session()->put('tyro-login.verification.email', $user->email);
+
+            return redirect()->route('tyro-login.verification.notice');
+        }
+
+        // Auto-login if enabled and email verification is not required
         if (config('tyro-login.registration.auto_login', true)) {
             Auth::login($user);
         }

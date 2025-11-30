@@ -5,8 +5,8 @@
     @if(in_array($layout, ['split-left', 'split-right']))
     <div class="background-panel" style="background-image: url('{{ $backgroundImage }}');">
         <div class="background-panel-content">
-            <h1>{{ $pageContent['background_title'] ?? 'Welcome Back!' }}</h1>
-            <p>{{ $pageContent['background_description'] ?? 'Sign in to access your account and continue where you left off. We\'re glad to see you again.' }}</p>
+            <h1>Reset Your Password</h1>
+            <p>Create a new secure password for your account.</p>
         </div>
     </div>
     @endif
@@ -28,88 +28,103 @@
 
             <!-- Header -->
             <div class="form-header">
-                <h2>Log in to your account</h2>
-                <p>Enter your email and password below to log in</p>
+                <h2>{{ $pageContent['title'] ?? 'Reset Password' }}</h2>
+                <p>{{ $pageContent['subtitle'] ?? 'Enter your new password below.' }}</p>
             </div>
 
-            <!-- Login Form -->
-            <form method="POST" action="{{ route('tyro-login.login.submit') }}">
-                @csrf
+            <!-- Email Address -->
+            <div class="email-notice">
+                <p>Resetting password for:</p>
+                <p class="email-address">{{ $email }}</p>
+            </div>
 
-                <!-- Email Field -->
-                <div class="form-group">
-                    <label for="email" class="form-label">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        class="form-input @error('email') is-invalid @enderror" 
-                        value="{{ old('email') }}" 
-                        required 
-                        autocomplete="email" 
-                        autofocus
-                        placeholder="email@example.com"
-                    >
-                    @error('email')
-                        <span class="error-message">{{ $message }}</span>
-                    @enderror
-                </div>
+            <!-- Error Message -->
+            @if(session('error'))
+            <div class="error-list">
+                <ul>
+                    <li>{{ session('error') }}</li>
+                </ul>
+            </div>
+            @endif
+
+            <!-- Reset Password Form -->
+            <form method="POST" action="{{ route('tyro-login.password.update') }}">
+                @csrf
+                <input type="hidden" name="token" value="{{ $token }}">
 
                 <!-- Password Field -->
                 <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
+                    <label for="password" class="form-label">New Password</label>
                     <input 
                         type="password" 
                         id="password" 
                         name="password" 
                         class="form-input @error('password') is-invalid @enderror" 
                         required 
-                        autocomplete="current-password"
-                        placeholder="Password"
+                        autocomplete="new-password"
+                        autofocus
+                        placeholder="New password"
+                        minlength="{{ config('tyro-login.password.min_length', 8) }}"
                     >
                     @error('password')
                         <span class="error-message">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <!-- Remember Me & Forgot Password -->
-                <div class="form-options">
-                    @if($features['remember_me'] ?? true)
-                    <div class="checkbox-group">
-                        <input 
-                            type="checkbox" 
-                            id="remember" 
-                            name="remember" 
-                            class="checkbox-input"
-                            {{ old('remember') ? 'checked' : '' }}
-                        >
-                        <label for="remember" class="checkbox-label">Remember me</label>
-                    </div>
-                    @else
-                    <div></div>
-                    @endif
-
-                    @if($features['forgot_password'] ?? true)
-                    <a href="{{ route('tyro-login.password.request') }}" class="form-link">Forgot password?</a>
-                    @endif
+                <!-- Confirm Password Field -->
+                <div class="form-group">
+                    <label for="password_confirmation" class="form-label">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="password_confirmation" 
+                        name="password_confirmation" 
+                        class="form-input @error('password_confirmation') is-invalid @enderror" 
+                        required 
+                        autocomplete="new-password"
+                        placeholder="Confirm new password"
+                    >
+                    @error('password_confirmation')
+                        <span class="error-message">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary">
-                    Log in
+                <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">
+                    Reset Password
                 </button>
             </form>
 
-            <!-- Register Link -->
-            @if($registrationEnabled ?? true)
+            <!-- Back to Login -->
             <div class="form-footer">
                 <p>
-                    Don't have an account? 
-                    <a href="{{ route('tyro-login.register') }}" class="form-link">Sign up</a>
+                    <a href="{{ route('tyro-login.login') }}" class="form-link">Back to Login</a>
                 </p>
             </div>
-            @endif
         </div>
     </div>
 </div>
+
+<style>
+    .email-notice {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background-color: var(--bg-secondary);
+        border-radius: 0.5rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .email-notice p {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin: 0;
+    }
+
+    .email-notice .email-address {
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 1rem;
+        margin-top: 0.25rem;
+    }
+</style>
 @endsection

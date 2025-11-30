@@ -166,6 +166,44 @@ return [
             'background_title' => env('TYRO_LOGIN_REGISTER_BG_TITLE', 'Join Us Today!'),
             'background_description' => env('TYRO_LOGIN_REGISTER_BG_DESCRIPTION', 'Create your account and start your journey with us. It only takes a minute to get started.'),
         ],
+        'verify_email' => [
+            'title' => env('TYRO_LOGIN_VERIFY_EMAIL_TITLE', 'Verify Your Email'),
+            'subtitle' => env('TYRO_LOGIN_VERIFY_EMAIL_SUBTITLE', 'We\'ve sent a verification link to your email address.'),
+        ],
+        'forgot_password' => [
+            'title' => env('TYRO_LOGIN_FORGOT_PASSWORD_TITLE', 'Forgot Password?'),
+            'subtitle' => env('TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE', 'Enter your email and we\'ll send you a reset link.'),
+        ],
+        'reset_password' => [
+            'title' => env('TYRO_LOGIN_RESET_PASSWORD_TITLE', 'Reset Password'),
+            'subtitle' => env('TYRO_LOGIN_RESET_PASSWORD_SUBTITLE', 'Enter your new password below.'),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Email Verification Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configure email verification token expiration time.
+    |
+    */
+    'verification' => [
+        // Token expiration time in minutes
+        'expire' => env('TYRO_LOGIN_VERIFICATION_EXPIRE', 60),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Password Reset Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configure password reset token expiration time.
+    |
+    */
+    'password_reset' => [
+        // Token expiration time in minutes
+        'expire' => env('TYRO_LOGIN_PASSWORD_RESET_EXPIRE', 60),
     ],
 
     /*

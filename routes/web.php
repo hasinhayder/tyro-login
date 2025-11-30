@@ -1,7 +1,9 @@
 <?php
 
 use HasinHayder\TyroLogin\Http\Controllers\LoginController;
+use HasinHayder\TyroLogin\Http\Controllers\PasswordResetController;
 use HasinHayder\TyroLogin\Http\Controllers\RegisterController;
+use HasinHayder\TyroLogin\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +36,29 @@ Route::middleware('guest')->group(function () {
         Route::post(config('tyro-login.routes.register', 'register'), [RegisterController::class, 'register'])
             ->name('register.submit');
     }
+
+    // Email verification routes
+    Route::get('email/verify', [VerificationController::class, 'showVerificationNotice'])
+        ->name('verification.notice');
+    
+    Route::get('email/verify/{token}', [VerificationController::class, 'verify'])
+        ->name('verification.verify');
+    
+    Route::post('email/resend', [VerificationController::class, 'resend'])
+        ->name('verification.resend');
+
+    // Password reset routes
+    Route::get('forgot-password', [PasswordResetController::class, 'showForgotPasswordForm'])
+        ->name('password.request');
+    
+    Route::post('forgot-password', [PasswordResetController::class, 'sendResetLink'])
+        ->name('password.email');
+    
+    Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])
+        ->name('password.reset');
+    
+    Route::post('reset-password', [PasswordResetController::class, 'reset'])
+        ->name('password.update');
 });
 
 // Authenticated routes
