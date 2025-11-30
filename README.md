@@ -6,22 +6,33 @@
 <a href="https://github.com/hasinhayder/tyro-login/blob/main/LICENSE"><img src="https://img.shields.io/packagist/l/hasinhayder/tyro-login.svg?style=flat-square" alt="License"></a>
 </p>
 
+<p align="center">
+<a href="https://hasinhayder.github.io/tyro/tyro-login/">Website</a> |
+<a href="https://hasinhayder.github.io/tyro/tyro-login/doc.html">Documentation</a> |
+<a href="https://github.com/hasinhayder/tyro-login">GitHub</a>
+</p>
+
 **Beautiful, customizable authentication views for Laravel 12** – Tyro Login provides professional, ready-to-use login and registration pages with multiple layout options and seamless integration with the [Tyro](https://github.com/hasinhayder/tyro) package.
 
-## ✨ Features
+## Features
 
-- 🎨 **Multiple Layouts** - Centered, split-left, and split-right layouts
-- 🖼️ **Beautiful Design** - Modern, professional UI out of the box
-- 🔧 **Highly Configurable** - Customize colors, logos, redirects, and more
-- 🔐 **Secure by Default** - Lockout protection, CSRF protection, and proper validation
-- 📧 **Email Verification** - Optional email verification for new registrations
-- 🔑 **Password Reset** - Built-in forgot password and reset functionality
-- 🔗 **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
-- 🌓 **Dark/Light Theme** - Automatic theme detection with manual toggle
-- 📱 **Fully Responsive** - Works perfectly on all devices
-- ⚡ **Zero Build Step** - No npm or webpack required, just install and use
+- **Multiple Layouts** - Centered, split-left, and split-right layouts
+- **Beautiful Design** - Modern, professional UI out of the box
+- **Highly Configurable** - Customize colors, logos, redirects, and more
+- **Secure by Default** - Lockout protection, CSRF protection, and proper validation
+- **Email Verification** - Optional email verification for new registrations
+- **Password Reset** - Built-in forgot password and reset functionality
+- **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
+- **Dark/Light Theme** - Automatic theme detection with manual toggle
+- **Fully Responsive** - Works perfectly on all devices
+- **Zero Build Step** - No npm or webpack required, just install and use
 
-## 📦 Installation
+## Requirements
+
+- PHP 8.2 or higher
+- Laravel 12.0 or higher
+
+## Installation
 
 Install the package via Composer:
 
@@ -37,7 +48,7 @@ php artisan tyro-login:install
 
 That's it! Visit `/login` to see your new authentication pages.
 
-## ⚙️ Configuration
+## Configuration
 
 After installation, you can customize the package by editing `config/tyro-login.php`:
 
@@ -98,9 +109,9 @@ When email verification is enabled, users won't be logged in automatically after
 ```
 
 **How it works:**
-1. User registers → Redirected to verification notice page
+1. User registers - Redirected to verification notice page
 2. Verification URL is logged to Laravel logs and error_log (for development)
-3. User clicks the link → Email is verified and user is logged in
+3. User clicks the link - Email is verified and user is logged in
 4. Users can request a new verification email from the notice page
 
 **For Development:** The verification URL is printed to your Laravel logs and error_log, so you can easily test without setting up email.
@@ -117,10 +128,10 @@ Tyro Login includes a complete password reset flow with beautiful, consistent UI
 
 **How it works:**
 1. User clicks "Forgot Password?" on login page
-2. User enters email → Reset link is generated
+2. User enters email - Reset link is generated
 3. Reset URL is logged to Laravel logs and error_log (for development)
-4. User clicks the link → Shown password reset form
-5. User enters new password → Password updated and user is logged in
+4. User clicks the link - Shown password reset form
+5. User enters new password - Password updated and user is logged in
 
 **For Development:** The reset URL is printed to your Laravel logs and error_log, so you can easily test without setting up email.
 
@@ -151,14 +162,14 @@ When enabled, users will be locked out after too many failed login attempts. The
 ```
 
 **Features:**
-- No database required – uses cache
+- No database required - uses cache
 - Configurable number of attempts before lockout
 - Configurable lockout duration
 - Customizable lockout page message and title
 - Automatic cache cleanup when lockout expires
 - Real-time countdown timer on lockout page
 
-## 🎨 Layout Examples
+## Layout Examples
 
 ### Centered Layout (Default)
 Form appears in the center of the page with a gradient background.
@@ -175,7 +186,7 @@ Set the layout in your `.env` file:
 TYRO_LOGIN_LAYOUT=split-left
 ```
 
-## 🛠️ Customization
+## Customization
 
 ### Publishing Views
 
@@ -205,7 +216,7 @@ TYRO_LOGIN_PRIMARY_HOVER_COLOR=#4338ca
 TYRO_LOGIN_BACKGROUND_IMAGE=https://example.com/image.jpg
 ```
 
-## 🖥️ Artisan Commands
+## Artisan Commands
 
 Tyro Login provides several artisan commands:
 
@@ -215,9 +226,9 @@ Tyro Login provides several artisan commands:
 | `php artisan tyro-login:publish` | Publish config, views, and assets |
 | `php artisan tyro-login:version` | Display the current Tyro Login version |
 | `php artisan tyro-login:doc` | Open the documentation in your browser |
-| `php artisan tyro-login:star` | Open GitHub repository to give it a star ⭐ |
+| `php artisan tyro-login:star` | Open GitHub repository to star the project |
 
-## 📍 Routes
+## Routes
 
 Tyro Login registers the following routes:
 
@@ -246,7 +257,7 @@ Tyro Login registers the following routes:
 ],
 ```
 
-## 🔒 Security Features
+## Security Features
 
 - **CSRF Protection** - All forms include CSRF tokens
 - **Lockout Protection** - Temporarily lock accounts after failed attempts (cache-based, no database)
@@ -256,7 +267,7 @@ Tyro Login registers the following routes:
 - **Session Regeneration** - Prevents session fixation attacks
 - **Input Validation** - Server-side validation with proper error messages
 
-## 🤝 Integration with Tyro
+## Integration with Tyro
 
 Tyro Login integrates seamlessly with the [Tyro](https://github.com/hasinhayder/tyro) package:
 
@@ -274,29 +285,28 @@ class User extends Authenticatable
 }
 ```
 
-## 📝 Changelog
+## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## 🤝 Contributing
+## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-## 🔐 Security
+## Security
 
-If you discover any security-related issues, please email security@example.com instead of using the issue tracker.
+If you discover any security-related issues, please email hasin@hasin.me instead of using the issue tracker.
 
-## 📄 License
+## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
-## 👨‍💻 Credits
+## Credits
 
 - [Hasin Hayder](https://github.com/hasinhayder)
-- [All Contributors](../../contributors)
 
 ---
 
 <p align="center">
-Made with ❤️ for the Laravel community
+Made with love for the Laravel community by Hasin Hayder
 </p>
