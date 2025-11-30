@@ -59,6 +59,19 @@ Route::middleware('guest')->group(function () {
     
     Route::post('reset-password', [PasswordResetController::class, 'reset'])
         ->name('password.update');
+
+    // OTP verification routes (for login with OTP enabled)
+    Route::get('otp/verify', [LoginController::class, 'showOtpForm'])
+        ->name('otp.verify');
+    
+    Route::post('otp/verify', [LoginController::class, 'verifyOtp'])
+        ->name('otp.submit');
+    
+    Route::post('otp/resend', [LoginController::class, 'resendOtp'])
+        ->name('otp.resend');
+    
+    Route::get('otp/cancel', [LoginController::class, 'cancelOtp'])
+        ->name('otp.cancel');
 });
 
 // Authenticated routes

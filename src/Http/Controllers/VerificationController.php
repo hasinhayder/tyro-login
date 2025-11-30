@@ -61,14 +61,13 @@ class VerificationController extends Controller
             ['token' => $token]
         );
 
-        // Log the verification URL for development
-        Log::info('Tyro Login - Email Verification URL', [
-            'email' => $user->email,
-            'url' => $url,
-        ]);
-
-        // Also dump to error log for easy access during development
-        error_log("Tyro Login - Verification URL for {$user->email}: {$url}");
+        // Log the verification URL for development (only if debug is enabled)
+        if (config('tyro-login.debug', false)) {
+            Log::info('Tyro Login - Email Verification URL', [
+                'email' => $user->email,
+                'url' => $url,
+            ]);
+        }
 
         return $url;
     }

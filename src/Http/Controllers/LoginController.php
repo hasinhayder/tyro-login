@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -23,6 +24,9 @@ class LoginController extends Controller
             return redirect()->route('tyro-login.lockout');
         }
 
+        // Generate captcha if enabled
+        $captcha = $this->generateCaptcha($request, 'login');
+
         return view('tyro-login::login', [
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
@@ -30,6 +34,9 @@ class LoginController extends Controller
             'features' => config('tyro-login.features'),
             'registrationEnabled' => config('tyro-login.registration.enabled', true),
             'pageContent' => config('tyro-login.pages.login'),
+            'captchaEnabled' => config('tyro-login.captcha.enabled_login', false),
+            'captchaQuestion' => $captcha['question'] ?? null,
+            'captchaConfig' => config('tyro-login.captcha'),
         ]);
     }
 
@@ -78,7 +85,28 @@ class LoginController extends Controller
 
         $loginField = config('tyro-login.login_field', 'email');
         
-        $credentials = $request->validate($this->getValidationRules($loginField));
+        // Get validation rules (includes captcha if enabled)
+        $rules = $this->getValidationRules($loginField);
+        
+        // Add captcha validation if enabled
+        if (config('tyro-login.captcha.enabled_login', false)) {
+            $rules['captcha_answer'] = ['required', 'numeric'];
+        }
+        
+        $credentials = $request->validate($rules);
+
+        // Validate captcha if enabled
+        if (config('tyro-login.captcha.enabled_login', false)) {
+            if (!$this->validateCaptcha($request, 'login', $credentials['captcha_answer'])) {
+                // Regenerate captcha for next attempt
+                $this->generateCaptcha($request, 'login');
+                
+                throw ValidationException::withMessages([
+                    'captcha_answer' => config('tyro-login.captcha.error_message', 'Incorrect answer. Please try again.'),
+                ]);
+            }
+            unset($credentials['captcha_answer']);
+        }
 
         $remember = config('tyro-login.features.remember_me', true) 
             ? $request->boolean('remember') 
@@ -92,10 +120,30 @@ class LoginController extends Controller
 
             $this->clearLockout($request);
 
+            // Check if OTP is enabled
+            if (config('tyro-login.otp.enabled', false)) {
+                // Store user ID in session for OTP verification
+                $user = Auth::user();
+                Auth::logout();
+                
+                $request->session()->put('tyro-login.otp.user_id', $user->id);
+                $request->session()->put('tyro-login.otp.remember', $remember);
+                
+                // Generate and send OTP
+                $this->generateAndSendOtp($request, $user);
+                
+                return redirect()->route('tyro-login.otp.verify');
+            }
+
             return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
         }
 
         $this->incrementLockoutAttempts($request);
+
+        // Regenerate captcha for next attempt
+        if (config('tyro-login.captcha.enabled_login', false)) {
+            $this->generateCaptcha($request, 'login');
+        }
 
         // Check if we should lock out the user now
         if ($this->shouldLockout($request)) {
@@ -120,6 +168,170 @@ class LoginController extends Controller
         throw ValidationException::withMessages([
             $loginField => $errorMessage,
         ]);
+    }
+
+    /**
+     * Show the OTP verification form.
+     */
+    public function showOtpForm(Request $request): View|RedirectResponse
+    {
+        // Check if we have a pending OTP verification
+        if (!$request->session()->has('tyro-login.otp.user_id')) {
+            return redirect()->route('tyro-login.login');
+        }
+
+        $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+        $userId = $request->session()->get('tyro-login.otp.user_id');
+        $user = $userModel::find($userId);
+
+        if (!$user) {
+            $request->session()->forget('tyro-login.otp');
+            return redirect()->route('tyro-login.login');
+        }
+
+        $otpConfig = config('tyro-login.otp');
+        $resendCount = $request->session()->get('tyro-login.otp.resend_count', 0);
+        $lastResendTime = $request->session()->get('tyro-login.otp.last_resend', 0);
+        $cooldown = $otpConfig['resend_cooldown'] ?? 60;
+        $canResend = (time() - $lastResendTime) >= $cooldown;
+        $remainingCooldown = max(0, $cooldown - (time() - $lastResendTime));
+
+        // Mask email
+        $email = $user->email;
+        $maskedEmail = $this->maskEmail($email);
+
+        $subtitle = str_replace(
+            [':length', ':email'],
+            [$otpConfig['length'] ?? 4, $maskedEmail],
+            $otpConfig['subtitle'] ?? 'We\'ve sent a :length-digit code to :email'
+        );
+
+        return view('tyro-login::otp-verify', [
+            'layout' => config('tyro-login.layout', 'centered'),
+            'branding' => config('tyro-login.branding'),
+            'backgroundImage' => config('tyro-login.background_image'),
+            'otpConfig' => $otpConfig,
+            'title' => $otpConfig['title'] ?? 'Enter Verification Code',
+            'subtitle' => $subtitle,
+            'canResend' => $canResend && $resendCount < ($otpConfig['max_resend'] ?? 3),
+            'remainingCooldown' => $remainingCooldown,
+            'resendCount' => $resendCount,
+            'maxResend' => $otpConfig['max_resend'] ?? 3,
+            'otpLength' => $otpConfig['length'] ?? 4,
+        ]);
+    }
+
+    /**
+     * Verify the OTP.
+     */
+    public function verifyOtp(Request $request): RedirectResponse
+    {
+        // Check if we have a pending OTP verification
+        if (!$request->session()->has('tyro-login.otp.user_id')) {
+            return redirect()->route('tyro-login.login');
+        }
+
+        $request->validate([
+            'otp' => ['required', 'string'],
+        ]);
+
+        $userId = $request->session()->get('tyro-login.otp.user_id');
+        $remember = $request->session()->get('tyro-login.otp.remember', false);
+
+        // Verify OTP
+        $cacheKey = $this->getOtpCacheKey($userId);
+        $storedOtp = Cache::get($cacheKey);
+
+        if (!$storedOtp || $storedOtp !== $request->input('otp')) {
+            throw ValidationException::withMessages([
+                'otp' => config('tyro-login.otp.error_message', 'Invalid or expired verification code.'),
+            ]);
+        }
+
+        // OTP is valid - log the user in
+        $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+        $user = $userModel::find($userId);
+
+        if (!$user) {
+            $request->session()->forget('tyro-login.otp');
+            return redirect()->route('tyro-login.login');
+        }
+
+        // Clear OTP cache
+        Cache::forget($cacheKey);
+        Cache::forget($this->getOtpCacheKey($userId) . ':resend');
+
+        // Clear session data
+        $request->session()->forget('tyro-login.otp');
+
+        // Log the user in
+        Auth::login($user, $remember);
+
+        return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+    }
+
+    /**
+     * Resend the OTP.
+     */
+    public function resendOtp(Request $request): RedirectResponse
+    {
+        // Check if we have a pending OTP verification
+        if (!$request->session()->has('tyro-login.otp.user_id')) {
+            return redirect()->route('tyro-login.login');
+        }
+
+        $userId = $request->session()->get('tyro-login.otp.user_id');
+        $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+        $user = $userModel::find($userId);
+
+        if (!$user) {
+            $request->session()->forget('tyro-login.otp');
+            return redirect()->route('tyro-login.login');
+        }
+
+        $otpConfig = config('tyro-login.otp');
+        $resendCount = $request->session()->get('tyro-login.otp.resend_count', 0);
+        $lastResendTime = $request->session()->get('tyro-login.otp.last_resend', 0);
+        $cooldown = $otpConfig['resend_cooldown'] ?? 60;
+
+        // Check if cooldown has passed
+        if ((time() - $lastResendTime) < $cooldown) {
+            return redirect()->route('tyro-login.otp.verify')
+                ->withErrors(['otp' => 'Please wait before requesting a new code.']);
+        }
+
+        // Check max resend attempts
+        if ($resendCount >= ($otpConfig['max_resend'] ?? 3)) {
+            $request->session()->forget('tyro-login.otp');
+            return redirect()->route('tyro-login.login')
+                ->withErrors(['email' => $otpConfig['max_resend_error'] ?? 'Maximum resend attempts reached. Please try logging in again.']);
+        }
+
+        // Regenerate and send OTP
+        $this->generateAndSendOtp($request, $user);
+
+        // Update resend count and time
+        $request->session()->put('tyro-login.otp.resend_count', $resendCount + 1);
+        $request->session()->put('tyro-login.otp.last_resend', time());
+
+        return redirect()->route('tyro-login.otp.verify')
+            ->with('success', $otpConfig['resend_success'] ?? 'A new verification code has been sent to your email.');
+    }
+
+    /**
+     * Cancel OTP verification and return to login.
+     */
+    public function cancelOtp(Request $request): RedirectResponse
+    {
+        // Clear OTP session data
+        if ($request->session()->has('tyro-login.otp.user_id')) {
+            $userId = $request->session()->get('tyro-login.otp.user_id');
+            Cache::forget($this->getOtpCacheKey($userId));
+        }
+        
+        $request->session()->forget('tyro-login.otp');
+        
+        return redirect()->route('tyro-login.login');
     }
 
     /**
@@ -154,6 +366,125 @@ class LoginController extends Controller
         }
 
         return $rules;
+    }
+
+    /**
+     * Generate a math captcha.
+     */
+    protected function generateCaptcha(Request $request, string $context): array
+    {
+        $min = config('tyro-login.captcha.min_number', 1);
+        $max = config('tyro-login.captcha.max_number', 10);
+
+        $num1 = rand($min, $max);
+        $num2 = rand($min, $max);
+        
+        // Randomly choose addition or subtraction
+        $isAddition = (bool) rand(0, 1);
+        
+        if ($isAddition) {
+            $question = "$num1 + $num2 = ?";
+            $answer = $num1 + $num2;
+        } else {
+            // Ensure first number is larger for positive result
+            if ($num1 < $num2) {
+                [$num1, $num2] = [$num2, $num1];
+            }
+            $question = "$num1 - $num2 = ?";
+            $answer = $num1 - $num2;
+        }
+
+        // Store answer in session
+        $request->session()->put("tyro-login.captcha.{$context}", $answer);
+
+        return [
+            'question' => $question,
+            'answer' => $answer,
+        ];
+    }
+
+    /**
+     * Validate the captcha answer.
+     */
+    protected function validateCaptcha(Request $request, string $context, $answer): bool
+    {
+        $expected = $request->session()->get("tyro-login.captcha.{$context}");
+        
+        if ($expected === null) {
+            return false;
+        }
+
+        // Clear the captcha from session after validation
+        $request->session()->forget("tyro-login.captcha.{$context}");
+
+        return (int) $answer === (int) $expected;
+    }
+
+    /**
+     * Generate and send OTP to user.
+     */
+    protected function generateAndSendOtp(Request $request, $user): void
+    {
+        $length = config('tyro-login.otp.length', 4);
+        $expire = config('tyro-login.otp.expire', 5);
+
+        // Generate OTP
+        $otp = '';
+        for ($i = 0; $i < $length; $i++) {
+            $otp .= rand(0, 9);
+        }
+
+        // Store OTP in cache
+        $cacheKey = $this->getOtpCacheKey($user->id);
+        Cache::put($cacheKey, $otp, now()->addMinutes($expire));
+
+        // Log OTP for development (only if debug is enabled)
+        if (config('tyro-login.debug', false)) {
+            Log::info('=== TYRO LOGIN OTP ===');
+            Log::info("User: {$user->email}");
+            Log::info("OTP Code: {$otp}");
+            Log::info("Expires in: {$expire} minutes");
+            Log::info('======================');
+        }
+
+        // Initialize resend tracking if not exists
+        if (!$request->session()->has('tyro-login.otp.resend_count')) {
+            $request->session()->put('tyro-login.otp.resend_count', 0);
+            $request->session()->put('tyro-login.otp.last_resend', time());
+        }
+
+        // TODO: Send OTP via email (integrate with Laravel's mail system)
+        // Mail::to($user->email)->send(new OtpMail($otp));
+    }
+
+    /**
+     * Get the cache key for OTP.
+     */
+    protected function getOtpCacheKey($userId): string
+    {
+        return "tyro-login:otp:{$userId}";
+    }
+
+    /**
+     * Mask email address for display.
+     */
+    protected function maskEmail(string $email): string
+    {
+        $parts = explode('@', $email);
+        if (count($parts) !== 2) {
+            return $email;
+        }
+
+        $name = $parts[0];
+        $domain = $parts[1];
+
+        if (strlen($name) <= 2) {
+            $maskedName = $name[0] . '***';
+        } else {
+            $maskedName = substr($name, 0, 2) . str_repeat('*', min(strlen($name) - 2, 5));
+        }
+
+        return $maskedName . '@' . $domain;
     }
 
     /**

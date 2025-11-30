@@ -87,14 +87,13 @@ class PasswordResetController extends Controller
             ['token' => $token]
         );
 
-        // Log the reset URL for development
-        Log::info('Tyro Login - Password Reset URL', [
-            'email' => $user->email,
-            'url' => $url,
-        ]);
-
-        // Also dump to error log for easy access during development
-        error_log("Tyro Login - Password Reset URL for {$user->email}: {$url}");
+        // Log the reset URL for development (only if debug is enabled)
+        if (config('tyro-login.debug', false)) {
+            Log::info('Tyro Login - Password Reset URL', [
+                'email' => $user->email,
+                'url' => $url,
+            ]);
+        }
 
         return $url;
     }

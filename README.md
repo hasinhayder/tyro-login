@@ -20,12 +20,15 @@
 - **Beautiful Design** - Modern, professional UI out of the box
 - **Highly Configurable** - Customize colors, logos, redirects, and more
 - **Secure by Default** - Lockout protection, CSRF protection, and proper validation
+- **Math Captcha** - Simple addition/subtraction captcha for login and registration
+- **Login OTP** - Two-factor authentication via email OTP codes
 - **Email Verification** - Optional email verification for new registrations
 - **Password Reset** - Built-in forgot password and reset functionality
 - **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
 - **Dark/Light Theme** - Automatic theme detection with manual toggle
 - **Fully Responsive** - Works perfectly on all devices
 - **Zero Build Step** - No npm or webpack required, just install and use
+- **Debug Mode** - Global debug toggle for development logging
 
 ## Requirements
 
@@ -146,6 +149,52 @@ If you have [hasinhayder/tyro](https://github.com/hasinhayder/tyro) installed, T
 ],
 ```
 
+### Math Captcha
+
+Add a simple math captcha to your login and/or registration forms to prevent automated submissions:
+
+```php
+'captcha' => [
+    'enabled_login' => env('TYRO_LOGIN_CAPTCHA_LOGIN', false),
+    'enabled_register' => env('TYRO_LOGIN_CAPTCHA_REGISTER', false),
+    'label' => 'Security Check',
+    'placeholder' => 'Enter the answer',
+    'error_message' => 'Incorrect answer. Please try again.',
+    'min_number' => 1,
+    'max_number' => 10,
+],
+```
+
+### Login OTP Verification
+
+Add two-factor authentication via email OTP. After entering valid credentials, users receive a one-time code:
+
+```php
+'otp' => [
+    'enabled' => env('TYRO_LOGIN_OTP_ENABLED', false),
+    'length' => 4,           // 4-8 digits
+    'expire' => 5,           // minutes
+    'max_resend' => 3,
+    'resend_cooldown' => 60, // seconds
+],
+```
+
+**Features:**
+- Beautiful OTP input with individual digit boxes
+- Configurable code length (4-8 digits)
+- Resend functionality with cooldown
+- Cache-based storage (no database required)
+
+### Debug Mode
+
+Enable debug logging for development:
+
+```php
+'debug' => env('TYRO_LOGIN_DEBUG', false),
+```
+
+When enabled, OTP codes, verification URLs, and password reset URLs are logged to `storage/logs/laravel.log`.
+
 ### Lockout Protection
 
 When enabled, users will be locked out after too many failed login attempts. The lockout state is stored in cache (no database required), and the cache is automatically cleared when the lockout expires.
@@ -247,6 +296,10 @@ Tyro Login registers the following routes:
 | POST | `/forgot-password` | `tyro-login.password.email` | Send reset link |
 | GET | `/reset-password/{token}` | `tyro-login.password.reset` | Show reset form |
 | POST | `/reset-password` | `tyro-login.password.update` | Reset password |
+| GET | `/otp/verify` | `tyro-login.otp.verify` | Show OTP form |
+| POST | `/otp/verify` | `tyro-login.otp.submit` | Verify OTP |
+| POST | `/otp/resend` | `tyro-login.otp.resend` | Resend OTP |
+| GET | `/otp/cancel` | `tyro-login.otp.cancel` | Cancel OTP verification |
 
 ### Customizing Route Prefix
 
