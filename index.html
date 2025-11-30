@@ -81,13 +81,13 @@
 
                 <h1 class="hero-title">
                     Beautiful<br>
-                    <span class="gradient-text">Auth Views</span><br>
+                    <span class="gradient-text">Authentication</span><br>
                     for Laravel 12
                 </h1>
 
                 <p class="hero-description">
                     Professional, customizable login and registration pages with multiple layouts, 
-                    dark/light themes, email verification, password reset, lockout protection, and seamless integration with the Tyro package.
+                    dark/light themes, captcha, OTP, email verification, password reset, lockout protection, and seamless integration with the Tyro package.
                 </p>
 
                 <div class="hero-cta">
@@ -118,7 +118,7 @@
                         <div class="stat-label">Layout Options</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">8</div>
+                        <div class="stat-value">10</div>
                         <div class="stat-label">Auth Features</div>
                     </div>
                     <div class="stat">
@@ -570,7 +570,7 @@ TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
     <section id="otp" class="code-example">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Two-Factor Authentication via OTP</h2>
+                <h2 class="section-title">2FA via Email OTP</h2>
                 <p class="section-description">Add an extra layer of security with email-based one-time passwords</p>
             </div>
 
@@ -682,7 +682,7 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
             </div>
 
             <!-- Artisan Commands -->
-            <div class="artisan-commands" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border);">
+            <!-- <div class="artisan-commands" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border);">
                 <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">Helpful Artisan Commands</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
                     <div class="code-block" style="margin: 0;">
@@ -698,7 +698,7 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                         <span style="display: block; font-size: 0.75rem; color: var(--color-text-tertiary); margin-top: 0.25rem;">Star on GitHub ⭐</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </section>
 
@@ -716,6 +716,18 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                             Custom branding colors and logos
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Math captcha for bot protection
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Two-factor authentication via email OTP
                         </li>
                         <li>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -739,7 +751,7 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            Enable/disable registration
+                            Debug mode for development
                         </li>
                     </ul>
                 </div>
@@ -765,12 +777,18 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
         'primary_color' => '#4f46e5',
     ],
 
-    // Email verification
-    'require_email_verification' => env('TYRO_LOGIN_REQUIRE_VERIFICATION', false),
-    'verification' => ['expire' => 60], // minutes
+    // Math captcha protection
+    'captcha' => [
+        'enabled_login' => env('TYRO_LOGIN_CAPTCHA_LOGIN', false),
+        'enabled_register' => env('TYRO_LOGIN_CAPTCHA_REGISTER', false),
+    ],
 
-    // Password reset
-    'password_reset' => ['expire' => 60], // minutes
+    // Two-factor authentication via OTP
+    'otp' => [
+        'enabled' => env('TYRO_LOGIN_OTP_ENABLED', false),
+        'length' => 4, // 4-8 digits
+        'expire' => 5, // minutes
+    ],
 
     // Lockout protection (cache-based)
     'lockout' => [
@@ -778,6 +796,9 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
         'max_attempts' => 5,
         'duration_minutes' => 15,
     ],
+
+    // Debug mode for development
+    'debug' => env('TYRO_LOGIN_DEBUG', false),
 ];</code></pre>
                     </div>
                 </div>
@@ -866,6 +887,27 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                     </div>
                     <h3>Secure Password Reset</h3>
                     <p>Time-limited, signed URLs for password reset. Auto-login after successful reset.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4"></path>
+                            <rect x="11" y="9" width="6" height="6" rx="1"></rect>
+                        </svg>
+                    </div>
+                    <h3>Captcha</h3>
+                    <p>Simple configurable math challenges to block bots. No external services or API keys required.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                    </div>
+                    <h3>Login OTP</h3>
+                    <p>Two-factor authentication via email. One-time passwords with expiration and resend limits.</p>
                 </div>
             </div>
         </div>
@@ -1124,6 +1166,54 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                     </button>
                     <div class="faq-answer">
                         <p>Set the <code>TYRO_LOGIN_LAYOUT</code> environment variable to <code>centered</code>, <code>split-left</code>, or <code>split-right</code>. You can also set a custom background image URL with <code>TYRO_LOGIN_BACKGROUND_IMAGE</code>.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How does the math captcha work?</span>
+                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>The math captcha displays a simple addition or subtraction problem (e.g., "5 + 3 = ?") on your login and/or registration forms. Enable it with <code>TYRO_LOGIN_CAPTCHA_LOGIN=true</code> or <code>TYRO_LOGIN_CAPTCHA_REGISTER=true</code>. No external APIs required - answers are stored in the session.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How do I enable two-factor authentication (OTP)?</span>
+                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Set <code>TYRO_LOGIN_OTP_ENABLED=true</code> in your <code>.env</code> file. After entering valid credentials, users receive a one-time password via email. Configure OTP length (4-8 digits) with <code>TYRO_LOGIN_OTP_LENGTH</code> and expiration time with <code>TYRO_LOGIN_OTP_EXPIRE</code>. All OTP data is stored in cache - no database required.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What is debug mode and when should I use it?</span>
+                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Debug mode (<code>TYRO_LOGIN_DEBUG=true</code>) logs OTP codes, verification URLs, and password reset URLs to <code>storage/logs/laravel.log</code>. This makes it easy to test email-based features during development without actually sending emails. <strong>Never enable this in production!</strong></p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Does Tyro Login require database migrations?</span>
+                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No! Tyro Login uses Laravel's cache system for all temporary data (lockouts, OTP codes, verification tokens, password reset tokens). This means zero database migrations and works with any cache driver (file, Redis, Memcached, etc.).</p>
                     </div>
                 </div>
             </div>
