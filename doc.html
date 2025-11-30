@@ -532,6 +532,7 @@
                         <li><a href="#otp" class="doc-nav-link">Login OTP</a></li>
                         <li><a href="#email-verification" class="doc-nav-link">Email Verification</a></li>
                         <li><a href="#password-reset" class="doc-nav-link">Password Reset</a></li>
+                        <li><a href="#emails" class="doc-nav-link">Email Templates</a></li>
                         <li><a href="#lockout" class="doc-nav-link">Lockout Protection</a></li>
                         <li><a href="#debug" class="doc-nav-link">Debug Mode</a></li>
                         <li><a href="#tyro-integration" class="doc-nav-link">Tyro Integration</a></li>
@@ -600,6 +601,7 @@
                     <li><strong>🔑 Login OTP</strong> - Two-factor authentication via email OTP codes</li>
                     <li><strong>📧 Email Verification</strong> - Optional email verification for new registrations</li>
                     <li><strong>🔄 Password Reset</strong> - Built-in forgot password and reset functionality</li>
+                    <li><strong>✉️ Beautiful Emails</strong> - Sleek, minimal HTML email templates for OTP, password reset, verification, and welcome</li>
                     <li><strong>🔗 Tyro Integration</strong> - Automatic role assignment if Tyro is installed</li>
                     <li><strong>🌓 Dark/Light Theme</strong> - Automatic theme detection with manual toggle</li>
                     <li><strong>📱 Fully Responsive</strong> - Works perfectly on all devices</li>
@@ -1050,6 +1052,91 @@ TYRO_LOGIN_PASSWORD_RESET_EXPIRE=60</code></pre>
                 </div>
             </section>
 
+            <!-- Email Templates -->
+            <section id="emails" class="doc-section">
+                <h2 class="doc-section-title">Email Templates</h2>
+                <p class="doc-text">
+                    Tyro Login includes sleek, minimal HTML email templates with a clean design. Each email type can be individually enabled or disabled, and templates can be fully customized by publishing them.
+                </p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-login.php</span>
+                    </div>
+                    <pre><code class="language-php">'emails' => [
+    // OTP verification email
+    'otp' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_OTP', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_OTP_SUBJECT', 'Your Verification Code'),
+    ],
+
+    // Password reset email
+    'password_reset' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET_SUBJECT', 'Reset Your Password'),
+    ],
+
+    // Email verification email
+    'verify_email' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_VERIFY', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_VERIFY_SUBJECT', 'Verify Your Email Address'),
+    ],
+
+    // Welcome email after registration
+    'welcome' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_WELCOME', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_WELCOME_SUBJECT', null), // Uses default
+    ],
+],</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Available Emails</h3>
+                <ul class="doc-list">
+                    <li><strong>OTP Email</strong> – Sent when OTP verification is enabled, contains the verification code</li>
+                    <li><strong>Password Reset Email</strong> – Sent when user requests password reset</li>
+                    <li><strong>Email Verification Email</strong> – Sent when email verification is required</li>
+                    <li><strong>Welcome Email</strong> – Sent after successful registration (when verification is not required)</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Customizing Email Templates</h3>
+                <p class="doc-text">Publish email templates to customize them:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash">php artisan tyro-login:publish --emails</code></pre>
+                </div>
+                <p class="doc-text">Templates will be published to <code class="doc-inline-code">resources/views/vendor/tyro-login/emails/</code>.</p>
+
+                <h3 class="doc-section-subtitle">Template Variables</h3>
+                <ul class="doc-list">
+                    <li><code class="doc-inline-code">{{ $name }}</code> – User's name</li>
+                    <li><code class="doc-inline-code">{{ $appName }}</code> – Application name from config</li>
+                    <li><code class="doc-inline-code">{{ $otp }}</code> – OTP code (for OTP email)</li>
+                    <li><code class="doc-inline-code">{{ $resetUrl }}</code> – Password reset URL</li>
+                    <li><code class="doc-inline-code">{{ $verificationUrl }}</code> – Verification URL</li>
+                    <li><code class="doc-inline-code">{{ $loginUrl }}</code> – Login URL (for welcome email)</li>
+                    <li><code class="doc-inline-code">{{ $expiresIn }}</code> – Expiration time in minutes</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Environment Variables</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                    </div>
+                    <pre><code class="language-bash"># Enable/disable specific emails
+TYRO_LOGIN_EMAIL_OTP=true
+TYRO_LOGIN_EMAIL_PASSWORD_RESET=true
+TYRO_LOGIN_EMAIL_VERIFY=true
+TYRO_LOGIN_EMAIL_WELCOME=true
+
+# Customize email subjects
+TYRO_LOGIN_EMAIL_OTP_SUBJECT="Your Login Code"
+TYRO_LOGIN_EMAIL_PASSWORD_RESET_SUBJECT="Reset Your Password"
+TYRO_LOGIN_EMAIL_VERIFY_SUBJECT="Verify Your Email"</code></pre>
+                </div>
+            </section>
+
             <!-- Lockout Protection -->
             <section id="lockout" class="doc-section">
                 <h2 class="doc-section-title">Lockout Protection</h2>
@@ -1250,6 +1337,12 @@ TYRO_LOGIN_VERIFICATION_EXPIRE=60
 TYRO_LOGIN_FORGOT_PASSWORD=true
 TYRO_LOGIN_PASSWORD_RESET_EXPIRE=60
 
+# Emails
+TYRO_LOGIN_EMAIL_OTP=true
+TYRO_LOGIN_EMAIL_PASSWORD_RESET=true
+TYRO_LOGIN_EMAIL_VERIFY=true
+TYRO_LOGIN_EMAIL_WELCOME=true
+
 # Debug Mode
 TYRO_LOGIN_DEBUG=false
 
@@ -1281,7 +1374,11 @@ TYRO_LOGIN_ROUTE_PREFIX=</code></pre>
                         </tr>
                         <tr>
                             <td><code class="doc-inline-code">php artisan tyro-login:publish</code></td>
-                            <td>Publish config, views, and assets</td>
+                            <td>Publish config, views, email templates, and assets</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-login:publish --emails</code></td>
+                            <td>Publish only email templates</td>
                         </tr>
                         <tr>
                             <td><code class="doc-inline-code">php artisan tyro-login:version</code></td>
@@ -1311,6 +1408,9 @@ php artisan tyro-login:publish --config
 
 # Publish only views
 php artisan tyro-login:publish --views
+
+# Publish only email templates
+php artisan tyro-login:publish --emails
 
 # Publish only assets
 php artisan tyro-login:publish --assets
