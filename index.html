@@ -23,6 +23,7 @@
             </a>
             <div class="navbar-links">
                 <a href="#features" class="nav-link">Features</a>
+                <a href="#screenshots" class="nav-link">Screenshots</a>
                 <a href="#layouts" class="nav-link">Layouts</a>
                 <a href="#installation" class="nav-link">Install</a>
                 <a href="doc.html" class="nav-link">Docs</a>
@@ -231,6 +232,97 @@
                     <p class="feature-description">Customize colors, logos, redirects, messages, and more via config file or environment variables.</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">See It in Action</h2>
+                <p class="section-description">Beautiful, professional authentication screens for every scenario</p>
+            </div>
+
+            <div class="screenshots-slider">
+                <button class="slider-btn slider-prev" aria-label="Previous screenshot">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+
+                <div class="screenshots-track-wrapper">
+                    <div class="screenshots-track">
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-light.png" alt="Tyro Login - Light Theme" loading="lazy">
+                                <div class="screenshot-label">Login - Light Theme</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-dark.png" alt="Tyro Login - Dark Theme" loading="lazy">
+                                <div class="screenshot-label">Login - Dark Theme</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-registration-dark.png" alt="Tyro Login - Registration Dark Theme" loading="lazy">
+                                <div class="screenshot-label">Registration - Dark Theme</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-split-left-light.png" alt="Tyro Login - Split Left Layout" loading="lazy">
+                                <div class="screenshot-label">Split Left Layout</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-split-right-light.png" alt="Tyro Login - Split Right Layout" loading="lazy">
+                                <div class="screenshot-label">Split Right Layout</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-attemts-remaining.png" alt="Tyro Login - Login Attempts Warning" loading="lazy">
+                                <div class="screenshot-label">Login Attempts Warning</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-attempts-remaining-dark.png" alt="Tyro Login - Attempts Warning Dark" loading="lazy">
+                                <div class="screenshot-label">Attempts Warning - Dark</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-lockout-light.png" alt="Tyro Login - Lockout Screen Light" loading="lazy">
+                                <div class="screenshot-label">Lockout Screen - Light</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-lockout-dark.png" alt="Tyro Login - Lockout Screen Dark" loading="lazy">
+                                <div class="screenshot-label">Lockout Screen - Dark</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-forgot-dark.png" alt="Tyro Login - Forgot Password Dark" loading="lazy">
+                                <div class="screenshot-label">Forgot Password - Dark</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="slider-btn slider-next" aria-label="Next screenshot">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="screenshots-dots"></div>
         </div>
     </section>
 
@@ -883,6 +975,30 @@
             </div>
         </div>
     </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Close lightbox">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-image" id="lightboxImage">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+        <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button class="lightbox-nav lightbox-next" aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="script.js"></script>

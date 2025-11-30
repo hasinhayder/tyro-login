@@ -296,6 +296,154 @@
             gap: var(--spacing-sm);
         }
 
+        /* Screenshots Grid */
+        .doc-screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+        }
+
+        .doc-screenshot {
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .doc-screenshot:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px var(--color-shadow);
+        }
+
+        .doc-screenshot img {
+            width: 100%;
+            height: auto;
+            display: block;
+            aspect-ratio: 16 / 10;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        .doc-screenshot-label {
+            display: block;
+            padding: var(--spacing-sm) var(--spacing-md);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-align: center;
+            color: var(--color-text);
+            background: var(--color-bg);
+            border-top: 1px solid var(--color-border);
+        }
+
+        /* Lightbox Styles */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox.active .lightbox-image {
+            transform: scale(1);
+        }
+
+        .lightbox-caption {
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: var(--spacing-lg);
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            z-index: 10001;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
         @media (max-width: 1024px) {
             .doc-sidebar {
                 display: none;
@@ -364,6 +512,7 @@
                     <ul class="doc-nav-list">
                         <li><a href="#introduction" class="doc-nav-link active">Introduction</a></li>
                         <li><a href="#features" class="doc-nav-link">Features</a></li>
+                        <li><a href="#screenshots" class="doc-nav-link">Screenshots</a></li>
                         <li><a href="#requirements" class="doc-nav-link">Requirements</a></li>
                         <li><a href="#installation" class="doc-nav-link">Installation</a></li>
                     </ul>
@@ -448,6 +597,51 @@
                     <li><strong>📱 Fully Responsive</strong> - Works perfectly on all devices</li>
                     <li><strong>⚡ Zero Build Step</strong> - No npm or webpack required</li>
                 </ul>
+            </section>
+
+            <!-- Screenshots -->
+            <section id="screenshots" class="doc-section">
+                <h2 class="doc-section-title">Screenshots</h2>
+                <p class="doc-text">Here's how Tyro Login looks in action:</p>
+
+                <div class="doc-screenshots-grid">
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-light.png" alt="Login - Light Theme" loading="lazy">
+                        <span class="doc-screenshot-label">Login - Light Theme</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-dark.png" alt="Login - Dark Theme" loading="lazy">
+                        <span class="doc-screenshot-label">Login - Dark Theme</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-registration-dark.png" alt="Registration - Dark Theme" loading="lazy">
+                        <span class="doc-screenshot-label">Registration - Dark Theme</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-split-left-light.png" alt="Split Left Layout" loading="lazy">
+                        <span class="doc-screenshot-label">Split Left Layout</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-split-right-light.png" alt="Split Right Layout" loading="lazy">
+                        <span class="doc-screenshot-label">Split Right Layout</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-attemts-remaining.png" alt="Login Attempts Warning" loading="lazy">
+                        <span class="doc-screenshot-label">Login Attempts Warning</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-lockout-light.png" alt="Lockout Screen - Light" loading="lazy">
+                        <span class="doc-screenshot-label">Lockout Screen - Light</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-lockout-dark.png" alt="Lockout Screen - Dark" loading="lazy">
+                        <span class="doc-screenshot-label">Lockout Screen - Dark</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-forgot-dark.png" alt="Forgot Password - Dark" loading="lazy">
+                        <span class="doc-screenshot-label">Forgot Password - Dark</span>
+                    </div>
+                </div>
             </section>
 
             <!-- Requirements -->
@@ -1161,6 +1355,110 @@ TYRO_LOGIN_PRIMARY_HOVER_COLOR=#your-hover-color</code></pre>
                 }
             });
         });
+    </script>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Close lightbox">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-image" id="lightboxImage">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+        <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button class="lightbox-nav lightbox-next" aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        // Lightbox functionality for doc screenshots
+        (function() {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightboxImage');
+            const lightboxCaption = document.getElementById('lightboxCaption');
+            const lightboxClose = document.querySelector('.lightbox-close');
+            const lightboxPrev = document.querySelector('.lightbox-prev');
+            const lightboxNext = document.querySelector('.lightbox-next');
+            
+            // Get all screenshots
+            const screenshots = document.querySelectorAll('.doc-screenshot');
+            let currentIndex = 0;
+            
+            // Open lightbox
+            function openLightbox(index) {
+                currentIndex = index;
+                const screenshot = screenshots[index];
+                const img = screenshot.querySelector('img');
+                const label = screenshot.querySelector('.doc-screenshot-label');
+                
+                lightboxImage.src = img.src;
+                lightboxImage.alt = img.alt;
+                lightboxCaption.textContent = label ? label.textContent : img.alt;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close lightbox
+            function closeLightbox() {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            // Show previous image
+            function showPrevImage() {
+                currentIndex = (currentIndex - 1 + screenshots.length) % screenshots.length;
+                openLightbox(currentIndex);
+            }
+            
+            // Show next image
+            function showNextImage() {
+                currentIndex = (currentIndex + 1) % screenshots.length;
+                openLightbox(currentIndex);
+            }
+            
+            // Add click listeners to screenshots
+            screenshots.forEach((screenshot, index) => {
+                screenshot.addEventListener('click', () => openLightbox(index));
+            });
+            
+            // Lightbox controls
+            if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+            if (lightboxPrev) lightboxPrev.addEventListener('click', showPrevImage);
+            if (lightboxNext) lightboxNext.addEventListener('click', showNextImage);
+            
+            // Close on background click
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) closeLightbox();
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!lightbox.classList.contains('active')) return;
+                
+                switch (e.key) {
+                    case 'Escape':
+                        closeLightbox();
+                        break;
+                    case 'ArrowLeft':
+                        showPrevImage();
+                        break;
+                    case 'ArrowRight':
+                        showNextImage();
+                        break;
+                }
+            });
+        })();
     </script>
 </body>
 
