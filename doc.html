@@ -525,9 +525,12 @@
                         <li><a href="#branding" class="doc-nav-link">Branding</a></li>
                         <li><a href="#redirects" class="doc-nav-link">Redirects</a></li>
                         <li><a href="#registration" class="doc-nav-link">Registration</a></li>
+                        <li><a href="#captcha" class="doc-nav-link">Math Captcha</a></li>
+                        <li><a href="#otp" class="doc-nav-link">Login OTP</a></li>
                         <li><a href="#email-verification" class="doc-nav-link">Email Verification</a></li>
                         <li><a href="#password-reset" class="doc-nav-link">Password Reset</a></li>
                         <li><a href="#lockout" class="doc-nav-link">Lockout Protection</a></li>
+                        <li><a href="#debug" class="doc-nav-link">Debug Mode</a></li>
                         <li><a href="#tyro-integration" class="doc-nav-link">Tyro Integration</a></li>
                     </ul>
                 </div>
@@ -590,12 +593,15 @@
                     <li><strong>🖼️ Beautiful Design</strong> - Modern, professional UI out of the box</li>
                     <li><strong>🔧 Highly Configurable</strong> - Customize colors, logos, redirects, and more</li>
                     <li><strong>🔐 Secure by Default</strong> - Lockout protection, CSRF protection, proper validation</li>
+                    <li><strong>🧮 Math Captcha</strong> - Simple addition/subtraction captcha for login and registration</li>
+                    <li><strong>🔑 Login OTP</strong> - Two-factor authentication via email OTP codes</li>
                     <li><strong>📧 Email Verification</strong> - Optional email verification for new registrations</li>
-                    <li><strong>🔑 Password Reset</strong> - Built-in forgot password and reset functionality</li>
+                    <li><strong>🔄 Password Reset</strong> - Built-in forgot password and reset functionality</li>
                     <li><strong>🔗 Tyro Integration</strong> - Automatic role assignment if Tyro is installed</li>
                     <li><strong>🌓 Dark/Light Theme</strong> - Automatic theme detection with manual toggle</li>
                     <li><strong>📱 Fully Responsive</strong> - Works perfectly on all devices</li>
                     <li><strong>⚡ Zero Build Step</strong> - No npm or webpack required</li>
+                    <li><strong>🐛 Debug Mode</strong> - Global debug toggle for development logging</li>
                 </ul>
             </section>
 
@@ -640,6 +646,22 @@
                     <div class="doc-screenshot">
                         <img src="images/tyro-login-forgot-dark.png" alt="Forgot Password - Dark" loading="lazy">
                         <span class="doc-screenshot-label">Forgot Password - Dark</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-captcha-light.png" alt="Math Captcha - Light" loading="lazy">
+                        <span class="doc-screenshot-label">Math Captcha - Light</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-captcha-dark.png" alt="Math Captcha - Dark" loading="lazy">
+                        <span class="doc-screenshot-label">Math Captcha - Dark</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-otp-light.png" alt="OTP Verification - Light" loading="lazy">
+                        <span class="doc-screenshot-label">OTP Verification - Light</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-otp-dark.png" alt="OTP Verification - Dark" loading="lazy">
+                        <span class="doc-screenshot-label">OTP Verification - Dark</span>
                     </div>
                 </div>
             </section>
@@ -824,6 +846,120 @@ TYRO_LOGIN_PRIMARY_HOVER_COLOR=#4338ca</code></pre>
                 </div>
             </section>
 
+            <!-- Math Captcha -->
+            <section id="captcha" class="doc-section">
+                <h2 class="doc-section-title">Math Captcha</h2>
+                <p class="doc-text">
+                    Add a simple math captcha (addition or subtraction) to your login and/or registration forms to prevent automated submissions. No external APIs or services required.
+                </p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-login.php</span>
+                    </div>
+                    <pre><code class="language-php">'captcha' => [
+    // Enable captcha on login form
+    'enabled_login' => env('TYRO_LOGIN_CAPTCHA_LOGIN', false),
+
+    // Enable captcha on registration form
+    'enabled_register' => env('TYRO_LOGIN_CAPTCHA_REGISTER', false),
+
+    // Label shown above the captcha input
+    'label' => 'Security Check',
+
+    // Placeholder text for the input
+    'placeholder' => 'Enter the answer',
+
+    // Error message when answer is incorrect
+    'error_message' => 'Incorrect answer. Please try again.',
+
+    // Number range for the math problem
+    'min_number' => 1,
+    'max_number' => 10,
+],</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Environment Variables</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                    </div>
+                    <pre><code class="language-bash"># Enable captcha on login form
+TYRO_LOGIN_CAPTCHA_LOGIN=true
+
+# Enable captcha on registration form
+TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
+                </div>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>💡 How It Works:</strong> A simple addition or subtraction problem is displayed (e.g., "5 + 3 = ?"). The answer is stored in the session and validated on form submission.
+                </div>
+            </section>
+
+            <!-- Login OTP -->
+            <section id="otp" class="doc-section">
+                <h2 class="doc-section-title">Login OTP Verification</h2>
+                <p class="doc-text">
+                    Add two-factor authentication to your login flow. After entering valid credentials, users receive a one-time password (OTP) via email that they must enter to complete the login.
+                </p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-login.php</span>
+                    </div>
+                    <pre><code class="language-php">'otp' => [
+    // Enable OTP verification
+    'enabled' => env('TYRO_LOGIN_OTP_ENABLED', false),
+
+    // Number of digits (4-8)
+    'length' => env('TYRO_LOGIN_OTP_LENGTH', 4),
+
+    // OTP expiration time in minutes
+    'expire' => env('TYRO_LOGIN_OTP_EXPIRE', 5),
+
+    // Maximum resend attempts
+    'max_resend' => env('TYRO_LOGIN_OTP_MAX_RESEND', 3),
+
+    // Cooldown between resends in seconds
+    'resend_cooldown' => env('TYRO_LOGIN_OTP_RESEND_COOLDOWN', 60),
+
+    // UI Labels
+    'title' => 'Enter Verification Code',
+    'subtitle' => 'We\'ve sent a verification code to your email address.',
+    'label' => 'Enter the :length-digit code',
+    'submit_button' => 'Verify',
+    'resend_button' => 'Resend Code',
+    'cancel_button' => 'Cancel',
+    'expire_message' => 'Code expires in :minutes minute(s)',
+    'error_invalid' => 'Invalid verification code. Please try again.',
+    'error_expired' => 'The verification code has expired. Please request a new one.',
+    'success_resend' => 'A new verification code has been sent to your email.',
+],</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">How It Works</h3>
+                <ul class="doc-list">
+                    <li><strong>Step 1:</strong> User enters valid email and password</li>
+                    <li><strong>Step 2:</strong> If OTP is enabled, a code is generated and sent via email</li>
+                    <li><strong>Step 3:</strong> User is redirected to the OTP verification page</li>
+                    <li><strong>Step 4:</strong> User enters the OTP code in the beautiful digit-by-digit input</li>
+                    <li><strong>Step 5:</strong> If correct, user is logged in and redirected</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Features</h3>
+                <ul class="doc-list">
+                    <li><strong>Beautiful UI</strong> - Individual digit input boxes with auto-focus</li>
+                    <li><strong>Configurable length</strong> - 4 to 8 digits</li>
+                    <li><strong>Expiration timer</strong> - Visual countdown of remaining time</li>
+                    <li><strong>Resend functionality</strong> - With cooldown protection</li>
+                    <li><strong>Cache-based</strong> - No database required</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>💡 For Development:</strong> When <code class="doc-inline-code">TYRO_LOGIN_DEBUG=true</code>, the OTP code is logged to <code class="doc-inline-code">storage/logs/laravel.log</code> for easy testing.
+                </div>
+            </section>
+
             <!-- Email Verification -->
             <section id="email-verification" class="doc-section">
                 <h2 class="doc-section-title">Email Verification</h2>
@@ -961,6 +1097,42 @@ TYRO_LOGIN_PASSWORD_RESET_EXPIRE=60</code></pre>
                 </ul>
             </section>
 
+            <!-- Debug Mode -->
+            <section id="debug" class="doc-section">
+                <h2 class="doc-section-title">Debug Mode</h2>
+                <p class="doc-text">
+                    Enable debug logging for development. When enabled, OTP codes, verification URLs, and password reset URLs are logged to your Laravel log file.
+                </p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-login.php</span>
+                    </div>
+                    <pre><code class="language-php">// Enable debug logging
+'debug' => env('TYRO_LOGIN_DEBUG', false),</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">What Gets Logged</h3>
+                <ul class="doc-list">
+                    <li><strong>OTP Codes</strong> - The generated OTP code for login verification</li>
+                    <li><strong>Verification URLs</strong> - Email verification links for new registrations</li>
+                    <li><strong>Password Reset URLs</strong> - Password reset links</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-warning">
+                    <strong>⚠️ Security Warning:</strong> Never enable debug mode in production! OTP codes and sensitive URLs will be logged.
+                </div>
+
+                <h3 class="doc-section-subtitle">Environment Variable</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                    </div>
+                    <pre><code class="language-bash"># Enable debug logging (NEVER in production!)
+TYRO_LOGIN_DEBUG=true</code></pre>
+                </div>
+            </section>
+
             <!-- Tyro Integration -->
             <section id="tyro-integration" class="doc-section">
                 <h2 class="doc-section-title">Tyro Integration</h2>
@@ -1061,6 +1233,17 @@ TYRO_LOGIN_REGISTRATION_ENABLED=true
 TYRO_LOGIN_REGISTRATION_AUTO_LOGIN=true
 TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION=false
 
+# Math Captcha
+TYRO_LOGIN_CAPTCHA_LOGIN=false
+TYRO_LOGIN_CAPTCHA_REGISTER=false
+
+# Login OTP
+TYRO_LOGIN_OTP_ENABLED=false
+TYRO_LOGIN_OTP_LENGTH=4
+TYRO_LOGIN_OTP_EXPIRE=5
+TYRO_LOGIN_OTP_MAX_RESEND=3
+TYRO_LOGIN_OTP_RESEND_COOLDOWN=60
+
 # Lockout Protection
 TYRO_LOGIN_LOCKOUT_ENABLED=true
 TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS=5
@@ -1073,6 +1256,9 @@ TYRO_LOGIN_VERIFICATION_EXPIRE=60
 # Password Reset
 TYRO_LOGIN_FORGOT_PASSWORD=true
 TYRO_LOGIN_PASSWORD_RESET_EXPIRE=60
+
+# Debug Mode
+TYRO_LOGIN_DEBUG=false
 
 # Tyro Integration
 TYRO_LOGIN_ASSIGN_DEFAULT_ROLE=true
@@ -1233,6 +1419,30 @@ php artisan tyro-login:publish --force</code></pre>
                             <td><code class="doc-inline-code">/reset-password</code></td>
                             <td><code class="doc-inline-code">tyro-login.password.update</code></td>
                             <td>Reset password</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                            <td><code class="doc-inline-code">/otp/verify</code></td>
+                            <td><code class="doc-inline-code">tyro-login.otp.verify</code></td>
+                            <td>Show OTP form</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
+                            <td><code class="doc-inline-code">/otp/verify</code></td>
+                            <td><code class="doc-inline-code">tyro-login.otp.submit</code></td>
+                            <td>Verify OTP code</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
+                            <td><code class="doc-inline-code">/otp/resend</code></td>
+                            <td><code class="doc-inline-code">tyro-login.otp.resend</code></td>
+                            <td>Resend OTP</td>
+                        </tr>
+                        <tr>
+                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                            <td><code class="doc-inline-code">/otp/cancel</code></td>
+                            <td><code class="doc-inline-code">tyro-login.otp.cancel</code></td>
+                            <td>Cancel OTP</td>
                         </tr>
                     </tbody>
                 </table>

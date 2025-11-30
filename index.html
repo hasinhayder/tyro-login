@@ -25,6 +25,8 @@
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#screenshots" class="nav-link">Screenshots</a>
                 <a href="#layouts" class="nav-link">Layouts</a>
+                <a href="#captcha" class="nav-link">Captcha</a>
+                <a href="#otp" class="nav-link">OTP</a>
                 <a href="#installation" class="nav-link">Install</a>
                 <a href="doc.html" class="nav-link">Docs</a>
                 <a href="https://github.com/hasinhayder/tyro-login" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">
@@ -116,7 +118,7 @@
                         <div class="stat-label">Layout Options</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">5</div>
+                        <div class="stat-value">8</div>
                         <div class="stat-label">Auth Features</div>
                     </div>
                     <div class="stat">
@@ -176,6 +178,26 @@
                     </div>
                     <h3 class="feature-title">Lockout Protection</h3>
                     <p class="feature-description">Cache-based lockout protection after failed attempts. Configurable limits, duration, and beautiful lockout page.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V13.5zm0 2.25h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V18zm2.498-6.75h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V13.5zm0 2.25h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V18zm2.504-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm4.75-1.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zM8.25 6h7.5v2.25h-7.5V6zM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 002.25 2.25h10.5a2.25 2.25 0 002.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0012 2.25z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Math Captcha</h3>
+                    <p class="feature-description">Simple addition/subtraction captcha to prevent automated submissions. No external APIs required.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Login OTP</h3>
+                    <p class="feature-description">Two-factor authentication via email OTP. Beautiful digit-by-digit input with resend and cooldown support.</p>
                 </div>
 
                 <div class="feature-card">
@@ -312,6 +334,30 @@
                                 <div class="screenshot-label">Forgot Password - Dark</div>
                             </div>
                         </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-captcha-light.png" alt="Tyro Login - Math Captcha Light" loading="lazy">
+                                <div class="screenshot-label">Math Captcha - Light</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-captcha-dark.png" alt="Tyro Login - Math Captcha Dark" loading="lazy">
+                                <div class="screenshot-label">Math Captcha - Dark</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-otp-light.png" alt="Tyro Login - OTP Verification Light" loading="lazy">
+                                <div class="screenshot-label">OTP Verification - Light</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-otp-dark.png" alt="Tyro Login - OTP Verification Dark" loading="lazy">
+                                <div class="screenshot-label">OTP Verification - Dark</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -444,6 +490,155 @@
                                 <code>TYRO_LOGIN_LAYOUT=split-right</code>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Math Captcha Section -->
+    <section id="captcha" class="security-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Math Captcha Protection</h2>
+                <p class="section-description">Simple yet effective bot protection without external dependencies</p>
+            </div>
+
+            <div class="code-showcase" style="margin-top: 2rem;">
+                <div class="code-showcase-content">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">Human Verification Made Easy</h3>
+                    <p class="section-description" style="text-align: left; margin-bottom: 1.5rem;">
+                        Add a simple math captcha to your login and registration forms. Users solve a basic addition or subtraction problem to prove they're human.
+                    </p>
+
+                    <ul class="feature-list">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            No external APIs or services required
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Enable separately for login and/or registration
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Configurable number range (default 1-10)
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Customizable labels and error messages
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Session-based answer storage
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-showcase-code">
+                    <div class="code-window">
+                        <div class="code-window-header">
+                            <div class="code-window-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="code-window-title">.env</div>
+                        </div>
+                        <pre><code class="language-bash"># Enable captcha on login form
+TYRO_LOGIN_CAPTCHA_LOGIN=true
+
+# Enable captcha on registration form
+TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login OTP Section -->
+    <section id="otp" class="code-example">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Two-Factor Authentication via OTP</h2>
+                <p class="section-description">Add an extra layer of security with email-based one-time passwords</p>
+            </div>
+
+            <div class="code-showcase" style="margin-top: 2rem;">
+                <div class="code-showcase-content">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">Secure Login with Email OTP</h3>
+                    <p class="section-description" style="text-align: left; margin-bottom: 1.5rem;">
+                        After entering valid credentials, users receive a one-time password via email. They must enter the OTP to complete the login process.
+                    </p>
+
+                    <ul class="feature-list">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Beautiful digit-by-digit input UI
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Configurable OTP length (4-8 digits)
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Expiration timer with visual countdown
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Resend functionality with cooldown
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Cache-based storage (no database required)
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Fully customizable labels and messages
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-showcase-code">
+                    <div class="code-window">
+                        <div class="code-window-header">
+                            <div class="code-window-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="code-window-title">.env</div>
+                        </div>
+                        <pre><code class="language-bash"># Enable OTP verification for login
+TYRO_LOGIN_OTP_ENABLED=true
+
+# OTP configuration
+TYRO_LOGIN_OTP_LENGTH=4      # 4-8 digits
+TYRO_LOGIN_OTP_EXPIRE=5      # minutes
+TYRO_LOGIN_OTP_MAX_RESEND=3  # max resend attempts
+TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                     </div>
                 </div>
             </div>
@@ -772,6 +967,30 @@
                             <td><code>/reset-password</code></td>
                             <td><code>tyro-login.password.update</code></td>
                             <td>Update password</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/otp/verify</code></td>
+                            <td><code>tyro-login.otp.verify</code></td>
+                            <td>Show OTP form</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge post">POST</span></td>
+                            <td><code>/otp/verify</code></td>
+                            <td><code>tyro-login.otp.submit</code></td>
+                            <td>Verify OTP code</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge post">POST</span></td>
+                            <td><code>/otp/resend</code></td>
+                            <td><code>tyro-login.otp.resend</code></td>
+                            <td>Resend OTP</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/otp/cancel</code></td>
+                            <td><code>tyro-login.otp.cancel</code></td>
+                            <td>Cancel OTP verification</td>
                         </tr>
                     </tbody>
                 </table>
