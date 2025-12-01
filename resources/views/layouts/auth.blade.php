@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -58,7 +59,9 @@
             --checkbox-checked-bg: #ffffff;
         }
 
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -150,7 +153,7 @@
             justify-content: center;
             padding: 2rem;
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
         }
 
         .auth-container.split-left .form-panel,
@@ -167,6 +170,11 @@
             max-width: 360px;
         }
 
+        .card .form-card,
+        .fullscreen .form-card {
+            max-width: 420px;
+        }
+
         /* Logo */
         .logo-container {
             text-align: center;
@@ -174,7 +182,13 @@
         }
 
         .logo-container img {
-            height: {{ $branding['logo_height'] ?? '48px' }};
+            height: {
+                    {
+                    $branding['logo_height'] ?? '48px'
+                }
+            }
+
+            ;
             width: auto;
         }
 
@@ -449,6 +463,7 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
+
             .auth-container.split-left .background-panel,
             .auth-container.split-right .background-panel {
                 display: none;
@@ -483,6 +498,116 @@
             }
         }
 
+        /* ========================================
+           NEW LAYOUT STYLES
+           ======================================== */
+
+        /* Fullscreen Background Layout */
+        .auth-container.fullscreen {
+            padding: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .auth-container.fullscreen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.85) 0%, rgba(17, 24, 39, 0.65) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        html.dark .auth-container.fullscreen::before {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.65) 100%);
+        }
+
+        .auth-container.fullscreen .form-panel {
+            position: relative;
+            z-index: 10;
+        }
+
+        .auth-container.fullscreen .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        html.dark .auth-container.fullscreen .form-card {
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Card Layout */
+        .auth-container.card {
+            background-color: var(--bg-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container.card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(17, 24, 39, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(17, 24, 39, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(17, 24, 39, 0.02) 0%, transparent 50%);
+            background-size: 100% 100%;
+        }
+
+        html.dark .auth-container.card::before {
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+        }
+
+        .auth-container.card .form-panel {
+            position: relative;
+            z-index: 10;
+        }
+
+        .auth-container.card .form-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            padding: 3rem 2.5rem;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.05),
+                0 10px 15px -3px rgba(0, 0, 0, 0.05),
+                0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .auth-container.card .form-card:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 30px 35px -7px rgba(0, 0, 0, 0.1);
+        }
+
+        html.dark .auth-container.card .form-card {
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.3),
+                0 10px 15px -3px rgba(0, 0, 0, 0.3),
+                0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        html.dark .auth-container.card .form-card:hover {
+            box-shadow:
+                0 10px 15px -3px rgba(0, 0, 0, 0.5),
+                0 20px 25px -5px rgba(0, 0, 0, 0.5),
+                0 30px 35px -7px rgba(0, 0, 0, 0.5);
+        }
+
         /* Loading State */
         .btn.loading {
             position: relative;
@@ -511,6 +636,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Theme Toggle Button -->
     <button type="button" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
@@ -555,11 +681,11 @@
         });
 
         // Form validation enhancement
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const forms = document.querySelectorAll('form');
-            
+
             forms.forEach(form => {
-                form.addEventListener('submit', function(e) {
+                form.addEventListener('submit', function (e) {
                     const submitBtn = form.querySelector('button[type="submit"]');
                     if (submitBtn && !submitBtn.classList.contains('loading')) {
                         submitBtn.classList.add('loading');
@@ -571,13 +697,13 @@
             // Real-time validation feedback
             const inputs = document.querySelectorAll('.form-input');
             inputs.forEach(input => {
-                input.addEventListener('blur', function() {
+                input.addEventListener('blur', function () {
                     if (this.value && this.checkValidity()) {
                         this.classList.remove('is-invalid');
                     }
                 });
 
-                input.addEventListener('input', function() {
+                input.addEventListener('input', function () {
                     if (this.classList.contains('is-invalid') && this.checkValidity()) {
                         this.classList.remove('is-invalid');
                         const errorEl = this.parentNode.querySelector('.error-message');
@@ -590,4 +716,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -16,25 +16,25 @@
 
 ## Features
 
-- **Multiple Layouts** - Centered, split-left, and split-right layouts
-- **Beautiful Design** - Modern, professional UI out of the box
-- **Highly Configurable** - Customize colors, logos, redirects, and more
-- **Secure by Default** - Lockout protection, CSRF protection, and proper validation
-- **Math Captcha** - Simple addition/subtraction captcha for login and registration
-- **Login OTP** - Two-factor authentication via email OTP codes
-- **Email Verification** - Optional email verification for new registrations
-- **Password Reset** - Built-in forgot password and reset functionality
-- **Beautiful Emails** - Sleek, minimal HTML email templates for OTP, password reset, verification, and welcome emails
-- **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
-- **Dark/Light Theme** - Automatic theme detection with manual toggle
-- **Fully Responsive** - Works perfectly on all devices
-- **Zero Build Step** - No npm or webpack required, just install and use
-- **Debug Mode** - Global debug toggle for development logging
+-   **Multiple Layouts** - 5 beautiful layouts: centered, split-left, split-right, fullscreen, and card
+-   **Beautiful Design** - Modern, professional UI out of the box
+-   **Highly Configurable** - Customize colors, logos, redirects, and more
+-   **Secure by Default** - Lockout protection, CSRF protection, and proper validation
+-   **Math Captcha** - Simple addition/subtraction captcha for login and registration
+-   **Login OTP** - Two-factor authentication via email OTP codes
+-   **Email Verification** - Optional email verification for new registrations
+-   **Password Reset** - Built-in forgot password and reset functionality
+-   **Beautiful Emails** - Sleek, minimal HTML email templates for OTP, password reset, verification, and welcome emails
+-   **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
+-   **Dark/Light Theme** - Automatic theme detection with manual toggle
+-   **Fully Responsive** - Works perfectly on all devices
+-   **Zero Build Step** - No npm or webpack required, just install and use
+-   **Debug Mode** - Global debug toggle for development logging
 
 ## Requirements
 
-- PHP 8.2 or higher
-- Laravel 12.0 or higher
+-   PHP 8.2 or higher
+-   Laravel 12.0 or higher
 
 ## Installation
 
@@ -59,10 +59,10 @@ After installation, you can customize the package by editing `config/tyro-login.
 ### Layout Options
 
 ```php
-// Available layouts: 'centered', 'split-left', 'split-right'
+// Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card'
 'layout' => env('TYRO_LOGIN_LAYOUT', 'centered'),
 
-// Background image for split layouts
+// Background image for split and fullscreen layouts
 'background_image' => env('TYRO_LOGIN_BACKGROUND_IMAGE', 'https://...'),
 ```
 
@@ -116,6 +116,7 @@ When email verification is enabled, users won't be logged in automatically after
 ```
 
 **How it works:**
+
 1. User registers - Redirected to verification notice page
 2. Verification URL is logged to Laravel logs and error_log (for development)
 3. User clicks the link - Email is verified and user is redirected to login page
@@ -135,6 +136,7 @@ Tyro Login includes a complete password reset flow with beautiful, consistent UI
 ```
 
 **How it works:**
+
 1. User clicks "Forgot Password?" on login page
 2. User enters email - Reset link is generated
 3. Reset URL is logged to Laravel logs and error_log (for development)
@@ -185,10 +187,11 @@ Add two-factor authentication via email OTP. After entering valid credentials, u
 ```
 
 **Features:**
-- Beautiful OTP input with individual digit boxes
-- Configurable code length (4-8 digits)
-- Resend functionality with cooldown
-- Cache-based storage (no database required)
+
+-   Beautiful OTP input with individual digit boxes
+-   Configurable code length (4-8 digits)
+-   Resend functionality with cooldown
+-   Cache-based storage (no database required)
 
 ### Debug Mode
 
@@ -233,10 +236,11 @@ Tyro Login sends sleek, minimal HTML emails with a clean design. Each email type
 ```
 
 **Available Emails:**
-- **OTP Email** - Sent when OTP verification is enabled
-- **Password Reset Email** - Sent when user requests password reset
-- **Email Verification Email** - Sent when email verification is required
-- **Welcome Email** - Sent after successful registration (when verification is not required)
+
+-   **OTP Email** - Sent when OTP verification is enabled
+-   **Password Reset Email** - Sent when user requests password reset
+-   **Email Verification Email** - Sent when email verification is required
+-   **Welcome Email** - Sent after successful registration (when verification is not required)
 
 **Customizing Email Templates:**
 
@@ -249,13 +253,14 @@ php artisan tyro-login:publish --emails
 Templates will be published to `resources/views/vendor/tyro-login/emails/`.
 
 Available template variables:
-- `{{ $name }}` - User's name
-- `{{ $appName }}` - Application name
-- `{{ $otp }}` - OTP code (for OTP email)
-- `{{ $resetUrl }}` - Password reset URL (for password reset email)
-- `{{ $verificationUrl }}` - Verification URL (for verification email)
-- `{{ $loginUrl }}` - Login URL (for welcome email)
-- `{{ $expiresIn }}` - Expiration time in minutes
+
+-   `{{ $name }}` - User's name
+-   `{{ $appName }}` - Application name
+-   `{{ $otp }}` - OTP code (for OTP email)
+-   `{{ $resetUrl }}` - Password reset URL (for password reset email)
+-   `{{ $verificationUrl }}` - Verification URL (for verification email)
+-   `{{ $loginUrl }}` - Login URL (for welcome email)
+-   `{{ $expiresIn }}` - Expiration time in minutes
 
 ### Lockout Protection
 
@@ -273,29 +278,67 @@ When enabled, users will be locked out after too many failed login attempts. The
 ```
 
 **Features:**
-- No database required - uses cache
-- Configurable number of attempts before lockout
-- Configurable lockout duration
-- Customizable lockout page message and title
-- Automatic cache cleanup when lockout expires
-- Real-time countdown timer on lockout page
+
+-   No database required - uses cache
+-   Configurable number of attempts before lockout
+-   Configurable lockout duration
+-   Customizable lockout page message and title
+-   Automatic cache cleanup when lockout expires
+-   Real-time countdown timer on lockout page
 
 ## Layout Examples
 
-### Centered Layout (Default)
+Tyro Login provides 5 stunning layout options to match your application's branding:
+
+### 1. Centered Layout (Default)
+
 Form appears in the center of the page with a gradient background.
 
-### Split-Left Layout
+```env
+TYRO_LOGIN_LAYOUT=centered
+```
+
+### 2. Split-Left Layout
+
 Two-column layout with a background image on the left and the form on the right.
-
-### Split-Right Layout
-Two-column layout with the form on the left and a background image on the right.
-
-Set the layout in your `.env` file:
 
 ```env
 TYRO_LOGIN_LAYOUT=split-left
+TYRO_LOGIN_BACKGROUND_IMAGE=https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80
 ```
+
+### 3. Split-Right Layout
+
+Two-column layout with the form on the left and a background image on the right.
+
+```env
+TYRO_LOGIN_LAYOUT=split-right
+TYRO_LOGIN_BACKGROUND_IMAGE=https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80
+```
+
+### 4. Fullscreen Layout
+
+Full-screen background image with a glassmorphism form overlay featuring frosted glass effect and backdrop blur.
+
+```env
+TYRO_LOGIN_LAYOUT=fullscreen
+TYRO_LOGIN_BACKGROUND_IMAGE=https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80
+```
+
+### 5. Card Layout
+
+Floating card design with subtle radial gradient background patterns and smooth hover animations.
+
+```env
+TYRO_LOGIN_LAYOUT=card
+```
+
+**All layouts support:**
+
+-   Dark and light themes
+-   Fully responsive design
+-   Customizable branding
+-   All authentication features (OTP, captcha, email verification, etc.)
 
 ## Customization
 
@@ -331,39 +374,39 @@ This publishes config, views, email templates, and assets.
 
 Tyro Login provides several artisan commands:
 
-| Command | Description |
-|---------|-------------|
-| `php artisan tyro-login:install` | Install the package and publish configuration |
-| `php artisan tyro-login:publish` | Publish config, views, email templates, and assets |
-| `php artisan tyro-login:publish --emails` | Publish only email templates |
-| `php artisan tyro-login:version` | Display the current Tyro Login version |
-| `php artisan tyro-login:doc` | Open the documentation in your browser |
-| `php artisan tyro-login:star` | Open GitHub repository to star the project |
+| Command                                   | Description                                        |
+| ----------------------------------------- | -------------------------------------------------- |
+| `php artisan tyro-login:install`          | Install the package and publish configuration      |
+| `php artisan tyro-login:publish`          | Publish config, views, email templates, and assets |
+| `php artisan tyro-login:publish --emails` | Publish only email templates                       |
+| `php artisan tyro-login:version`          | Display the current Tyro Login version             |
+| `php artisan tyro-login:doc`              | Open the documentation in your browser             |
+| `php artisan tyro-login:star`             | Open GitHub repository to star the project         |
 
 ## Routes
 
 Tyro Login registers the following routes:
 
-| Method | URI | Name | Description |
-|--------|-----|------|-------------|
-| GET | `/login` | `tyro-login.login` | Show login form |
-| POST | `/login` | `tyro-login.login.submit` | Handle login |
-| GET | `/register` | `tyro-login.register` | Show registration form |
-| POST | `/register` | `tyro-login.register.submit` | Handle registration |
-| GET/POST | `/logout` | `tyro-login.logout` | Handle logout |
-| GET | `/lockout` | `tyro-login.lockout` | Show lockout page |
-| GET | `/email/verify` | `tyro-login.verification.notice` | Show verification notice |
-| GET | `/email/not-verified` | `tyro-login.verification.not-verified` | Show unverified email page |
-| GET | `/email/verify/{token}` | `tyro-login.verification.verify` | Verify email |
-| POST | `/email/resend` | `tyro-login.verification.resend` | Resend verification email |
-| GET | `/forgot-password` | `tyro-login.password.request` | Show forgot password form |
-| POST | `/forgot-password` | `tyro-login.password.email` | Send reset link |
-| GET | `/reset-password/{token}` | `tyro-login.password.reset` | Show reset form |
-| POST | `/reset-password` | `tyro-login.password.update` | Reset password |
-| GET | `/otp/verify` | `tyro-login.otp.verify` | Show OTP form |
-| POST | `/otp/verify` | `tyro-login.otp.submit` | Verify OTP |
-| POST | `/otp/resend` | `tyro-login.otp.resend` | Resend OTP |
-| GET | `/otp/cancel` | `tyro-login.otp.cancel` | Cancel OTP verification |
+| Method   | URI                       | Name                                   | Description                |
+| -------- | ------------------------- | -------------------------------------- | -------------------------- |
+| GET      | `/login`                  | `tyro-login.login`                     | Show login form            |
+| POST     | `/login`                  | `tyro-login.login.submit`              | Handle login               |
+| GET      | `/register`               | `tyro-login.register`                  | Show registration form     |
+| POST     | `/register`               | `tyro-login.register.submit`           | Handle registration        |
+| GET/POST | `/logout`                 | `tyro-login.logout`                    | Handle logout              |
+| GET      | `/lockout`                | `tyro-login.lockout`                   | Show lockout page          |
+| GET      | `/email/verify`           | `tyro-login.verification.notice`       | Show verification notice   |
+| GET      | `/email/not-verified`     | `tyro-login.verification.not-verified` | Show unverified email page |
+| GET      | `/email/verify/{token}`   | `tyro-login.verification.verify`       | Verify email               |
+| POST     | `/email/resend`           | `tyro-login.verification.resend`       | Resend verification email  |
+| GET      | `/forgot-password`        | `tyro-login.password.request`          | Show forgot password form  |
+| POST     | `/forgot-password`        | `tyro-login.password.email`            | Send reset link            |
+| GET      | `/reset-password/{token}` | `tyro-login.password.reset`            | Show reset form            |
+| POST     | `/reset-password`         | `tyro-login.password.update`           | Reset password             |
+| GET      | `/otp/verify`             | `tyro-login.otp.verify`                | Show OTP form              |
+| POST     | `/otp/verify`             | `tyro-login.otp.submit`                | Verify OTP                 |
+| POST     | `/otp/resend`             | `tyro-login.otp.resend`                | Resend OTP                 |
+| GET      | `/otp/cancel`             | `tyro-login.otp.cancel`                | Cancel OTP verification    |
 
 ### Customizing Route Prefix
 
@@ -376,13 +419,13 @@ Tyro Login registers the following routes:
 
 ## Security Features
 
-- **CSRF Protection** - All forms include CSRF tokens
-- **Lockout Protection** - Temporarily lock accounts after failed attempts (cache-based, no database)
-- **Email Verification** - Optional email verification for new registrations
-- **Secure Password Reset** - Time-limited, signed URLs for password reset
-- **Password Hashing** - Uses Laravel's secure hashing
-- **Session Regeneration** - Prevents session fixation attacks
-- **Input Validation** - Server-side validation with proper error messages
+-   **CSRF Protection** - All forms include CSRF tokens
+-   **Lockout Protection** - Temporarily lock accounts after failed attempts (cache-based, no database)
+-   **Email Verification** - Optional email verification for new registrations
+-   **Secure Password Reset** - Time-limited, signed URLs for password reset
+-   **Password Hashing** - Uses Laravel's secure hashing
+-   **Session Regeneration** - Prevents session fixation attacks
+-   **Input Validation** - Server-side validation with proper error messages
 
 ## Integration with Tyro
 
@@ -420,7 +463,7 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
 ## Credits
 
-- [Hasin Hayder](https://github.com/hasinhayder)
+-   [Hasin Hayder](https://github.com/hasinhayder)
 
 ---
 
