@@ -303,7 +303,7 @@
             .doc-table {
                 font-size: 0.875rem;
             }
-            
+
             .doc-table th,
             .doc-table td {
                 padding: var(--spacing-sm);
@@ -631,7 +631,7 @@
                 width: 95%;
                 top: 10%;
             }
-            
+
             .spotlight-search {
                 font-size: 1.125rem;
             }
@@ -785,7 +785,7 @@
             <section id="features" class="doc-section">
                 <h2 class="doc-section-title">Features</h2>
                 <ul class="doc-list">
-                    <li><strong>🎨 Multiple Layouts</strong> - Centered, split-left, and split-right layouts</li>
+                    <li><strong>🎨 Multiple Layouts</strong> - 5 beautiful layouts: centered, split-left, split-right, fullscreen, and card</li>
                     <li><strong>🖼️ Beautiful Design</strong> - Modern, professional UI out of the box</li>
                     <li><strong>🔧 Highly Configurable</strong> - Customize colors, logos, redirects, and more</li>
                     <li><strong>🔐 Secure by Default</strong> - Lockout protection, CSRF protection, proper validation</li>
@@ -827,6 +827,18 @@
                     <div class="doc-screenshot">
                         <img src="images/tyro-login-split-right-light.png" alt="Split Right Layout" loading="lazy">
                         <span class="doc-screenshot-label">Split Right Layout</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-fullscreen.png" alt="Fullscreen Layout" loading="lazy">
+                        <span class="doc-screenshot-label">Fullscreen Layout</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-card-light.png" alt="Card Layout - Light" loading="lazy">
+                        <span class="doc-screenshot-label">Card Layout - Light</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-card-dark.png" alt="Card Layout - Dark" loading="lazy">
+                        <span class="doc-screenshot-label">Card Layout - Dark</span>
                     </div>
                     <div class="doc-screenshot">
                         <img src="images/tyro-login-attemts-remaining.png" alt="Login Attempts Warning" loading="lazy">
@@ -913,7 +925,7 @@
             <!-- Layout Options -->
             <section id="layouts" class="doc-section">
                 <h2 class="doc-section-title">Layout Options</h2>
-                <p class="doc-text">Tyro Login offers three beautiful layout options:</p>
+                <p class="doc-text">Tyro Login offers 5 beautiful layout options:</p>
 
                 <table class="doc-table">
                     <thead>
@@ -935,6 +947,14 @@
                             <td><code class="doc-inline-code">split-right</code></td>
                             <td>Form on the left, background image on the right</td>
                         </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">fullscreen</code></td>
+                            <td>Full-screen background with glassmorphism form overlay</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">card</code></td>
+                            <td>Floating card design with subtle background patterns</td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -943,10 +963,10 @@
                     <div class="doc-code-header">
                         <span class="doc-code-title">.env</span>
                     </div>
-                    <pre><code class="language-bash"># Available layouts: 'centered', 'split-left', 'split-right'
+                    <pre><code class="language-bash"># Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card'
 TYRO_LOGIN_LAYOUT=centered
 
-# Background image for split layouts
+# Background image for split and fullscreen layouts
 TYRO_LOGIN_BACKGROUND_IMAGE=https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe</code></pre>
                 </div>
 
@@ -1515,7 +1535,7 @@ class User extends Authenticatable
                     <tbody>
                         <tr>
                             <td><code class="doc-inline-code">TYRO_LOGIN_LAYOUT</code></td>
-                            <td>Layout style for authentication pages (centered, split-left, split-right)</td>
+                            <td>Layout style for authentication pages (centered, split-left, split-right, fullscreen, card)</td>
                             <td><code class="doc-inline-code">centered</code></td>
                         </tr>
                         <tr>
@@ -2384,34 +2404,34 @@ php artisan tyro-login:publish --force</code></pre>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
     <script>
         // Initialize highlight.js BEFORE script.js loads
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Apply syntax highlighting to all code blocks
-            document.querySelectorAll('.doc-code-block pre code').forEach(function(el) {
+            document.querySelectorAll('.doc-code-block pre code').forEach(function (el) {
                 // Clean and highlight
                 hljs.highlightElement(el);
             });
-            
+
             // Add copy functionality to code blocks
-            document.querySelectorAll('.doc-code-block').forEach(function(block) {
+            document.querySelectorAll('.doc-code-block').forEach(function (block) {
                 const header = block.querySelector('.doc-code-header');
                 if (header && !header.querySelector('.doc-code-copy')) {
                     const copyBtn = document.createElement('button');
                     copyBtn.className = 'doc-code-copy';
                     copyBtn.innerHTML = 'Copy';
                     copyBtn.setAttribute('type', 'button');
-                    
-                    copyBtn.addEventListener('click', function() {
+
+                    copyBtn.addEventListener('click', function () {
                         const code = block.querySelector('code');
                         const text = code.textContent;
-                        navigator.clipboard.writeText(text).then(function() {
+                        navigator.clipboard.writeText(text).then(function () {
                             const originalText = copyBtn.innerHTML;
                             copyBtn.innerHTML = '✓ Copied!';
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 copyBtn.innerHTML = originalText;
                             }, 2000);
                         });
                     });
-                    
+
                     header.appendChild(copyBtn);
                 }
             });
@@ -2477,69 +2497,69 @@ php artisan tyro-login:publish --force</code></pre>
 
     <script>
         // Lightbox functionality for doc screenshots
-        (function() {
+        (function () {
             const lightbox = document.getElementById('lightbox');
             const lightboxImage = document.getElementById('lightboxImage');
             const lightboxCaption = document.getElementById('lightboxCaption');
             const lightboxClose = document.querySelector('.lightbox-close');
             const lightboxPrev = document.querySelector('.lightbox-prev');
             const lightboxNext = document.querySelector('.lightbox-next');
-            
+
             // Get all screenshots
             const screenshots = document.querySelectorAll('.doc-screenshot');
             let currentIndex = 0;
-            
+
             // Open lightbox
             function openLightbox(index) {
                 currentIndex = index;
                 const screenshot = screenshots[index];
                 const img = screenshot.querySelector('img');
                 const label = screenshot.querySelector('.doc-screenshot-label');
-                
+
                 lightboxImage.src = img.src;
                 lightboxImage.alt = img.alt;
                 lightboxCaption.textContent = label ? label.textContent : img.alt;
                 lightbox.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
-            
+
             // Close lightbox
             function closeLightbox() {
                 lightbox.classList.remove('active');
                 document.body.style.overflow = '';
             }
-            
+
             // Show previous image
             function showPrevImage() {
                 currentIndex = (currentIndex - 1 + screenshots.length) % screenshots.length;
                 openLightbox(currentIndex);
             }
-            
+
             // Show next image
             function showNextImage() {
                 currentIndex = (currentIndex + 1) % screenshots.length;
                 openLightbox(currentIndex);
             }
-            
+
             // Add click listeners to screenshots
             screenshots.forEach((screenshot, index) => {
                 screenshot.addEventListener('click', () => openLightbox(index));
             });
-            
+
             // Lightbox controls
             if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
             if (lightboxPrev) lightboxPrev.addEventListener('click', showPrevImage);
             if (lightboxNext) lightboxNext.addEventListener('click', showNextImage);
-            
+
             // Close on background click
             lightbox.addEventListener('click', (e) => {
                 if (e.target === lightbox) closeLightbox();
             });
-            
+
             // Keyboard navigation
             document.addEventListener('keydown', (e) => {
                 if (!lightbox.classList.contains('active')) return;
-                
+
                 switch (e.key) {
                     case 'Escape':
                         closeLightbox();
@@ -2558,17 +2578,17 @@ php artisan tyro-login:publish --force</code></pre>
     <!-- Spotlight Search JavaScript -->
     <script>
         // Spotlight Search Functionality
-        (function() {
+        (function () {
             const spotlightOverlay = document.getElementById('spotlightOverlay');
             const spotlightContainer = document.getElementById('spotlightContainer');
             const spotlightSearch = document.getElementById('spotlightSearch');
             const spotlightResults = document.getElementById('spotlightResults');
             const spotlightShortcut = document.getElementById('spotlightShortcut');
-            
+
             let isSpotlightOpen = false;
             let selectedIndex = -1;
             let searchResults = [];
-            
+
             // Index all documentation sections for search
             const docSections = [
                 // Getting Started
@@ -2577,7 +2597,7 @@ php artisan tyro-login:publish --force</code></pre>
                 { id: 'screenshots', title: 'Screenshots', description: 'Visual examples of the UI', icon: '🖼️' },
                 { id: 'requirements', title: 'Requirements', description: 'System requirements', icon: '📋' },
                 { id: 'installation', title: 'Installation', description: 'How to install the package', icon: '🚀' },
-                
+
                 // Configuration
                 { id: 'layouts', title: 'Layout Options', description: 'Available layout styles', icon: '🎨' },
                 { id: 'branding', title: 'Branding', description: 'Customize app name and logo', icon: '🏷️' },
@@ -2591,7 +2611,7 @@ php artisan tyro-login:publish --force</code></pre>
                 { id: 'lockout', title: 'Lockout Protection', description: 'Prevent brute force attacks', icon: '🔒' },
                 { id: 'debug', title: 'Debug Mode', description: 'Development logging options', icon: '🐛' },
                 { id: 'tyro-integration', title: 'Tyro Integration', description: 'RBAC package integration', icon: '🔗' },
-                
+
                 // Customization
                 { id: 'publishing', title: 'Publishing Assets', description: 'Publish views and assets', icon: '📦' },
                 { id: 'env-variables', title: 'Config Variables', description: 'Environment variables reference', icon: '⚙️' },
@@ -2599,17 +2619,17 @@ php artisan tyro-login:publish --force</code></pre>
                 { id: 'routes', title: 'Routes Reference', description: 'All available routes', icon: '🛣️' },
                 { id: 'faq', title: 'FAQ', description: 'Frequently asked questions', icon: '❓' }
             ];
-            
+
             // Show shortcut hint after a delay
             setTimeout(() => {
                 spotlightShortcut.classList.add('show');
             }, 2000);
-            
+
             // Hide shortcut hint after 5 seconds
             setTimeout(() => {
                 spotlightShortcut.classList.remove('show');
             }, 7000);
-            
+
             // Open spotlight search
             function openSpotlight() {
                 isSpotlightOpen = true;
@@ -2624,7 +2644,7 @@ php artisan tyro-login:publish --force</code></pre>
                     spotlightSearch.focus();
                 }, 100);
             }
-            
+
             // Close spotlight search
             function closeSpotlight() {
                 isSpotlightOpen = false;
@@ -2635,7 +2655,7 @@ php artisan tyro-login:publish --force</code></pre>
                 searchResults = [];
                 renderResults();
             }
-            
+
             // Search functionality
             function performSearch(query) {
                 if (!query.trim()) {
@@ -2643,24 +2663,24 @@ php artisan tyro-login:publish --force</code></pre>
                     renderResults();
                     return;
                 }
-                
+
                 const lowercaseQuery = query.toLowerCase();
                 searchResults = docSections.filter(section =>
                     section.title.toLowerCase().includes(lowercaseQuery) ||
                     section.description.toLowerCase().includes(lowercaseQuery)
                 );
-                
+
                 selectedIndex = searchResults.length > 0 ? 0 : -1;
                 renderResults();
             }
-            
+
             // Render search results
             function renderResults() {
                 if (searchResults.length === 0 && spotlightSearch.value.trim() !== '') {
                     spotlightResults.innerHTML = '<div class="spotlight-no-results">No results found</div>';
                     return;
                 }
-                
+
                 const resultsHtml = searchResults.map((result, index) => `
                     <div class="spotlight-result ${index === selectedIndex ? 'active' : ''}" data-index="${index}">
                         <div class="spotlight-result-icon">${result.icon}</div>
@@ -2670,12 +2690,12 @@ php artisan tyro-login:publish --force</code></pre>
                         </div>
                     </div>
                 `).join('');
-                
+
                 spotlightResults.innerHTML = resultsHtml;
-                
+
                 // Add click listeners to results
                 spotlightResults.querySelectorAll('.spotlight-result').forEach(result => {
-                    result.addEventListener('click', function() {
+                    result.addEventListener('click', function () {
                         const index = parseInt(this.getAttribute('data-index'));
                         const selectedResult = searchResults[index];
                         if (selectedResult) {
@@ -2689,32 +2709,32 @@ php artisan tyro-login:publish --force</code></pre>
                     });
                 });
             }
-            
+
             // Keyboard navigation
             function navigateResults(direction) {
                 if (searchResults.length === 0) return;
-                
+
                 if (direction === 'down') {
                     selectedIndex = (selectedIndex + 1) % searchResults.length;
                 } else if (direction === 'up') {
                     selectedIndex = selectedIndex <= 0 ? searchResults.length - 1 : selectedIndex - 1;
                 }
-                
+
                 renderResults();
-                
+
                 // Scroll selected result into view
                 const selectedElement = spotlightResults.querySelector('.spotlight-result.active');
                 if (selectedElement) {
                     selectedElement.scrollIntoView({ block: 'nearest' });
                 }
             }
-            
+
             // Event listeners
-            spotlightSearch.addEventListener('input', function() {
+            spotlightSearch.addEventListener('input', function () {
                 performSearch(this.value);
             });
-            
-            spotlightSearch.addEventListener('keydown', function(e) {
+
+            spotlightSearch.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     closeSpotlight();
                 } else if (e.key === 'ArrowDown') {
@@ -2731,13 +2751,13 @@ php artisan tyro-login:publish --force</code></pre>
                     }
                 }
             });
-            
-            spotlightOverlay.addEventListener('click', function() {
+
+            spotlightOverlay.addEventListener('click', function () {
                 closeSpotlight();
             });
-            
+
             // Keyboard shortcut (Cmd/Ctrl + K)
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 // Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
                 if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                     e.preventDefault();

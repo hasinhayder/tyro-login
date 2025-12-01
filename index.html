@@ -76,7 +76,7 @@
             <div class="hero-content">
                 <div class="hero-badge">
                     <span class="badge-dot"></span>
-                    Laravel 12 &nbsp; • &nbsp; Zero Build Step &nbsp; • &nbsp;  Beautiful UI &nbsp; • &nbsp;  Beautiful Emails
+                    Laravel 12 &nbsp; • &nbsp; Zero Build Step &nbsp; • &nbsp; Beautiful UI &nbsp; • &nbsp; Beautiful Emails
                 </div>
 
                 <h1 class="hero-title">
@@ -86,7 +86,7 @@
                 </h1>
 
                 <p class="hero-description">
-                    Professional, customizable login and registration pages with multiple layouts, 
+                    Professional, customizable login and registration pages with multiple layouts,
                     dark/light themes, captcha, OTP, email verification, password reset, lockout protection, and seamless integration with the <a href="https://hasinhayder.github.io/tyro/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: none;">Tyro</a> package.
                 </p>
 
@@ -114,7 +114,7 @@
 
                 <div class="hero-stats">
                     <div class="stat">
-                        <div class="stat-value">3</div>
+                        <div class="stat-value">5</div>
                         <div class="stat-label">Layout Options</div>
                     </div>
                     <div class="stat">
@@ -148,7 +148,7 @@
                         </svg>
                     </div>
                     <h3 class="feature-title">Multiple Layouts</h3>
-                    <p class="feature-description">Choose from centered, split-left, or split-right layouts. Each layout is fully responsive and professionally designed.</p>
+                    <p class="feature-description">Choose from 5 beautiful layouts: centered, split-left, split-right, fullscreen, and card. Each layout is fully responsive and professionally designed.</p>
                 </div>
 
                 <div class="feature-card">
@@ -319,6 +319,24 @@
                         </div>
                         <div class="screenshot-slide">
                             <div class="screenshot-card">
+                                <img src="images/tyro-login-fullscreen.png" alt="Tyro Login - Fullscreen Layout" loading="lazy">
+                                <div class="screenshot-label">Fullscreen Layout</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-card-light.png" alt="Tyro Login - Card Layout Light" loading="lazy">
+                                <div class="screenshot-label">Card Layout - Light</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-card-dark.png" alt="Tyro Login - Card Layout Dark" loading="lazy">
+                                <div class="screenshot-label">Card Layout - Dark</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
                                 <img src="images/tyro-login-attemts-remaining.png" alt="Tyro Login - Login Attempts Warning" loading="lazy">
                                 <div class="screenshot-label">Login Attempts Warning</div>
                             </div>
@@ -427,6 +445,19 @@
                         </svg>
                         Split Right
                     </button>
+                    <button class="layout-tab" data-layout="fullscreen">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                        </svg>
+                        Fullscreen
+                    </button>
+                    <button class="layout-tab" data-layout="card">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                        Card
+                    </button>
                 </div>
 
                 <div class="layout-preview-container">
@@ -513,6 +544,62 @@
                             <p>Form on the left with background image on the right. Another great option for brand-focused authentication pages.</p>
                             <div class="code-block">
                                 <code>TYRO_LOGIN_LAYOUT=split-right</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layout-preview" id="layout-fullscreen">
+                        <div class="preview-window">
+                            <div class="preview-header">
+                                <div class="preview-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="preview-title">Fullscreen Layout</div>
+                            </div>
+                            <div class="preview-content centered-preview" style="background: linear-gradient(135deg, rgba(17, 24, 39, 0.85), rgba(17, 24, 39, 0.65));">
+                                <div class="preview-form-card" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2);">
+                                    <div class="preview-logo"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-button"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layout-info">
+                            <h3>Fullscreen Layout</h3>
+                            <p>Full-screen background image with glassmorphism form overlay. Features frosted glass effect and backdrop blur for a premium, modern look.</p>
+                            <div class="code-block">
+                                <code>TYRO_LOGIN_LAYOUT=fullscreen</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layout-preview" id="layout-card">
+                        <div class="preview-window">
+                            <div class="preview-header">
+                                <div class="preview-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="preview-title">Card Layout</div>
+                            </div>
+                            <div class="preview-content centered-preview" style="background: radial-gradient(circle at 20% 50%, rgba(17, 24, 39, 0.03), transparent 50%), radial-gradient(circle at 80% 80%, rgba(17, 24, 39, 0.03), transparent 50%);">
+                                <div class="preview-form-card" style="border: 1px solid #e5e7eb; border-radius: 1.25rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                                    <div class="preview-logo"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-button"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layout-info">
+                            <h3>Card Layout</h3>
+                            <p>Floating card design with subtle radial gradient background patterns. Smooth hover animations and elevated shadows for visual depth.</p>
+                            <div class="code-block">
+                                <code>TYRO_LOGIN_LAYOUT=card</code>
                             </div>
                         </div>
                     </div>
