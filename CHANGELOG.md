@@ -2,6 +2,56 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [1.2.0] - 2025-12-01
+
+### Added
+- **Beautiful Email Templates** - Sleek, minimal HTML email templates with clean design
+  - OTP verification email with large, readable code display
+  - Password reset email with secure reset button and link fallback
+  - Email verification email with verification link
+  - Welcome email for new registrations with feature highlights
+- **Email Configuration** - Each email type can be individually enabled/disabled
+  - `TYRO_LOGIN_EMAIL_OTP` - Toggle OTP emails
+  - `TYRO_LOGIN_EMAIL_PASSWORD_RESET` - Toggle password reset emails
+  - `TYRO_LOGIN_EMAIL_VERIFY` - Toggle verification emails
+  - `TYRO_LOGIN_EMAIL_WELCOME` - Toggle welcome emails
+- **Customizable Email Subjects** - Configure email subjects via environment variables
+- **Email Template Publishing** - Publish only email templates with `--emails` flag
+  - `php artisan tyro-login:publish --emails`
+- **Email Verification Redirect** - New config option `TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION` to control where users are redirected after verifying their email (defaults to `/login`)
+- **Unverified Email Login Handling** - When `TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION` is enabled, users with unverified emails attempting to login are now shown a dedicated "Email Not Verified" page instead of being logged in
+- **New "Email Not Verified" Page** - Beautiful dedicated page for unverified users with option to resend verification email
+- **Customizable Page Content** - New config options for `email_not_verified` page titles and descriptions
+
+### Changed
+- Email verification no longer auto-logs in users - they are redirected to login page after verification
+- Login attempts with unverified email no longer resend verification email automatically (users can manually resend from the page)
+- Emails are now sent automatically when features are enabled (OTP, verification, password reset)
+- Welcome email is sent after registration when email verification is not required
+- Removed placeholder comments about email integration - emails are now fully functional
+
+## [1.1.0] - 2025-11-30
+
+### Added
+- **Math Captcha** - Simple addition/subtraction captcha for login and registration forms
+  - Configurable via `TYRO_LOGIN_CAPTCHA_LOGIN` and `TYRO_LOGIN_CAPTCHA_REGISTER`
+  - Customizable number range, labels, and error messages
+  - No external dependencies required
+- **Login OTP Verification** - Two-factor authentication via email OTP
+  - Configurable OTP length (4-8 digits)
+  - Configurable expiration time and resend limits
+  - Beautiful OTP input with individual digit boxes
+  - Resend cooldown and attempt tracking
+  - Cache-based storage (no database required)
+- **Debug Mode** - Global `TYRO_LOGIN_DEBUG` configuration
+  - When enabled, logs OTP codes, verification URLs, and reset URLs
+  - Disabled by default for production safety
+  - Single toggle for all debug logging
+
+### Changed
+- All debug logging now requires `TYRO_LOGIN_DEBUG=true` to be set
+- Improved code organization in LoginController and RegisterController
+
 ## [1.0.0] - 2025-11-30
 
 ### Added
@@ -25,5 +75,5 @@ All notable changes to `tyro-login` will be documented in this file.
 - Responsive design for all screen sizes
 - CSRF protection and secure password handling
 - Session regeneration on login
-- Development-friendly: verification and reset URLs logged to console
+- Development-friendly: verification and reset URLs logged when debug enabled
 

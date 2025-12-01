@@ -2,6 +2,7 @@
 
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
+use HasinHayder\TyroLogin\Mail\PasswordResetMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
@@ -56,8 +58,14 @@ class PasswordResetController extends Controller
         // Generate password reset URL
         $resetUrl = $this->generateResetUrl($user);
 
-        // In a real application, you would send this via email
-        // For development, it's logged above
+        // Send password reset email if enabled
+        if (config('tyro-login.emails.password_reset.enabled', true)) {
+            Mail::to($user->email)->send(new PasswordResetMail(
+                resetUrl: $resetUrl,
+                userName: $user->name ?? 'User',
+                expiresInMinutes: config('tyro-login.password_reset.expire', 60)
+            ));
+        }
 
         return redirect()->route('tyro-login.password.request')
             ->with('success', 'If an account with that email exists, we\'ve sent a password reset link.');
@@ -87,14 +95,13 @@ class PasswordResetController extends Controller
             ['token' => $token]
         );
 
-        // Log the reset URL for development
-        Log::info('Tyro Login - Password Reset URL', [
-            'email' => $user->email,
-            'url' => $url,
-        ]);
-
-        // Also dump to error log for easy access during development
-        error_log("Tyro Login - Password Reset URL for {$user->email}: {$url}");
+        // Log the reset URL for development (only if debug is enabled)
+        if (config('tyro-login.debug', false)) {
+            Log::info('Tyro Login - Password Reset URL', [
+                'email' => $user->email,
+                'url' => $url,
+            ]);
+        }
 
         return $url;
     }

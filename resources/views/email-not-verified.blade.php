@@ -5,8 +5,8 @@
     @if(in_array($layout, ['split-left', 'split-right']))
     <div class="background-panel" style="background-image: url('{{ $backgroundImage }}');">
         <div class="background-panel-content">
-            <h1>{{ $pageContent['background_title'] ?? 'Check Your Email' }}</h1>
-            <p>{{ $pageContent['background_description'] ?? 'We\'ve sent a verification link to your email address. Click the link to verify your account.' }}</p>
+            <h1>{{ $pageContent['background_title'] ?? 'Email Verification Required' }}</h1>
+            <p>{{ $pageContent['background_description'] ?? 'Your email address needs to be verified before you can access your account.' }}</p>
         </div>
     </div>
     @endif
@@ -26,22 +26,22 @@
                 @endif
             </div>
 
-            <!-- Email Icon -->
-            <!-- <div class="email-icon-container">
-                <svg class="email-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            <!-- Warning Icon -->
+            <!-- <div class="warning-icon-container">
+                <svg class="warning-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                 </svg>
             </div> -->
 
             <!-- Header -->
             <div class="form-header">
-                <h2>{{ $pageContent['title'] ?? 'Verify Your Email' }}</h2>
-                <p>{{ $pageContent['subtitle'] ?? 'We\'ve sent a verification link to your email address.' }}</p>
+                <h2>{{ $pageContent['title'] ?? 'Email Not Verified' }}</h2>
+                <p>{{ $pageContent['subtitle'] ?? 'Please verify your email address to continue.' }}</p>
             </div>
 
             <!-- Email Address -->
             <div class="email-notice">
-                <p>We sent a verification link to:</p>
+                <p>A verification link was sent to:</p>
                 <p class="email-address">{{ $email }}</p>
             </div>
 
@@ -54,7 +54,7 @@
 
             <!-- Instructions -->
             <div class="verify-instructions">
-                <p>Click the link in your email to verify your account. If you don't see the email, check your spam folder.</p>
+                <p>Please check your inbox and click the verification link to activate your account. If you don't see the email, check your spam folder.</p>
             </div>
 
             <!-- Resend Link -->
@@ -76,16 +76,19 @@
 </div>
 
 <style>
-    .email-icon-container {
+    .warning-icon-container {
         text-align: center;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
     }
 
-    .email-icon {
-        width: 4rem;
-        height: 4rem;
-        color: var(--text-primary);
-        opacity: 0.8;
+    .warning-icon {
+        width: 3.5rem;
+        height: 3.5rem;
+        color: #f59e0b;
+    }
+
+    html.dark .warning-icon {
+        color: #fbbf24;
     }
 
     .email-notice {

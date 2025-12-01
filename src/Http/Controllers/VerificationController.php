@@ -2,12 +2,13 @@
 
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
+use HasinHayder\TyroLogin\Mail\VerifyEmailMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -38,9 +39,34 @@ class VerificationController extends Controller
     }
 
     /**
+     * Show the email not verified notice (for login attempts with unverified email).
+     */
+    public function showEmailNotVerified(Request $request): View|RedirectResponse
+    {
+        $email = $request->session()->get('tyro-login.verification.email');
+
+        if (!$email) {
+            return redirect()->route('tyro-login.login');
+        }
+
+        return view('tyro-login::email-not-verified', [
+            'layout' => config('tyro-login.layout', 'centered'),
+            'branding' => config('tyro-login.branding'),
+            'backgroundImage' => config('tyro-login.background_image'),
+            'email' => $email,
+            'pageContent' => config('tyro-login.pages.email_not_verified', [
+                'title' => 'Email Not Verified',
+                'subtitle' => 'Please verify your email address to continue.',
+                'background_title' => 'Email Verification Required',
+                'background_description' => 'Your email address needs to be verified before you can access your account.',
+            ]),
+        ]);
+    }
+
+    /**
      * Generate a verification URL for the user.
      */
-    public static function generateVerificationUrl($user): string
+    public static function generateVerificationUrl($user, bool $sendEmail = true): string
     {
         $token = Str::random(64);
         $expiresAt = now()->addMinutes(config('tyro-login.verification.expire', 60));
@@ -61,14 +87,22 @@ class VerificationController extends Controller
             ['token' => $token]
         );
 
-        // Log the verification URL for development
-        Log::info('Tyro Login - Email Verification URL', [
-            'email' => $user->email,
-            'url' => $url,
-        ]);
+        // Log the verification URL for development (only if debug is enabled)
+        if (config('tyro-login.debug', false)) {
+            Log::info('Tyro Login - Email Verification URL', [
+                'email' => $user->email,
+                'url' => $url,
+            ]);
+        }
 
-        // Also dump to error log for easy access during development
-        error_log("Tyro Login - Verification URL for {$user->email}: {$url}");
+        // Send verification email if enabled
+        if ($sendEmail && config('tyro-login.emails.verify_email.enabled', true)) {
+            Mail::to($user->email)->send(new VerifyEmailMail(
+                verificationUrl: $url,
+                userName: $user->name ?? 'User',
+                expiresInMinutes: config('tyro-login.verification.expire', 60)
+            ));
+        }
 
         return $url;
     }
@@ -111,11 +145,9 @@ class VerificationController extends Controller
         // Clear the session email
         $request->session()->forget('tyro-login.verification.email');
 
-        // Log the user in
-        Auth::login($user);
-
-        return redirect(config('tyro-login.redirects.after_register', '/'))
-            ->with('success', 'Your email has been verified successfully.');
+        // Redirect to the configured URL (default: login page)
+        return redirect(config('tyro-login.redirects.after_email_verification', '/login'))
+            ->with('success', 'Your email has been verified successfully. Please log in to continue.');
     }
 
     /**
@@ -142,9 +174,6 @@ class VerificationController extends Controller
 
         // Generate new verification URL
         $verificationUrl = self::generateVerificationUrl($user);
-
-        // In a real application, you would send this via email
-        // For development, it's logged above
 
         return redirect()->route('tyro-login.verification.notice')
             ->with('success', 'A new verification link has been sent to your email address.');

@@ -20,12 +20,16 @@
 - **Beautiful Design** - Modern, professional UI out of the box
 - **Highly Configurable** - Customize colors, logos, redirects, and more
 - **Secure by Default** - Lockout protection, CSRF protection, and proper validation
+- **Math Captcha** - Simple addition/subtraction captcha for login and registration
+- **Login OTP** - Two-factor authentication via email OTP codes
 - **Email Verification** - Optional email verification for new registrations
 - **Password Reset** - Built-in forgot password and reset functionality
+- **Beautiful Emails** - Sleek, minimal HTML email templates for OTP, password reset, verification, and welcome emails
 - **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
 - **Dark/Light Theme** - Automatic theme detection with manual toggle
 - **Fully Responsive** - Works perfectly on all devices
 - **Zero Build Step** - No npm or webpack required, just install and use
+- **Debug Mode** - Global debug toggle for development logging
 
 ## Requirements
 
@@ -69,8 +73,6 @@ After installation, you can customize the package by editing `config/tyro-login.
     'app_name' => env('TYRO_LOGIN_APP_NAME', 'Laravel'),
     'logo' => env('TYRO_LOGIN_LOGO', null), // URL to your logo
     'logo_height' => env('TYRO_LOGIN_LOGO_HEIGHT', '48px'),
-    'primary_color' => env('TYRO_LOGIN_PRIMARY_COLOR', '#4f46e5'),
-    'primary_hover_color' => env('TYRO_LOGIN_PRIMARY_HOVER_COLOR', '#4338ca'),
 ],
 ```
 
@@ -81,6 +83,7 @@ After installation, you can customize the package by editing `config/tyro-login.
     'after_login' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGIN', '/'),
     'after_logout' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGOUT', '/login'),
     'after_register' => env('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', '/'),
+    'after_email_verification' => env('TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION', '/login'),
 ],
 ```
 
@@ -106,13 +109,18 @@ When email verification is enabled, users won't be logged in automatically after
 'verification' => [
     'expire' => env('TYRO_LOGIN_VERIFICATION_EXPIRE', 60), // Token expires in 60 minutes
 ],
+
+'redirects' => [
+    'after_email_verification' => env('TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION', '/login'),
+],
 ```
 
 **How it works:**
 1. User registers - Redirected to verification notice page
 2. Verification URL is logged to Laravel logs and error_log (for development)
-3. User clicks the link - Email is verified and user is logged in
+3. User clicks the link - Email is verified and user is redirected to login page
 4. Users can request a new verification email from the notice page
+5. If user tries to login with unverified email, they see "Email Not Verified" page
 
 **For Development:** The verification URL is printed to your Laravel logs and error_log, so you can easily test without setting up email.
 
@@ -145,6 +153,109 @@ If you have [hasinhayder/tyro](https://github.com/hasinhayder/tyro) installed, T
     'default_role_slug' => env('TYRO_LOGIN_DEFAULT_ROLE_SLUG', 'user'),
 ],
 ```
+
+### Math Captcha
+
+Add a simple math captcha to your login and/or registration forms to prevent automated submissions:
+
+```php
+'captcha' => [
+    'enabled_login' => env('TYRO_LOGIN_CAPTCHA_LOGIN', false),
+    'enabled_register' => env('TYRO_LOGIN_CAPTCHA_REGISTER', false),
+    'label' => 'Security Check',
+    'placeholder' => 'Enter the answer',
+    'error_message' => 'Incorrect answer. Please try again.',
+    'min_number' => 1,
+    'max_number' => 10,
+],
+```
+
+### Login OTP Verification
+
+Add two-factor authentication via email OTP. After entering valid credentials, users receive a one-time code:
+
+```php
+'otp' => [
+    'enabled' => env('TYRO_LOGIN_OTP_ENABLED', false),
+    'length' => 4,           // 4-8 digits
+    'expire' => 5,           // minutes
+    'max_resend' => 3,
+    'resend_cooldown' => 60, // seconds
+],
+```
+
+**Features:**
+- Beautiful OTP input with individual digit boxes
+- Configurable code length (4-8 digits)
+- Resend functionality with cooldown
+- Cache-based storage (no database required)
+
+### Debug Mode
+
+Enable debug logging for development:
+
+```php
+'debug' => env('TYRO_LOGIN_DEBUG', false),
+```
+
+When enabled, OTP codes, verification URLs, and password reset URLs are logged to `storage/logs/laravel.log`.
+
+### Email Configuration
+
+Tyro Login sends sleek, minimal HTML emails with a clean design. Each email type can be individually enabled or disabled:
+
+```php
+'emails' => [
+    // OTP verification email
+    'otp' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_OTP', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_OTP_SUBJECT', 'Your Verification Code'),
+    ],
+
+    // Password reset email
+    'password_reset' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET_SUBJECT', 'Reset Your Password'),
+    ],
+
+    // Email verification email
+    'verify_email' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_VERIFY', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_VERIFY_SUBJECT', 'Verify Your Email Address'),
+    ],
+
+    // Welcome email after registration
+    'welcome' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_WELCOME', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_WELCOME_SUBJECT', null), // Uses default with app name
+    ],
+],
+```
+
+**Available Emails:**
+- **OTP Email** - Sent when OTP verification is enabled
+- **Password Reset Email** - Sent when user requests password reset
+- **Email Verification Email** - Sent when email verification is required
+- **Welcome Email** - Sent after successful registration (when verification is not required)
+
+**Customizing Email Templates:**
+
+Publish email templates to customize them:
+
+```bash
+php artisan tyro-login:publish --emails
+```
+
+Templates will be published to `resources/views/vendor/tyro-login/emails/`.
+
+Available template variables:
+- `{{ $name }}` - User's name
+- `{{ $appName }}` - Application name
+- `{{ $otp }}` - OTP code (for OTP email)
+- `{{ $resetUrl }}` - Password reset URL (for password reset email)
+- `{{ $verificationUrl }}` - Verification URL (for verification email)
+- `{{ $loginUrl }}` - Login URL (for welcome email)
+- `{{ $expiresIn }}` - Expiration time in minutes
 
 ### Lockout Protection
 
@@ -198,23 +309,23 @@ php artisan tyro-login:publish --views
 
 Views will be published to `resources/views/vendor/tyro-login/`.
 
+### Publishing Email Templates
+
+To customize the email templates:
+
+```bash
+php artisan tyro-login:publish --emails
+```
+
+Email templates will be published to `resources/views/vendor/tyro-login/emails/`.
+
 ### Publishing Everything
 
 ```bash
 php artisan tyro-login:publish
 ```
 
-This publishes config, views, and assets.
-
-### Custom Styling via Environment
-
-You can customize colors without publishing files:
-
-```env
-TYRO_LOGIN_PRIMARY_COLOR=#4f46e5
-TYRO_LOGIN_PRIMARY_HOVER_COLOR=#4338ca
-TYRO_LOGIN_BACKGROUND_IMAGE=https://example.com/image.jpg
-```
+This publishes config, views, email templates, and assets.
 
 ## Artisan Commands
 
@@ -223,7 +334,8 @@ Tyro Login provides several artisan commands:
 | Command | Description |
 |---------|-------------|
 | `php artisan tyro-login:install` | Install the package and publish configuration |
-| `php artisan tyro-login:publish` | Publish config, views, and assets |
+| `php artisan tyro-login:publish` | Publish config, views, email templates, and assets |
+| `php artisan tyro-login:publish --emails` | Publish only email templates |
 | `php artisan tyro-login:version` | Display the current Tyro Login version |
 | `php artisan tyro-login:doc` | Open the documentation in your browser |
 | `php artisan tyro-login:star` | Open GitHub repository to star the project |
@@ -241,12 +353,17 @@ Tyro Login registers the following routes:
 | GET/POST | `/logout` | `tyro-login.logout` | Handle logout |
 | GET | `/lockout` | `tyro-login.lockout` | Show lockout page |
 | GET | `/email/verify` | `tyro-login.verification.notice` | Show verification notice |
+| GET | `/email/not-verified` | `tyro-login.verification.not-verified` | Show unverified email page |
 | GET | `/email/verify/{token}` | `tyro-login.verification.verify` | Verify email |
 | POST | `/email/resend` | `tyro-login.verification.resend` | Resend verification email |
 | GET | `/forgot-password` | `tyro-login.password.request` | Show forgot password form |
 | POST | `/forgot-password` | `tyro-login.password.email` | Send reset link |
 | GET | `/reset-password/{token}` | `tyro-login.password.reset` | Show reset form |
 | POST | `/reset-password` | `tyro-login.password.update` | Reset password |
+| GET | `/otp/verify` | `tyro-login.otp.verify` | Show OTP form |
+| POST | `/otp/verify` | `tyro-login.otp.submit` | Verify OTP |
+| POST | `/otp/resend` | `tyro-login.otp.resend` | Resend OTP |
+| GET | `/otp/cancel` | `tyro-login.otp.cancel` | Cancel OTP verification |
 
 ### Customizing Route Prefix
 

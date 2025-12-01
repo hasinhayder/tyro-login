@@ -110,6 +110,28 @@
                 </div>
                 @endif
 
+                <!-- Captcha -->
+                @if($captchaEnabled ?? false)
+                <div class="form-group captcha-group">
+                    <label for="captcha_answer" class="form-label">{{ $captchaConfig['label'] ?? 'Security Check' }}</label>
+                    <div class="captcha-container">
+                        <span class="captcha-question">{{ $captchaQuestion }}</span>
+                        <input 
+                            type="number" 
+                            id="captcha_answer" 
+                            name="captcha_answer" 
+                            class="form-input captcha-input @error('captcha_answer') is-invalid @enderror" 
+                            required 
+                            autocomplete="off"
+                            placeholder="{{ $captchaConfig['placeholder'] ?? 'Enter the answer' }}"
+                        >
+                    </div>
+                    @error('captcha_answer')
+                        <span class="error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+                @endif
+
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">
                     Create account
@@ -126,4 +148,49 @@
         </div>
     </div>
 </div>
+
+<style>
+    .captcha-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .captcha-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .captcha-question {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1rem;
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--text-primary);
+        white-space: nowrap;
+        min-width: 100px;
+        text-align: center;
+    }
+
+    .captcha-input {
+        flex: 1;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    /* Hide number input spinners */
+    .captcha-input::-webkit-outer-spin-button,
+    .captcha-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .captcha-input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
 @endsection

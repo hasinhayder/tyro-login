@@ -57,6 +57,11 @@ class TyroLoginServiceProvider extends ServiceProvider
             __DIR__ . '/../../resources/views' => resource_path('views/vendor/tyro-login'),
         ], 'tyro-login-views');
 
+        // Publish email templates only
+        $this->publishes([
+            __DIR__ . '/../../resources/views/emails' => resource_path('views/vendor/tyro-login/emails'),
+        ], 'tyro-login-emails');
+
         // Publish assets
         $this->publishes([
             __DIR__ . '/../../resources/assets' => public_path('vendor/tyro-login'),

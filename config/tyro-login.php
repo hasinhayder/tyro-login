@@ -6,7 +6,19 @@ return [
     | Tyro Login Version
     |--------------------------------------------------------------------------
     */
-    'version' => '1.0.0',
+    'version' => '1.2.0',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Debug Mode
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, debug information such as OTP codes, verification tokens,
+    | and password reset tokens will be logged to storage/logs/laravel.log.
+    | This should be disabled in production environments.
+    |
+    */
+    'debug' => env('TYRO_LOGIN_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -43,8 +55,6 @@ return [
         'app_name' => env('TYRO_LOGIN_APP_NAME', env('APP_NAME', 'Laravel')),
         'logo' => env('TYRO_LOGIN_LOGO', null),
         'logo_height' => env('TYRO_LOGIN_LOGO_HEIGHT', '48px'),
-        'primary_color' => env('TYRO_LOGIN_PRIMARY_COLOR', '#4f46e5'),
-        'primary_hover_color' => env('TYRO_LOGIN_PRIMARY_HOVER_COLOR', '#4338ca'),
     ],
 
     /*
@@ -72,6 +82,7 @@ return [
         'after_login' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGIN', '/'),
         'after_logout' => env('TYRO_LOGIN_REDIRECT_AFTER_LOGOUT', '/login'),
         'after_register' => env('TYRO_LOGIN_REDIRECT_AFTER_REGISTER', '/'),
+        'after_email_verification' => env('TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION', '/login'),
     ],
 
     /*
@@ -84,7 +95,7 @@ return [
         'enabled' => env('TYRO_LOGIN_REGISTRATION_ENABLED', true),
 
         // Whether to automatically log in the user after registration
-        'auto_login' => env('TYRO_LOGIN_REGISTRATION_AUTO_LOGIN', true),
+        'auto_login' => env('TYRO_LOGIN_REGISTRATION_AUTO_LOGIN', false),
 
         // Whether to require email verification after registration
         'require_email_verification' => env('TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION', false),
@@ -172,6 +183,12 @@ return [
             'background_title' => env('TYRO_LOGIN_VERIFY_EMAIL_BG_TITLE', 'Check Your Email'),
             'background_description' => env('TYRO_LOGIN_VERIFY_EMAIL_BG_DESCRIPTION', 'We\'ve sent a verification link to your email address. Click the link to verify your account.'),
         ],
+        'email_not_verified' => [
+            'title' => env('TYRO_LOGIN_EMAIL_NOT_VERIFIED_TITLE', 'Email Not Verified'),
+            'subtitle' => env('TYRO_LOGIN_EMAIL_NOT_VERIFIED_SUBTITLE', 'Please verify your email address to continue.'),
+            'background_title' => env('TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_TITLE', 'Email Verification Required'),
+            'background_description' => env('TYRO_LOGIN_EMAIL_NOT_VERIFIED_BG_DESCRIPTION', 'Your email address needs to be verified before you can access your account.'),
+        ],
         'forgot_password' => [
             'title' => env('TYRO_LOGIN_FORGOT_PASSWORD_TITLE', 'Forgot Password?'),
             'subtitle' => env('TYRO_LOGIN_FORGOT_PASSWORD_SUBTITLE', 'Enter your email and we\'ll send you a reset link.'),
@@ -210,6 +227,135 @@ return [
     'password_reset' => [
         // Token expiration time in minutes
         'expire' => env('TYRO_LOGIN_PASSWORD_RESET_EXPIRE', 60),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Math Captcha Settings
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, a simple math captcha (addition/subtraction) will be shown
+    | on the login and/or registration forms. This helps prevent automated
+    | submissions without requiring external services.
+    |
+    */
+    'captcha' => [
+        // Whether captcha is enabled on login form
+        'enabled_login' => env('TYRO_LOGIN_CAPTCHA_LOGIN', false),
+
+        // Whether captcha is enabled on registration form
+        'enabled_register' => env('TYRO_LOGIN_CAPTCHA_REGISTER', false),
+
+        // Captcha label text
+        'label' => env('TYRO_LOGIN_CAPTCHA_LABEL', 'Security Check'),
+
+        // Captcha placeholder text
+        'placeholder' => env('TYRO_LOGIN_CAPTCHA_PLACEHOLDER', 'Enter the answer'),
+
+        // Error message when captcha is incorrect
+        'error_message' => env('TYRO_LOGIN_CAPTCHA_ERROR', 'Incorrect answer. Please try again.'),
+
+        // Minimum number for math operation
+        'min_number' => env('TYRO_LOGIN_CAPTCHA_MIN', 1),
+
+        // Maximum number for math operation
+        'max_number' => env('TYRO_LOGIN_CAPTCHA_MAX', 10),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Login OTP Settings
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, users will receive a one-time password via email after
+    | entering valid credentials. They must enter the OTP to complete login.
+    | The OTP is stored in cache (no database required).
+    |
+    */
+    'otp' => [
+        // Whether OTP verification is enabled for login
+        'enabled' => env('TYRO_LOGIN_OTP_ENABLED', false),
+
+        // Number of digits in the OTP (4-8)
+        'length' => env('TYRO_LOGIN_OTP_LENGTH', 4),
+
+        // OTP expiration time in minutes
+        'expire' => env('TYRO_LOGIN_OTP_EXPIRE', 5),
+
+        // Maximum OTP resend attempts
+        'max_resend' => env('TYRO_LOGIN_OTP_MAX_RESEND', 3),
+
+        // Cooldown between resends in seconds
+        'resend_cooldown' => env('TYRO_LOGIN_OTP_RESEND_COOLDOWN', 60),
+
+        // Page title
+        'title' => env('TYRO_LOGIN_OTP_TITLE', 'Enter Verification Code'),
+
+        // Page subtitle (supports :email placeholder)
+        'subtitle' => env('TYRO_LOGIN_OTP_SUBTITLE', 'We\'ve sent a :length-digit code to :email'),
+
+        // Input label
+        'label' => env('TYRO_LOGIN_OTP_LABEL', 'Verification Code'),
+
+        // Input placeholder
+        'placeholder' => env('TYRO_LOGIN_OTP_PLACEHOLDER', 'Enter code'),
+
+        // Submit button text
+        'submit_button' => env('TYRO_LOGIN_OTP_SUBMIT_BUTTON', 'Verify'),
+
+        // Resend button text
+        'resend_button' => env('TYRO_LOGIN_OTP_RESEND_BUTTON', 'Resend Code'),
+
+        // Error message when OTP is incorrect
+        'error_message' => env('TYRO_LOGIN_OTP_ERROR', 'Invalid or expired verification code.'),
+
+        // Success message when OTP is resent
+        'resend_success' => env('TYRO_LOGIN_OTP_RESEND_SUCCESS', 'A new verification code has been sent to your email.'),
+
+        // Error message when max resends reached
+        'max_resend_error' => env('TYRO_LOGIN_OTP_MAX_RESEND_ERROR', 'Maximum resend attempts reached. Please try logging in again.'),
+
+        // Background title (for split layouts)
+        'background_title' => env('TYRO_LOGIN_OTP_BG_TITLE', 'Almost There!'),
+
+        // Background description (for split layouts)
+        'background_description' => env('TYRO_LOGIN_OTP_BG_DESCRIPTION', 'Enter the verification code we sent to your email to complete the login process.'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Email Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configure email sending for various authentication actions.
+    | Each email type can be individually enabled or disabled.
+    | Email templates can be customized by publishing them.
+    |
+    */
+    'emails' => [
+        // OTP verification email
+        'otp' => [
+            'enabled' => env('TYRO_LOGIN_EMAIL_OTP', true),
+            'subject' => env('TYRO_LOGIN_EMAIL_OTP_SUBJECT', 'Your Verification Code'),
+        ],
+
+        // Password reset email
+        'password_reset' => [
+            'enabled' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET', true),
+            'subject' => env('TYRO_LOGIN_EMAIL_PASSWORD_RESET_SUBJECT', 'Reset Your Password'),
+        ],
+
+        // Email verification email
+        'verify_email' => [
+            'enabled' => env('TYRO_LOGIN_EMAIL_VERIFY', true),
+            'subject' => env('TYRO_LOGIN_EMAIL_VERIFY_SUBJECT', 'Verify Your Email Address'),
+        ],
+
+        // Welcome email after registration
+        'welcome' => [
+            'enabled' => env('TYRO_LOGIN_EMAIL_WELCOME', true),
+            'subject' => env('TYRO_LOGIN_EMAIL_WELCOME_SUBJECT', null), // null = uses default with app name
+        ],
     ],
 
     /*

@@ -12,6 +12,7 @@ class PublishCommand extends Command
     protected $signature = 'tyro-login:publish 
                             {--config : Publish only configuration}
                             {--views : Publish only views}
+                            {--emails : Publish only email templates}
                             {--assets : Publish only assets}
                             {--force : Overwrite existing files}';
 
@@ -27,8 +28,9 @@ class PublishCommand extends Command
     {
         $publishConfig = $this->option('config');
         $publishViews = $this->option('views');
+        $publishEmails = $this->option('emails');
         $publishAssets = $this->option('assets');
-        $publishAll = !$publishConfig && !$publishViews && !$publishAssets;
+        $publishAll = !$publishConfig && !$publishViews && !$publishEmails && !$publishAssets;
 
         $this->info('');
 
@@ -48,6 +50,15 @@ class PublishCommand extends Command
                 '--force' => $this->option('force'),
             ]);
             $this->info('   ✓ Views published to resources/views/vendor/tyro-login/');
+        }
+
+        if ($publishEmails || $publishAll) {
+            $this->info('📧 Publishing email templates...');
+            $this->callSilently('vendor:publish', [
+                '--tag' => 'tyro-login-emails',
+                '--force' => $this->option('force'),
+            ]);
+            $this->info('   ✓ Email templates published to resources/views/vendor/tyro-login/emails/');
         }
 
         if ($publishAssets || $publishAll) {
