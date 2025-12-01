@@ -483,6 +483,159 @@
                 padding: calc(var(--spacing-xl) + 72px) var(--spacing-lg) var(--spacing-xl);
             }
         }
+
+        /* Spotlight Search Styles */
+        .spotlight-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 10002;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .spotlight-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spotlight-container {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%) scale(0.95);
+            width: 90%;
+            max-width: 600px;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            z-index: 10003;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .spotlight-container.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .spotlight-search {
+            width: 100%;
+            padding: var(--spacing-lg);
+            font-size: 1.25rem;
+            border: none;
+            border-radius: var(--radius-lg);
+            background: var(--color-bg);
+            color: var(--color-text);
+            outline: none;
+        }
+
+        .spotlight-results {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        .spotlight-result {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid var(--color-border);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .spotlight-result:last-child {
+            border-bottom: none;
+        }
+
+        .spotlight-result:hover,
+        .spotlight-result.active {
+            background: var(--color-bg-secondary);
+        }
+
+        .spotlight-result-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            color: var(--color-text-tertiary);
+        }
+
+        .spotlight-result-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .spotlight-result-title {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 2px;
+        }
+
+        .spotlight-result-description {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .spotlight-no-results {
+            padding: var(--spacing-xl);
+            text-align: center;
+            color: var(--color-text-secondary);
+        }
+
+        .spotlight-shortcut {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            z-index: 10001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .spotlight-shortcut.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spotlight-shortcut kbd {
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: "SF Mono", "Monaco", "Consolas", monospace;
+            font-size: 0.75rem;
+            margin: 0 2px;
+        }
+
+        @media (max-width: 768px) {
+            .spotlight-container {
+                width: 95%;
+                top: 10%;
+            }
+            
+            .spotlight-search {
+                font-size: 1.125rem;
+            }
+        }
     </style>
 </head>
 
@@ -529,6 +682,16 @@
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
     </button>
+
+    <!-- Spotlight Search -->
+    <div class="spotlight-overlay" id="spotlightOverlay"></div>
+    <div class="spotlight-container" id="spotlightContainer">
+        <input type="text" class="spotlight-search" id="spotlightSearch" placeholder="Search documentation..." autocomplete="off">
+        <div class="spotlight-results" id="spotlightResults"></div>
+    </div>
+    <div class="spotlight-shortcut" id="spotlightShortcut">
+        Press <kbd>⌘</kbd><kbd>K</kbd> to search
+    </div>
 
     <div class="doc-layout">
         <!-- Sidebar Navigation -->
@@ -2387,6 +2550,202 @@ php artisan tyro-login:publish --force</code></pre>
                     case 'ArrowRight':
                         showNextImage();
                         break;
+                }
+            });
+        })();
+    </script>
+
+    <!-- Spotlight Search JavaScript -->
+    <script>
+        // Spotlight Search Functionality
+        (function() {
+            const spotlightOverlay = document.getElementById('spotlightOverlay');
+            const spotlightContainer = document.getElementById('spotlightContainer');
+            const spotlightSearch = document.getElementById('spotlightSearch');
+            const spotlightResults = document.getElementById('spotlightResults');
+            const spotlightShortcut = document.getElementById('spotlightShortcut');
+            
+            let isSpotlightOpen = false;
+            let selectedIndex = -1;
+            let searchResults = [];
+            
+            // Index all documentation sections for search
+            const docSections = [
+                // Getting Started
+                { id: 'introduction', title: 'Introduction', description: 'Overview of Tyro Login package', icon: '📖' },
+                { id: 'features', title: 'Features', description: 'List of all features', icon: '✨' },
+                { id: 'screenshots', title: 'Screenshots', description: 'Visual examples of the UI', icon: '🖼️' },
+                { id: 'requirements', title: 'Requirements', description: 'System requirements', icon: '📋' },
+                { id: 'installation', title: 'Installation', description: 'How to install the package', icon: '🚀' },
+                
+                // Configuration
+                { id: 'layouts', title: 'Layout Options', description: 'Available layout styles', icon: '🎨' },
+                { id: 'branding', title: 'Branding', description: 'Customize app name and logo', icon: '🏷️' },
+                { id: 'redirects', title: 'Redirects', description: 'Configure post-auth redirects', icon: '🔄' },
+                { id: 'registration', title: 'Registration Settings', description: 'Control user registration', icon: '📝' },
+                { id: 'captcha', title: 'Math Captcha', description: 'Simple math captcha protection', icon: '🧮' },
+                { id: 'otp', title: 'Login OTP', description: 'Two-factor authentication', icon: '🔑' },
+                { id: 'email-verification', title: 'Email Verification', description: 'Verify user email addresses', icon: '✉️' },
+                { id: 'password-reset', title: 'Password Reset', description: 'Forgot password functionality', icon: '🔒' },
+                { id: 'emails', title: 'Email Templates', description: 'Customize email templates', icon: '📧' },
+                { id: 'lockout', title: 'Lockout Protection', description: 'Prevent brute force attacks', icon: '🔒' },
+                { id: 'debug', title: 'Debug Mode', description: 'Development logging options', icon: '🐛' },
+                { id: 'tyro-integration', title: 'Tyro Integration', description: 'RBAC package integration', icon: '🔗' },
+                
+                // Customization
+                { id: 'publishing', title: 'Publishing Assets', description: 'Publish views and assets', icon: '📦' },
+                { id: 'env-variables', title: 'Config Variables', description: 'Environment variables reference', icon: '⚙️' },
+                { id: 'artisan-commands', title: 'Artisan Commands', description: 'Available CLI commands', icon: '⌨️' },
+                { id: 'routes', title: 'Routes Reference', description: 'All available routes', icon: '🛣️' },
+                { id: 'faq', title: 'FAQ', description: 'Frequently asked questions', icon: '❓' }
+            ];
+            
+            // Show shortcut hint after a delay
+            setTimeout(() => {
+                spotlightShortcut.classList.add('show');
+            }, 2000);
+            
+            // Hide shortcut hint after 5 seconds
+            setTimeout(() => {
+                spotlightShortcut.classList.remove('show');
+            }, 7000);
+            
+            // Open spotlight search
+            function openSpotlight() {
+                isSpotlightOpen = true;
+                spotlightOverlay.classList.add('active');
+                spotlightContainer.classList.add('active');
+                spotlightSearch.value = '';
+                spotlightResults.innerHTML = ''; // Clear results instead of calling renderResults
+                selectedIndex = -1;
+                searchResults = [];
+                // Use setTimeout to ensure focus works after DOM updates
+                setTimeout(() => {
+                    spotlightSearch.focus();
+                }, 100);
+            }
+            
+            // Close spotlight search
+            function closeSpotlight() {
+                isSpotlightOpen = false;
+                spotlightOverlay.classList.remove('active');
+                spotlightContainer.classList.remove('active');
+                spotlightSearch.value = '';
+                selectedIndex = -1;
+                searchResults = [];
+                renderResults();
+            }
+            
+            // Search functionality
+            function performSearch(query) {
+                if (!query.trim()) {
+                    searchResults = [];
+                    renderResults();
+                    return;
+                }
+                
+                const lowercaseQuery = query.toLowerCase();
+                searchResults = docSections.filter(section =>
+                    section.title.toLowerCase().includes(lowercaseQuery) ||
+                    section.description.toLowerCase().includes(lowercaseQuery)
+                );
+                
+                selectedIndex = searchResults.length > 0 ? 0 : -1;
+                renderResults();
+            }
+            
+            // Render search results
+            function renderResults() {
+                if (searchResults.length === 0 && spotlightSearch.value.trim() !== '') {
+                    spotlightResults.innerHTML = '<div class="spotlight-no-results">No results found</div>';
+                    return;
+                }
+                
+                const resultsHtml = searchResults.map((result, index) => `
+                    <div class="spotlight-result ${index === selectedIndex ? 'active' : ''}" data-index="${index}">
+                        <div class="spotlight-result-icon">${result.icon}</div>
+                        <div class="spotlight-result-content">
+                            <div class="spotlight-result-title">${result.title}</div>
+                            <div class="spotlight-result-description">${result.description}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                spotlightResults.innerHTML = resultsHtml;
+                
+                // Add click listeners to results
+                spotlightResults.querySelectorAll('.spotlight-result').forEach(result => {
+                    result.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        const selectedResult = searchResults[index];
+                        if (selectedResult) {
+                            closeSpotlight();
+                            // Navigate to the section
+                            const targetElement = document.getElementById(selectedResult.id);
+                            if (targetElement) {
+                                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Keyboard navigation
+            function navigateResults(direction) {
+                if (searchResults.length === 0) return;
+                
+                if (direction === 'down') {
+                    selectedIndex = (selectedIndex + 1) % searchResults.length;
+                } else if (direction === 'up') {
+                    selectedIndex = selectedIndex <= 0 ? searchResults.length - 1 : selectedIndex - 1;
+                }
+                
+                renderResults();
+                
+                // Scroll selected result into view
+                const selectedElement = spotlightResults.querySelector('.spotlight-result.active');
+                if (selectedElement) {
+                    selectedElement.scrollIntoView({ block: 'nearest' });
+                }
+            }
+            
+            // Event listeners
+            spotlightSearch.addEventListener('input', function() {
+                performSearch(this.value);
+            });
+            
+            spotlightSearch.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeSpotlight();
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    navigateResults('down');
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    navigateResults('up');
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const activeResult = spotlightResults.querySelector('.spotlight-result.active');
+                    if (activeResult) {
+                        activeResult.click();
+                    }
+                }
+            });
+            
+            spotlightOverlay.addEventListener('click', function() {
+                closeSpotlight();
+            });
+            
+            // Keyboard shortcut (Cmd/Ctrl + K)
+            document.addEventListener('keydown', function(e) {
+                // Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                    e.preventDefault();
+                    if (!isSpotlightOpen) {
+                        openSpotlight();
+                    } else {
+                        closeSpotlight();
+                    }
                 }
             });
         })();
