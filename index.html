@@ -1192,7 +1192,7 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                                 </svg>
                             </button>
                             <div class="faq-answer">
-                                <p>Disable Laravel's default auth routes in routes/web.php, install Tyro Login, and update any redirects. Your existing users and data remain unchanged.</p>
+                                <p>Tyro Login works seamlessly with Laravel's default authentication system. No migration is required - your existing users and data remain completely unchanged. Simply install Tyro Login and it will integrate automatically. You can optionally disable Laravel's default auth routes in routes/web.php if you prefer to use only Tyro Login's routes.</p>
                             </div>
                         </div>
                     </div>
@@ -1378,7 +1378,7 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                                 </svg>
                             </button>
                             <div class="faq-answer">
-                                <p>Enable debug mode with <code>TYRO_LOGIN_DEBUG=true</code>. All email URLs, OTP codes, and reset tokens will be logged to storage/logs/laravel.log.</p>
+                                <p>Enable debug mode with <code>TYRO_LOGIN_DEBUG=true</code>. All email URLs, OTP codes, and reset tokens will be logged to storage/logs/laravel.log. For development, you can also use email debugging services like <a href="https://mailtrap.io" target="_blank" rel="noopener">MailTrap</a> or <a href="https://mailpit.dev" target="_blank" rel="noopener">Mailpit</a> to capture and inspect sent emails without affecting real users. These services provide real-time email previews, delivery tracking, and webhook testing capabilities.</p>
                             </div>
                         </div>
                     </div>
@@ -1409,18 +1409,6 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                             </button>
                             <div class="faq-answer">
                                 <p>Minimal impact. It uses cache for temporary data (no database queries) and lazy-loads views. Email operations can be queued for better performance.</p>
-                            </div>
-                        </div>
-
-                        <div class="faq-item">
-                            <button class="faq-question" aria-expanded="false">
-                                <span>Users getting locked out unexpectedly</span>
-                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </button>
-                            <div class="faq-answer">
-                                <p>Check your cache configuration. Different cache drivers (Redis, Memcached) may have different key naming. Clear cache with <code>php artisan cache:clear</code> and check lockout duration settings.</p>
                             </div>
                         </div>
 
