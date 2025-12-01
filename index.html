@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tyro Login - Beautiful Authentication System for Laravel 12</title>
+    <meta name="description" content="Beautiful, customizable authentication views for Laravel 12. Professional login and registration pages with multiple layouts, dark/light themes, and seamless Tyro integration.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="index.html" class="navbar-logo">
+                <!-- <span class="logo-icon">🔐</span> -->
+                <span class="logo-text">Tyro Login</span>
+            </a>
+            <div class="navbar-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#screenshots" class="nav-link">Screenshots</a>
+                <a href="#layouts" class="nav-link">Layouts</a>
+                <a href="#captcha" class="nav-link">Captcha</a>
+                <a href="#otp" class="nav-link">OTP</a>
+                <a href="#installation" class="nav-link">Install</a>
+                <a href="doc.html" class="nav-link">Docs</a>
+                <a href="https://github.com/hasinhayder/tyro-login" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    Laravel 12 &nbsp; • &nbsp; Zero Build Step &nbsp; • &nbsp;  Beautiful UI &nbsp; • &nbsp;  Beautiful Emails
+                </div>
+
+                <h1 class="hero-title">
+                    Powerful<br>
+                    <span class="gradient-text">Authentication</span><br>
+                    for Laravel 12
+                </h1>
+
+                <p class="hero-description">
+                    Professional, customizable login and registration pages with multiple layouts, 
+                    dark/light themes, captcha, OTP, email verification, password reset, lockout protection, and seamless integration with the <a href="https://hasinhayder.github.io/tyro/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: none;">Tyro</a> package.
+                </p>
+
+                <div class="hero-cta">
+                    <div class="install-command">
+                        <code id="installCommand">composer require hasinhayder/tyro-login</code>
+                        <button class="copy-btn" id="copyBtn" aria-label="Copy command">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="cta-buttons">
+                        <a href="#features" class="btn btn-primary">Explore Features</a>
+                        <a href="https://github.com/hasinhayder/tyro-login" class="btn btn-secondary" target="_blank" rel="noopener">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            View on GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Layout Options</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Email Templates</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Customizable</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose Tyro Login</h2>
+                <p class="section-description">Everything you need for beautiful, secure authentication pages</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="3" y1="9" x2="21" y2="9"></line>
+                            <line x1="9" y1="21" x2="9" y2="9"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Multiple Layouts</h3>
+                    <p class="feature-description">Choose from centered, split-left, or split-right layouts. Each layout is fully responsive and professionally designed.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Dark/Light Theme</h3>
+                    <p class="feature-description">Automatic theme detection with manual toggle. Respects user preferences and system settings out of the box.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Lockout Protection</h3>
+                    <p class="feature-description">Cache-based lockout protection after failed attempts. Configurable limits, duration, and beautiful lockout page.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V13.5zm0 2.25h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V18zm2.498-6.75h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V13.5zm0 2.25h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V18zm2.504-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm4.75-1.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zM8.25 6h7.5v2.25h-7.5V6zM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 002.25 2.25h10.5a2.25 2.25 0 002.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0012 2.25z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Math Captcha</h3>
+                    <p class="feature-description">Simple addition/subtraction captcha to prevent automated submissions. No external APIs required.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Login OTP</h3>
+                    <p class="feature-description">Two-factor authentication via email OTP. Beautiful digit-by-digit input with resend and cooldown support.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Email Verification</h3>
+                    <p class="feature-description">Optional email verification for new registrations. Secure signed URLs with configurable expiration times.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Password Reset</h3>
+                    <p class="feature-description">Complete forgot password flow with secure reset links. Users can reset passwords and auto-login after reset.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <path d="M22 6l-10 7L2 6"></path>
+                            <path d="M2 18l7-7"></path>
+                            <path d="M22 18l-7-7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Beautiful Emails</h3>
+                    <p class="feature-description">Sleek, minimal HTML email templates for OTP, password reset, email verification, and welcome emails. Fully customizable.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <polyline points="9 12 11 14 15 10"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Tyro Integration</h3>
+                    <p class="feature-description">Seamless integration with the Tyro package. Auto-assign roles to new users upon registration.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Zero Build Step</h3>
+                    <p class="feature-description">No npm, webpack, or vite required. Just install via Composer and you're ready to go. Works immediately.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Highly Configurable</h3>
+                    <p class="feature-description">Customize colors, logos, redirects, messages, and more via config file or environment variables.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">See It in Action</h2>
+                <p class="section-description">Beautiful, professional authentication screens for every scenario</p>
+            </div>
+
+            <div class="screenshots-slider">
+                <button class="slider-btn slider-prev" aria-label="Previous screenshot">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+
+                <div class="screenshots-track-wrapper">
+                    <div class="screenshots-track">
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-light.png" alt="Tyro Login - Light Theme" loading="lazy">
+                                <div class="screenshot-label">Login - Light Theme</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-dark.png" alt="Tyro Login - Dark Theme" loading="lazy">
+                                <div class="screenshot-label">Login - Dark Theme</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-registration-dark.png" alt="Tyro Login - Registration Dark Theme" loading="lazy">
+                                <div class="screenshot-label">Registration - Dark Theme</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-split-left-light.png" alt="Tyro Login - Split Left Layout" loading="lazy">
+                                <div class="screenshot-label">Split Left Layout</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-split-right-light.png" alt="Tyro Login - Split Right Layout" loading="lazy">
+                                <div class="screenshot-label">Split Right Layout</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-attemts-remaining.png" alt="Tyro Login - Login Attempts Warning" loading="lazy">
+                                <div class="screenshot-label">Login Attempts Warning</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-attempts-remaining-dark.png" alt="Tyro Login - Attempts Warning Dark" loading="lazy">
+                                <div class="screenshot-label">Attempts Warning - Dark</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-lockout-light.png" alt="Tyro Login - Lockout Screen Light" loading="lazy">
+                                <div class="screenshot-label">Lockout Screen - Light</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-lockout-dark.png" alt="Tyro Login - Lockout Screen Dark" loading="lazy">
+                                <div class="screenshot-label">Lockout Screen - Dark</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-forgot-dark.png" alt="Tyro Login - Forgot Password Dark" loading="lazy">
+                                <div class="screenshot-label">Forgot Password - Dark</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-captcha-light.png" alt="Tyro Login - Math Captcha Light" loading="lazy">
+                                <div class="screenshot-label">Math Captcha - Light</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-captcha-dark.png" alt="Tyro Login - Math Captcha Dark" loading="lazy">
+                                <div class="screenshot-label">Math Captcha - Dark</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-otp-light.png" alt="Tyro Login - OTP Verification Light" loading="lazy">
+                                <div class="screenshot-label">OTP Verification - Light</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-otp-dark.png" alt="Tyro Login - OTP Verification Dark" loading="lazy">
+                                <div class="screenshot-label">OTP Verification - Dark</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-verify-after-registration.png" alt="Tyro Login - Email Verification After Registration" loading="lazy">
+                                <div class="screenshot-label">Email Verification - After Registration</div>
+                            </div>
+                        </div>
+                        <div class="screenshot-slide">
+                            <div class="screenshot-card">
+                                <img src="images/tyro-login-verify-if-not-verified-but-logging-in.png" alt="Tyro Login - Unverified Email Login" loading="lazy">
+                                <div class="screenshot-label">Unverified Email - Login Attempt</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="slider-btn slider-next" aria-label="Next screenshot">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="screenshots-dots"></div>
+        </div>
+    </section>
+
+    <!-- Layouts Section -->
+    <section id="layouts" class="layouts-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Beautiful Layout Options</h2>
+                <p class="section-description">Choose the perfect layout for your application's branding</p>
+            </div>
+
+            <div class="layouts-showcase">
+                <div class="layout-tabs">
+                    <button class="layout-tab active" data-layout="centered">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        </svg>
+                        Centered
+                    </button>
+                    <button class="layout-tab" data-layout="split-left">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="12" y1="3" x2="12" y2="21"></line>
+                        </svg>
+                        Split Left
+                    </button>
+                    <button class="layout-tab" data-layout="split-right">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="12" y1="3" x2="12" y2="21"></line>
+                        </svg>
+                        Split Right
+                    </button>
+                </div>
+
+                <div class="layout-preview-container">
+                    <div class="layout-preview active" id="layout-centered">
+                        <div class="preview-window">
+                            <div class="preview-header">
+                                <div class="preview-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="preview-title">Centered Layout</div>
+                            </div>
+                            <div class="preview-content centered-preview">
+                                <div class="preview-gradient-bg"></div>
+                                <div class="preview-form-card">
+                                    <div class="preview-logo"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-button"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layout-info">
+                            <h3>Centered Layout</h3>
+                            <p>Clean, minimal design with the form centered on a gradient background. Perfect for a modern, focused login experience.</p>
+                            <div class="code-block">
+                                <code>TYRO_LOGIN_LAYOUT=centered</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layout-preview" id="layout-split-left">
+                        <div class="preview-window">
+                            <div class="preview-header">
+                                <div class="preview-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="preview-title">Split Left Layout</div>
+                            </div>
+                            <div class="preview-content split-left-preview">
+                                <div class="preview-image-side"></div>
+                                <div class="preview-form-side">
+                                    <div class="preview-logo"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-button"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layout-info">
+                            <h3>Split Left Layout</h3>
+                            <p>Two-column design with a stunning background image on the left and the form on the right. Great for showcasing your brand.</p>
+                            <div class="code-block">
+                                <code>TYRO_LOGIN_LAYOUT=split-left</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layout-preview" id="layout-split-right">
+                        <div class="preview-window">
+                            <div class="preview-header">
+                                <div class="preview-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="preview-title">Split Right Layout</div>
+                            </div>
+                            <div class="preview-content split-right-preview">
+                                <div class="preview-form-side">
+                                    <div class="preview-logo"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-input"></div>
+                                    <div class="preview-button"></div>
+                                </div>
+                                <div class="preview-image-side"></div>
+                            </div>
+                        </div>
+                        <div class="layout-info">
+                            <h3>Split Right Layout</h3>
+                            <p>Form on the left with background image on the right. Another great option for brand-focused authentication pages.</p>
+                            <div class="code-block">
+                                <code>TYRO_LOGIN_LAYOUT=split-right</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Math Captcha Section -->
+    <section id="captcha" class="security-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Math Captcha Protection</h2>
+                <p class="section-description">Simple yet effective bot protection without external dependencies</p>
+            </div>
+
+            <div class="code-showcase" style="margin-top: 2rem;">
+                <div class="code-showcase-content">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">Human Verification Made Easy</h3>
+                    <p class="section-description" style="text-align: left; margin-bottom: 1.5rem;">
+                        Add a simple math captcha to your login and registration forms. Users solve a basic addition or subtraction problem to prove they're human.
+                    </p>
+
+                    <ul class="feature-list">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            No external APIs or services required
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Enable separately for login and/or registration
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Configurable number range (default 1-10)
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Customizable labels and error messages
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Session-based answer storage
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-showcase-code">
+                    <div class="code-window">
+                        <div class="code-window-header">
+                            <div class="code-window-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="code-window-title">.env</div>
+                        </div>
+                        <pre><code class="language-bash"># Enable captcha on login form
+TYRO_LOGIN_CAPTCHA_LOGIN=true
+
+# Enable captcha on registration form
+TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login OTP Section -->
+    <section id="otp" class="code-example">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">2FA via Email OTP</h2>
+                <p class="section-description">Add an extra layer of security with email-based one-time passwords</p>
+            </div>
+
+            <div class="code-showcase" style="margin-top: 2rem;">
+                <div class="code-showcase-content">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">Secure Login with Email OTP</h3>
+                    <p class="section-description" style="text-align: left; margin-bottom: 1.5rem;">
+                        After entering valid credentials, users receive a one-time password via email. They must enter the OTP to complete the login process.
+                    </p>
+
+                    <ul class="feature-list">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Beautiful digit-by-digit input UI
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Configurable OTP length (4-8 digits)
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Expiration timer with visual countdown
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Resend functionality with cooldown
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Cache-based storage (no database required)
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Fully customizable labels and messages
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-showcase-code">
+                    <div class="code-window">
+                        <div class="code-window-header">
+                            <div class="code-window-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="code-window-title">.env</div>
+                        </div>
+                        <pre><code class="language-bash"># Enable OTP verification for login
+TYRO_LOGIN_OTP_ENABLED=true
+
+# OTP configuration
+TYRO_LOGIN_OTP_LENGTH=4      # 4-8 digits
+TYRO_LOGIN_OTP_EXPIRE=5      # minutes
+TYRO_LOGIN_OTP_MAX_RESEND=3  # max resend attempts
+TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="installation" class="quick-start">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get Started in 2 Steps</h2>
+                <p class="section-description">From installation to beautiful auth pages in under a minute</p>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Install the Package</h3>
+                        <div class="code-block">
+                            <code>composer require hasinhayder/tyro-login</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Run the Installer</h3>
+                        <div class="code-block">
+                            <code>php artisan tyro-login:install</code>
+                        </div>
+                        <p class="step-note">Publishes config and sets up routes automatically</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-start-cta">
+                <p>That's it! Visit <code>/login</code> to see your beautiful new authentication pages.</p>
+                <a href="doc.html" class="btn btn-primary">Read Full Documentation</a>
+            </div>
+
+            <!-- Artisan Commands -->
+            <!-- <div class="artisan-commands" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border);">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">Helpful Artisan Commands</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                    <div class="code-block" style="margin: 0;">
+                        <code>php artisan tyro-login:version</code>
+                        <span style="display: block; font-size: 0.75rem; color: var(--color-text-tertiary); margin-top: 0.25rem;">Show version info</span>
+                    </div>
+                    <div class="code-block" style="margin: 0;">
+                        <code>php artisan tyro-login:doc</code>
+                        <span style="display: block; font-size: 0.75rem; color: var(--color-text-tertiary); margin-top: 0.25rem;">Open documentation</span>
+                    </div>
+                    <div class="code-block" style="margin: 0;">
+                        <code>php artisan tyro-login:star</code>
+                        <span style="display: block; font-size: 0.75rem; color: var(--color-text-tertiary); margin-top: 0.25rem;">Star on GitHub ⭐</span>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- Code Example Section -->
+    <section class="code-example">
+        <div class="container">
+            <div class="code-showcase">
+                <div class="code-showcase-content">
+                    <h2 class="section-title">Highly Configurable</h2>
+                    <p class="section-description">Customize everything via config or environment variables</p>
+
+                    <ul class="feature-list">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Custom branding colors and logos
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Math captcha for bot protection
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Two-factor authentication via email OTP
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Email verification for new registrations
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Password reset with secure links
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Lockout protection with custom limits
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Debug mode for development
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-showcase-code">
+                    <div class="code-window">
+                        <div class="code-window-header">
+                            <div class="code-window-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="code-window-title">config/tyro-login.php</div>
+                        </div>
+                        <pre><code class="language-php">return [
+    // Layout: 'centered', 'split-left', 'split-right'
+    'layout' => env('TYRO_LOGIN_LAYOUT', 'centered'),
+
+    // Custom branding
+    'branding' => [
+        'app_name' => env('APP_NAME', 'Laravel'),
+        'logo' => env('TYRO_LOGIN_LOGO', null),
+    ],
+
+    // Math captcha protection
+    'captcha' => [
+        'enabled_login' => env('TYRO_LOGIN_CAPTCHA_LOGIN', false),
+        'enabled_register' => env('TYRO_LOGIN_CAPTCHA_REGISTER', false),
+    ],
+
+    // Two-factor authentication via OTP
+    'otp' => [
+        'enabled' => env('TYRO_LOGIN_OTP_ENABLED', false),
+        'length' => 4, // 4-8 digits
+        'expire' => 5, // minutes
+    ],
+
+    // Lockout protection (cache-based)
+    'lockout' => [
+        'enabled' => true,
+        'max_attempts' => 5,
+        'duration_minutes' => 15,
+    ],
+
+    // Debug mode for development
+    'debug' => env('TYRO_LOGIN_DEBUG', false),
+];</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Features Section -->
+    <section class="security-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Secure by Default</h2>
+                <p class="section-description">Built with security best practices from the ground up</p>
+            </div>
+
+            <div class="security-grid">
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <h3>CSRF Protection</h3>
+                    <p>All forms include CSRF tokens for protection against cross-site request forgery attacks.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <h3>Lockout Protection</h3>
+                    <p>Temporarily lock accounts after too many failed attempts. Cache-based, no database required.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                        </svg>
+                    </div>
+                    <h3>Password Hashing</h3>
+                    <p>Uses Laravel's secure bcrypt hashing for all passwords. Industry-standard security.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                    </div>
+                    <h3>Session Regeneration</h3>
+                    <p>Automatic session regeneration on login prevents session fixation attacks.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 11 12 14 22 4"></polyline>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                        </svg>
+                    </div>
+                    <h3>Input Validation</h3>
+                    <p>Server-side validation with proper sanitization and error messages.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Email Verification</h3>
+                    <p>Verify user email addresses before granting access. Secure signed URLs with expiration.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                        </svg>
+                    </div>
+                    <h3>Secure Password Reset</h3>
+                    <p>Time-limited, signed URLs for password reset. Auto-login after successful reset.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4"></path>
+                            <rect x="11" y="9" width="6" height="6" rx="1"></rect>
+                        </svg>
+                    </div>
+                    <h3>Captcha</h3>
+                    <p>Simple configurable math challenges to block bots. No external services or API keys required.</p>
+                </div>
+
+                <div class="security-card">
+                    <div class="security-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                    </div>
+                    <h3>Login OTP</h3>
+                    <p>Two-factor authentication via email. One-time passwords with expiration and resend limits.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Routes Section -->
+    <section class="routes-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Ready-to-Use Routes</h2>
+                <p class="section-description">All authentication routes registered automatically</p>
+            </div>
+
+            <div class="routes-table-wrapper">
+                <table class="routes-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>URI</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/login</code></td>
+                            <td><code>tyro-login.login</code></td>
+                            <td>Show login form</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge post">POST</span></td>
+                            <td><code>/login</code></td>
+                            <td><code>tyro-login.login.submit</code></td>
+                            <td>Handle login</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/register</code></td>
+                            <td><code>tyro-login.register</code></td>
+                            <td>Show registration form</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge post">POST</span></td>
+                            <td><code>/register</code></td>
+                            <td><code>tyro-login.register.submit</code></td>
+                            <td>Handle registration</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge delete">GET/POST</span></td>
+                            <td><code>/logout</code></td>
+                            <td><code>tyro-login.logout</code></td>
+                            <td>Handle logout</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/lockout</code></td>
+                            <td><code>tyro-login.lockout</code></td>
+                            <td>Show lockout page</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/email/verify</code></td>
+                            <td><code>tyro-login.verification.notice</code></td>
+                            <td>Verification notice</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/email/not-verified</code></td>
+                            <td><code>tyro-login.verification.not-verified</code></td>
+                            <td>Unverified email page</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/email/verify/{token}</code></td>
+                            <td><code>tyro-login.verification.verify</code></td>
+                            <td>Verify email</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge post">POST</span></td>
+                            <td><code>/email/resend</code></td>
+                            <td><code>tyro-login.verification.resend</code></td>
+                            <td>Resend verification</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/forgot-password</code></td>
+                            <td><code>tyro-login.password.request</code></td>
+                            <td>Forgot password form</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge post">POST</span></td>
+                            <td><code>/forgot-password</code></td>
+                            <td><code>tyro-login.password.email</code></td>
+                            <td>Send reset link</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/reset-password/{token}</code></td>
+                            <td><code>tyro-login.password.reset</code></td>
+                            <td>Reset password form</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge post">POST</span></td>
+                            <td><code>/reset-password</code></td>
+                            <td><code>tyro-login.password.update</code></td>
+                            <td>Update password</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/otp/verify</code></td>
+                            <td><code>tyro-login.otp.verify</code></td>
+                            <td>Show OTP form</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge post">POST</span></td>
+                            <td><code>/otp/verify</code></td>
+                            <td><code>tyro-login.otp.submit</code></td>
+                            <td>Verify OTP code</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge post">POST</span></td>
+                            <td><code>/otp/resend</code></td>
+                            <td><code>tyro-login.otp.resend</code></td>
+                            <td>Resend OTP</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/otp/cancel</code></td>
+                            <td><code>tyro-login.otp.cancel</code></td>
+                            <td>Cancel OTP verification</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social CTA Section -->
+    <section class="social-cta">
+        <div class="container">
+            <div class="social-cta-content">
+                <div class="social-cta-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+                <h2 class="social-cta-title">Like What You See?</h2>
+                <p class="social-cta-description">If Tyro Login is helping you build better apps, help us spread the word!</p>
+
+                <div class="social-cta-buttons">
+                    <a href="https://github.com/hasinhayder/tyro-login" class="social-btn star-btn" target="_blank" rel="noopener">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        Star on GitHub
+                    </a>
+                    <button class="social-btn share-btn" onclick="shareOnTwitter()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                        Share on X
+                    </button>
+                    <button class="social-btn share-btn" onclick="shareOnLinkedIn()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                        Share on LinkedIn
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-description">Everything you need to know about Tyro Login</p>
+            </div>
+
+            <!-- FAQ Navigation -->
+            <!-- <div class="faq-nav">
+                <a href="#getting-started" class="faq-nav-link">Getting Started</a>
+                <a href="#installation-setup" class="faq-nav-link">Installation & Setup</a>
+                <a href="#configuration-customization" class="faq-nav-link">Configuration & Customization</a>
+                <a href="#security-features" class="faq-nav-link">Security Features</a>
+                <a href="#email-password" class="faq-nav-link">Email & Password Features</a>
+                <a href="#technical-performance" class="faq-nav-link">Technical & Performance</a>
+                <a href="#advanced-usage" class="faq-nav-link">Advanced Usage</a>
+            </div> -->
+
+            <div class="faq-list">
+                <!-- Getting Started -->
+                <div class="faq-category" id="getting-started">
+                    <h3 class="faq-category-title">Getting Started</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>What is Tyro Login?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login is a Laravel package that provides beautiful, customizable login and registration pages. It includes multiple layout options, dark/light themes, lockout protection, and seamless integration with the Tyro RBAC package.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>What are the requirements?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login requires PHP 8.2 or higher and Laravel 12. It works with any database supported by Laravel (MySQL, PostgreSQL, SQLite, SQL Server).</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Do I need the Tyro package?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>No, Tyro Login works independently. However, if you have the <a href="https://github.com/hasinhayder/tyro" target="_blank">Tyro package</a> installed, it will automatically integrate with it to assign default roles to new users upon registration.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Installation & Setup -->
+                <div class="faq-category" id="installation-setup">
+                    <h3 class="faq-category-title">Installation & Setup</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>I'm getting composer errors during installation</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Ensure you're using PHP 8.2+ and Laravel 12. Run <code>composer update</code> first. Check your minimum-stability in composer.json. If using older Laravel versions, upgrade your framework first.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I migrate from Laravel's default auth?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login works seamlessly with Laravel's default authentication system. No migration is required - your existing users and data remain completely unchanged. Simply install Tyro Login and it will integrate automatically. You can optionally disable Laravel's default auth routes in routes/web.php if you prefer to use only Tyro Login's routes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuration & Customization -->
+                <div class="faq-category" id="configuration-customization">
+                    <h3 class="faq-category-title">Configuration & Customization</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Can I customize the views?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Run <code>php artisan tyro-login:publish --views</code> to publish the Blade templates to your application. You can then modify them as needed. You can also customize colors and branding via environment variables without touching any code.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I change the layout?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Set the <code>TYRO_LOGIN_LAYOUT</code> environment variable to <code>centered</code>, <code>split-left</code>, or <code>split-right</code>. You can also set a custom background image URL with <code>TYRO_LOGIN_BACKGROUND_IMAGE</code>.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I customize colors and styling?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Publish views with <code>php artisan tyro-login:publish --views</code> and modify CSS. You can also override CSS variables or use your own stylesheet.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Email features aren't working</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Check your mail configuration in config/mail.php. Verify SMTP settings and ensure <code>TYRO_LOGIN_DEBUG=true</code> to see logged email URLs during development. Some email providers may require additional configuration.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Can I use Tyro Login with existing User model?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Set <code>TYRO_LOGIN_USER_MODEL</code> to your custom User model class. Your model just needs to implement Laravel's Authenticatable contract.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Can I change the authentication URLs?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Use <code>TYRO_LOGIN_ROUTE_PREFIX</code> to add a prefix (e.g., 'auth' makes URLs /auth/login). All routes will be prefixed automatically.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Features -->
+                <div class="faq-category" id="security-features">
+                    <h3 class="faq-category-title">Security Features</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How does lockout protection work?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>When enabled, users are locked out after a configurable number of failed login attempts (default 5). The lockout is stored in cache (no database required) and automatically expires after a configurable duration (default 15 minutes). A beautiful lockout page shows a countdown timer.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How does the math captcha work?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>The math captcha displays a simple addition or subtraction problem (e.g., "5 + 3 = ?") on your login and/or registration forms. Enable it with <code>TYRO_LOGIN_CAPTCHA_LOGIN=true</code> or <code>TYRO_LOGIN_CAPTCHA_REGISTER=true</code>. No external APIs required - answers are stored in the session.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I enable two-factor authentication (OTP)?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Set <code>TYRO_LOGIN_OTP_ENABLED=true</code> in your <code>.env</code> file. After entering valid credentials, users receive a one-time password via email. Configure OTP length (4-8 digits) with <code>TYRO_LOGIN_OTP_LENGTH</code> and expiration time with <code>TYRO_LOGIN_OTP_EXPIRE</code>. All OTP data is stored in cache - no database required.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Is Tyro Login secure for production?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! It includes CSRF protection, secure password hashing, session regeneration, and uses signed URLs for sensitive operations. Always use HTTPS in production and never enable debug mode.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>What is debug mode and when should I use it?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Debug mode (<code>TYRO_LOGIN_DEBUG=true</code>) logs OTP codes, verification URLs, and password reset URLs to <code>storage/logs/laravel.log</code>. This makes it easy to test email-based features during development without actually sending emails. <strong>Never enable this in production!</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email & Password Features -->
+                <div class="faq-category" id="email-password">
+                    <h3 class="faq-category-title">Email & Password Features</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do email verification and password reset work?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Both features use secure, time-limited signed URLs stored in cache (no database migrations required). Email verification can be enabled via <code>TYRO_LOGIN_REQUIRE_VERIFICATION=true</code>. Password reset shows a "Forgot Password?" link on the login page. In development, verification and reset URLs are logged to the console for easy testing.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Can I use third-party email services?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Tyro Login works with any email service configured in Laravel's mail.php (SendGrid, Mailgun, SES, etc.). Just configure your service and emails will work.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I test email features without sending real emails?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Enable debug mode with <code>TYRO_LOGIN_DEBUG=true</code>. All email URLs, OTP codes, and reset tokens will be logged to storage/logs/laravel.log. For development, you can also use email debugging services like <a href="https://mailtrap.io" target="_blank" rel="noopener">MailTrap</a> or <a href="https://mailpit.dev" target="_blank" rel="noopener">Mailpit</a> to capture and inspect sent emails without affecting real users. These services provide real-time email previews, delivery tracking, and webhook testing capabilities.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical & Performance -->
+                <div class="faq-category" id="technical-performance">
+                    <h3 class="faq-category-title">Technical & Performance</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Does Tyro Login require database migrations?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>No! Tyro Login uses Laravel's cache system for all temporary data (lockouts, OTP codes, verification tokens, password reset tokens). This means zero database migrations and works with any cache driver (file, Redis, Memcached, etc.).</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Does Tyro Login impact application performance?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Minimal impact. It uses cache for temporary data (no database queries) and lazy-loads views. Email operations can be queued for better performance.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Lockout/OTP features not working</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login uses Laravel's cache system. Ensure your cache driver is properly configured in config/cache.php. File cache works out of the box, Redis/Memcached need proper setup.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Cache driver issues</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login uses Laravel's cache system. Ensure your cache driver is properly configured in config/cache.php. File cache works out of the box, Redis/Memcached need proper setup.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Usage -->
+                <div class="faq-category" id="advanced-usage">
+                    <h3 class="faq-category-title">Advanced Usage</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Route customization</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Use <code>TYRO_LOGIN_ROUTE_PREFIX</code> to add a prefix (e.g., 'auth' makes URLs /auth/login). All routes will be prefixed automatically.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Middleware usage</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Use Laravel's built-in <code>auth</code> middleware or <code>guest</code> middleware for public pages. Tyro Login integrates seamlessly with Laravel's authentication system.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Production deployment</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Disable debug mode (<code>TYRO_LOGIN_DEBUG=false</code>), use HTTPS, configure proper email service, set appropriate lockout limits, and consider rate limiting.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Multi-tenant applications</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! It works with any Laravel setup. For multi-tenant, ensure your cache and session configurations are tenant-aware.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Instant Authentication System</h2>
+                <p class="cta-description">Get started with Tyro Login in just 2 commands</p>
+
+                <div class="install-command large">
+                    <code>composer require hasinhayder/tyro-login</code>
+                    <button class="copy-btn" id="copyBtnFooter" aria-label="Copy command">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="cta-links">
+                    <a href="https://github.com/hasinhayder/tyro-login" target="_blank" rel="noopener">View on GitHub</a>
+                    <span>•</span>
+                    <a href="doc.html">Documentation</a>
+                    <span>•</span>
+                    <a href="https://github.com/hasinhayder/tyro" target="_blank" rel="noopener">Tyro RBAC Package</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <!-- <h3>🔐 Tyro Login</h3> -->
+                    <p>Complete authentication for Laravel 12</p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="doc.html">Documentation</a></li>
+                            <li><a href="https://github.com/hasinhayder/tyro-login" target="_blank" rel="noopener">GitHub</a></li>
+                            <li><a href="https://github.com/hasinhayder/tyro-login/issues" target="_blank" rel="noopener">Issues</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Related</h4>
+                        <ul>
+                            <li><a href="https://github.com/hasinhayder/tyro" target="_blank" rel="noopener">Tyro RBAC Package</a></li>
+                            <li><a href="https://github.com/hasinhayder/tyro-login/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a></li>
+                            <li><a href="https://github.com/hasinhayder" target="_blank" rel="noopener">Author</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>Open-sourced under the <a href="https://github.com/hasinhayder/tyro-login/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a></p>
+                <p>Built with ❤️ by <a href="https://github.com/hasinhayder" target="_blank" rel="noopener">Hasin Hayder</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Close lightbox">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-image" id="lightboxImage">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+        <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button class="lightbox-nav lightbox-next" aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
