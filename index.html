@@ -1114,136 +1114,393 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                 <p class="section-description">Everything you need to know about Tyro Login</p>
             </div>
 
+            <!-- FAQ Navigation -->
+            <!-- <div class="faq-nav">
+                <a href="#getting-started" class="faq-nav-link">Getting Started</a>
+                <a href="#installation-setup" class="faq-nav-link">Installation & Setup</a>
+                <a href="#configuration-customization" class="faq-nav-link">Configuration & Customization</a>
+                <a href="#security-features" class="faq-nav-link">Security Features</a>
+                <a href="#email-password" class="faq-nav-link">Email & Password Features</a>
+                <a href="#technical-performance" class="faq-nav-link">Technical & Performance</a>
+                <a href="#advanced-usage" class="faq-nav-link">Advanced Usage</a>
+            </div> -->
+
             <div class="faq-list">
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>What is Tyro Login?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Tyro Login is a Laravel package that provides beautiful, customizable login and registration pages. It includes multiple layout options, dark/light themes, lockout protection, and seamless integration with the Tyro RBAC package.</p>
+                <!-- Getting Started -->
+                <div class="faq-category" id="getting-started">
+                    <h3 class="faq-category-title">Getting Started</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>What is Tyro Login?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login is a Laravel package that provides beautiful, customizable login and registration pages. It includes multiple layout options, dark/light themes, lockout protection, and seamless integration with the Tyro RBAC package.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>What are the requirements?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login requires PHP 8.2 or higher and Laravel 12. It works with any database supported by Laravel (MySQL, PostgreSQL, SQLite, SQL Server).</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Do I need the Tyro package?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>No, Tyro Login works independently. However, if you have the <a href="https://github.com/hasinhayder/tyro" target="_blank">Tyro package</a> installed, it will automatically integrate with it to assign default roles to new users upon registration.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>What are the requirements?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Tyro Login requires PHP 8.2 or higher and Laravel 12. It works with any database supported by Laravel (MySQL, PostgreSQL, SQLite, SQL Server).</p>
+                <!-- Installation & Setup -->
+                <div class="faq-category" id="installation-setup">
+                    <h3 class="faq-category-title">Installation & Setup</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>I'm getting composer errors during installation</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Ensure you're using PHP 8.2+ and Laravel 12. Run <code>composer update</code> first. Check your minimum-stability in composer.json. If using older Laravel versions, upgrade your framework first.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I migrate from Laravel's default auth?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Disable Laravel's default auth routes in routes/web.php, install Tyro Login, and update any redirects. Your existing users and data remain unchanged.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>Do I need the Tyro package?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>No, Tyro Login works independently. However, if you have the <a href="https://github.com/hasinhayder/tyro" target="_blank">Tyro package</a> installed, it will automatically integrate with it to assign default roles to new users upon registration.</p>
+                <!-- Configuration & Customization -->
+                <div class="faq-category" id="configuration-customization">
+                    <h3 class="faq-category-title">Configuration & Customization</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Can I customize the views?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Run <code>php artisan tyro-login:publish --views</code> to publish the Blade templates to your application. You can then modify them as needed. You can also customize colors and branding via environment variables without touching any code.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I change the layout?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Set the <code>TYRO_LOGIN_LAYOUT</code> environment variable to <code>centered</code>, <code>split-left</code>, or <code>split-right</code>. You can also set a custom background image URL with <code>TYRO_LOGIN_BACKGROUND_IMAGE</code>.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I customize colors and styling?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Publish views with <code>php artisan tyro-login:publish --views</code> and modify CSS. You can also override CSS variables or use your own stylesheet.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Email features aren't working</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Check your mail configuration in config/mail.php. Verify SMTP settings and ensure <code>TYRO_LOGIN_DEBUG=true</code> to see logged email URLs during development. Some email providers may require additional configuration.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Can I use Tyro Login with existing User model?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Set <code>TYRO_LOGIN_USER_MODEL</code> to your custom User model class. Your model just needs to implement Laravel's Authenticatable contract.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Can I change the authentication URLs?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Use <code>TYRO_LOGIN_ROUTE_PREFIX</code> to add a prefix (e.g., 'auth' makes URLs /auth/login). All routes will be prefixed automatically.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>Can I customize the views?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Yes! Run <code>php artisan tyro-login:publish --views</code> to publish the Blade templates to your application. You can then modify them as needed. You can also customize colors and branding via environment variables without touching any code.</p>
+                <!-- Security Features -->
+                <div class="faq-category" id="security-features">
+                    <h3 class="faq-category-title">Security Features</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How does lockout protection work?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>When enabled, users are locked out after a configurable number of failed login attempts (default 5). The lockout is stored in cache (no database required) and automatically expires after a configurable duration (default 15 minutes). A beautiful lockout page shows a countdown timer.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How does the math captcha work?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>The math captcha displays a simple addition or subtraction problem (e.g., "5 + 3 = ?") on your login and/or registration forms. Enable it with <code>TYRO_LOGIN_CAPTCHA_LOGIN=true</code> or <code>TYRO_LOGIN_CAPTCHA_REGISTER=true</code>. No external APIs required - answers are stored in the session.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I enable two-factor authentication (OTP)?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Set <code>TYRO_LOGIN_OTP_ENABLED=true</code> in your <code>.env</code> file. After entering valid credentials, users receive a one-time password via email. Configure OTP length (4-8 digits) with <code>TYRO_LOGIN_OTP_LENGTH</code> and expiration time with <code>TYRO_LOGIN_OTP_EXPIRE</code>. All OTP data is stored in cache - no database required.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Is Tyro Login secure for production?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! It includes CSRF protection, secure password hashing, session regeneration, and uses signed URLs for sensitive operations. Always use HTTPS in production and never enable debug mode.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>What is debug mode and when should I use it?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Debug mode (<code>TYRO_LOGIN_DEBUG=true</code>) logs OTP codes, verification URLs, and password reset URLs to <code>storage/logs/laravel.log</code>. This makes it easy to test email-based features during development without actually sending emails. <strong>Never enable this in production!</strong></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>How does lockout protection work?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>When enabled, users are locked out after a configurable number of failed login attempts (default 5). The lockout is stored in cache (no database required) and automatically expires after a configurable duration (default 15 minutes). A beautiful lockout page shows a countdown timer.</p>
+                <!-- Email & Password Features -->
+                <div class="faq-category" id="email-password">
+                    <h3 class="faq-category-title">Email & Password Features</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do email verification and password reset work?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Both features use secure, time-limited signed URLs stored in cache (no database migrations required). Email verification can be enabled via <code>TYRO_LOGIN_REQUIRE_VERIFICATION=true</code>. Password reset shows a "Forgot Password?" link on the login page. In development, verification and reset URLs are logged to the console for easy testing.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Can I use third-party email services?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Tyro Login works with any email service configured in Laravel's mail.php (SendGrid, Mailgun, SES, etc.). Just configure your service and emails will work.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I test email features without sending real emails?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Enable debug mode with <code>TYRO_LOGIN_DEBUG=true</code>. All email URLs, OTP codes, and reset tokens will be logged to storage/logs/laravel.log.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>How do email verification and password reset work?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Both features use secure, time-limited signed URLs stored in cache (no database migrations required). Email verification can be enabled via <code>TYRO_LOGIN_REQUIRE_VERIFICATION=true</code>. Password reset shows a "Forgot Password?" link on the login page. In development, verification and reset URLs are logged to the console for easy testing.</p>
+                <!-- Technical & Performance -->
+                <div class="faq-category" id="technical-performance">
+                    <h3 class="faq-category-title">Technical & Performance</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Does Tyro Login require database migrations?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>No! Tyro Login uses Laravel's cache system for all temporary data (lockouts, OTP codes, verification tokens, password reset tokens). This means zero database migrations and works with any cache driver (file, Redis, Memcached, etc.).</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Does Tyro Login impact application performance?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Minimal impact. It uses cache for temporary data (no database queries) and lazy-loads views. Email operations can be queued for better performance.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Users getting locked out unexpectedly</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Check your cache configuration. Different cache drivers (Redis, Memcached) may have different key naming. Clear cache with <code>php artisan cache:clear</code> and check lockout duration settings.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Lockout/OTP features not working</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login uses Laravel's cache system. Ensure your cache driver is properly configured in config/cache.php. File cache works out of the box, Redis/Memcached need proper setup.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Cache driver issues</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login uses Laravel's cache system. Ensure your cache driver is properly configured in config/cache.php. File cache works out of the box, Redis/Memcached need proper setup.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>How do I change the layout?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Set the <code>TYRO_LOGIN_LAYOUT</code> environment variable to <code>centered</code>, <code>split-left</code>, or <code>split-right</code>. You can also set a custom background image URL with <code>TYRO_LOGIN_BACKGROUND_IMAGE</code>.</p>
-                    </div>
-                </div>
+                <!-- Advanced Usage -->
+                <div class="faq-category" id="advanced-usage">
+                    <h3 class="faq-category-title">Advanced Usage</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Route customization</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! Use <code>TYRO_LOGIN_ROUTE_PREFIX</code> to add a prefix (e.g., 'auth' makes URLs /auth/login). All routes will be prefixed automatically.</p>
+                            </div>
+                        </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>How does the math captcha work?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>The math captcha displays a simple addition or subtraction problem (e.g., "5 + 3 = ?") on your login and/or registration forms. Enable it with <code>TYRO_LOGIN_CAPTCHA_LOGIN=true</code> or <code>TYRO_LOGIN_CAPTCHA_REGISTER=true</code>. No external APIs required - answers are stored in the session.</p>
-                    </div>
-                </div>
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Middleware usage</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Use Laravel's built-in <code>auth</code> middleware or <code>guest</code> middleware for public pages. Tyro Login integrates seamlessly with Laravel's authentication system.</p>
+                            </div>
+                        </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>How do I enable two-factor authentication (OTP)?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Set <code>TYRO_LOGIN_OTP_ENABLED=true</code> in your <code>.env</code> file. After entering valid credentials, users receive a one-time password via email. Configure OTP length (4-8 digits) with <code>TYRO_LOGIN_OTP_LENGTH</code> and expiration time with <code>TYRO_LOGIN_OTP_EXPIRE</code>. All OTP data is stored in cache - no database required.</p>
-                    </div>
-                </div>
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Production deployment</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Disable debug mode (<code>TYRO_LOGIN_DEBUG=false</code>), use HTTPS, configure proper email service, set appropriate lockout limits, and consider rate limiting.</p>
+                            </div>
+                        </div>
 
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>What is debug mode and when should I use it?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Debug mode (<code>TYRO_LOGIN_DEBUG=true</code>) logs OTP codes, verification URLs, and password reset URLs to <code>storage/logs/laravel.log</code>. This makes it easy to test email-based features during development without actually sending emails. <strong>Never enable this in production!</strong></p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span>Does Tyro Login require database migrations?</span>
-                        <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>No! Tyro Login uses Laravel's cache system for all temporary data (lockouts, OTP codes, verification tokens, password reset tokens). This means zero database migrations and works with any cache driver (file, Redis, Memcached, etc.).</p>
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Multi-tenant applications</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! It works with any Laravel setup. For multi-tenant, ensure your cache and session configurations are tenant-aware.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
