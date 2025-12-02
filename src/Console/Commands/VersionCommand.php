@@ -26,7 +26,7 @@ class VersionCommand extends Command
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
-        $this->info('  ║     🔐 Tyro Login                      ║');
+        $this->info('  ║        Tyro Login                      ║');
         $this->info('  ║                                        ║');
         $this->info('  ╚════════════════════════════════════════╝');
         $this->info('');
@@ -34,8 +34,8 @@ class VersionCommand extends Command
         $this->info('  Laravel: <comment>' . app()->version() . '</comment>');
         $this->info('  PHP: <comment>' . PHP_VERSION . '</comment>');
         $this->info('');
-        $this->info('  📖 Documentation: <comment>https://hasinhayder.github.io/tyro/tyro-login/doc.html</comment>');
-        $this->info('  📦 GitHub: <comment>https://github.com/hasinhayder/tyro-login</comment>');
+        $this->info('  Documentation: <comment>https://hasinhayder.github.io/tyro/tyro-login/doc.html</comment>');
+        $this->info('  GitHub: <comment>https://github.com/hasinhayder/tyro-login</comment>');
         $this->info('');
 
         return self::SUCCESS;
