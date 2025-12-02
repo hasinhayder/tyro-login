@@ -11,632 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <style>
-        /* Documentation-specific styles */
-        .doc-layout {
-            min-height: 100vh;
-            background: var(--color-bg);
-        }
-
-        .doc-sidebar {
-            position: fixed;
-            top: 72px;
-            left: 0;
-            width: 280px;
-            height: calc(100vh - 72px);
-            background: var(--color-bg-secondary);
-            border-right: 1px solid var(--color-border);
-            overflow-y: auto;
-            padding: var(--spacing-lg);
-            z-index: 100;
-        }
-
-        .doc-sidebar-header {
-            margin-bottom: var(--spacing-xl);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .doc-logo {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            font-weight: 900;
-            background: var(--gradient-text);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .doc-version {
-            font-size: 0.875rem;
-            color: var(--color-text-tertiary);
-        }
-
-        .doc-nav {
-            list-style: none;
-        }
-
-        .doc-nav-section {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .doc-nav-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--color-text-tertiary);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .doc-nav-list {
-            list-style: none;
-        }
-
-        .doc-nav-link {
-            display: block;
-            padding: var(--spacing-xs) var(--spacing-sm);
-            color: var(--color-text-secondary);
-            text-decoration: none;
-            border-radius: var(--radius-sm);
-            transition: all var(--transition-fast);
-            font-size: 0.9375rem;
-            margin-bottom: 2px;
-        }
-
-        .doc-nav-link:hover {
-            background: var(--color-bg);
-            color: var(--color-primary);
-        }
-
-        .doc-nav-link.active {
-            background: var(--color-primary);
-            color: white;
-            font-weight: 600;
-        }
-
-        .doc-content {
-            margin-left: 280px;
-            padding: calc(var(--spacing-2xl) + 72px) var(--spacing-3xl) var(--spacing-3xl);
-            max-width: 1000px;
-        }
-
-        .doc-header {
-            margin-bottom: var(--spacing-3xl);
-            padding-bottom: var(--spacing-xl);
-            border-bottom: 2px solid var(--color-border);
-        }
-
-        .doc-title {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
-            font-weight: 900;
-            margin-bottom: var(--spacing-md);
-            background: var(--gradient-text);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .doc-subtitle {
-            font-size: 1.25rem;
-            color: var(--color-text-secondary);
-            line-height: 1.7;
-        }
-
-        .doc-section {
-            margin-bottom: var(--spacing-3xl);
-        }
-
-        .doc-section-title {
-            font-family: var(--font-display);
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-lg);
-            color: var(--color-text);
-            scroll-margin-top: 100px;
-        }
-
-        .doc-section-subtitle {
-            font-family: var(--font-display);
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin: var(--spacing-xl) 0 var(--spacing-md);
-            color: var(--color-text);
-            scroll-margin-top: 100px;
-        }
-
-        .doc-text {
-            font-size: 1.0625rem;
-            line-height: 1.8;
-            color: var(--color-text-secondary);
-            margin-bottom: var(--spacing-md);
-        }
-
-        .doc-code-block {
-            background: #1e293b;
-            border-radius: var(--radius-md);
-            margin: var(--spacing-lg) 0;
-            overflow: hidden;
-            border: 1px solid #334155;
-        }
-
-        .doc-code-header {
-            background: #0f172a;
-            padding: var(--spacing-sm) var(--spacing-lg);
-            border-bottom: 1px solid #334155;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .doc-code-title {
-            font-size: 0.875rem;
-            color: #94a3b8;
-            font-family: "SF Mono", "Monaco", "Consolas", monospace;
-        }
-
-        .doc-code-copy {
-            background: transparent;
-            border: 1px solid #475569;
-            color: #94a3b8;
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .doc-code-copy:hover {
-            background: #334155;
-            color: white;
-        }
-
-        .doc-code-block pre {
-            padding: var(--spacing-lg);
-            overflow-x: auto;
-            margin: 0;
-        }
-
-        .doc-code-block code {
-            font-family: "SF Mono", "Monaco", "Consolas", monospace;
-            font-size: 0.9375rem;
-            line-height: 1.7;
-            color: #e2e8f0;
-            display: block;
-            white-space: pre;
-        }
-
-        .doc-inline-code {
-            background: var(--color-bg-secondary);
-            color: var(--color-primary);
-            padding: 0.2em 0.5em;
-            border-radius: 4px;
-            font-family: "SF Mono", "Monaco", "Consolas", monospace;
-            font-size: 0.9em;
-            border: 1px solid var(--color-border);
-        }
-
-        .doc-alert {
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-radius: var(--radius-md);
-            margin: var(--spacing-lg) 0;
-            border-left: 4px solid;
-        }
-
-        .doc-alert-info {
-            background: rgba(224, 90, 51, 0.1);
-            border-color: var(--color-primary);
-            color: var(--color-text);
-        }
-
-        .doc-alert-warning {
-            background: rgba(245, 158, 11, 0.1);
-            border-color: #f59e0b;
-            color: var(--color-text);
-        }
-
-        .doc-alert-success {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: #10b981;
-            color: var(--color-text);
-        }
-
-        .doc-list {
-            margin: var(--spacing-md) 0;
-            padding-left: var(--spacing-xl);
-        }
-
-        .doc-list li {
-            margin-bottom: var(--spacing-sm);
-            color: var(--color-text-secondary);
-            line-height: 1.7;
-        }
-
-        .doc-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: var(--spacing-lg) 0;
-            font-size: 0.9375rem;
-        }
-
-        .doc-table th {
-            background: var(--color-bg-secondary);
-            padding: var(--spacing-md);
-            text-align: left;
-            font-weight: 700;
-            border: 1px solid var(--color-border);
-            color: var(--color-text);
-        }
-
-        .doc-table td {
-            padding: var(--spacing-md);
-            border: 1px solid var(--color-border);
-            color: var(--color-text-secondary);
-            line-height: 1.6;
-        }
-
-        .doc-table tr:hover {
-            background: var(--color-bg-secondary);
-        }
-
-        /* Environment Variables Table Styling */
-        .doc-section-subtitle {
-            margin-top: var(--spacing-2xl);
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid var(--color-border);
-        }
-
-        .doc-section-subtitle:first-of-type {
-            margin-top: var(--spacing-lg);
-            border-top: none;
-            padding-top: 0;
-        }
-
-        .doc-table code.doc-inline-code {
-            font-size: 0.875em;
-            word-break: break-all;
-        }
-
-        @media (max-width: 768px) {
-            .doc-table {
-                font-size: 0.875rem;
-            }
-
-            .doc-table th,
-            .doc-table td {
-                padding: var(--spacing-sm);
-            }
-        }
-
-        .doc-back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            color: var(--color-primary);
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: var(--spacing-lg);
-            transition: all var(--transition-fast);
-        }
-
-        .doc-back-link:hover {
-            gap: var(--spacing-sm);
-        }
-
-        /* Screenshots Grid */
-        .doc-screenshots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-lg);
-        }
-
-        .doc-screenshot {
-            background: var(--color-bg-secondary);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            border: 1px solid var(--color-border);
-            transition: all var(--transition-base);
-            cursor: pointer;
-        }
-
-        .doc-screenshot:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px var(--color-shadow);
-        }
-
-        .doc-screenshot img {
-            width: 100%;
-            height: auto;
-            display: block;
-            aspect-ratio: 16 / 10;
-            object-fit: cover;
-            object-position: top;
-        }
-
-        .doc-screenshot-label {
-            display: block;
-            padding: var(--spacing-sm) var(--spacing-md);
-            font-weight: 600;
-            font-size: 0.875rem;
-            text-align: center;
-            color: var(--color-text);
-            background: var(--color-bg);
-            border-top: 1px solid var(--color-border);
-        }
-
-        /* Lightbox Styles */
-        .lightbox {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .lightbox.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .lightbox-content {
-            max-width: 90vw;
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .lightbox-image {
-            max-width: 100%;
-            max-height: 80vh;
-            object-fit: contain;
-            border-radius: var(--radius-md);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .lightbox.active .lightbox-image {
-            transform: scale(1);
-        }
-
-        .lightbox-caption {
-            color: white;
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-top: var(--spacing-lg);
-            text-align: center;
-            opacity: 0.9;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
-            z-index: 10001;
-        }
-
-        .lightbox-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-
-        .lightbox-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
-        }
-
-        .lightbox-nav:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .lightbox-prev {
-            left: 20px;
-        }
-
-        .lightbox-next {
-            right: 20px;
-        }
-
-        @media (max-width: 1024px) {
-            .doc-sidebar {
-                display: none;
-            }
-
-            .doc-content {
-                margin-left: 0;
-                padding: calc(var(--spacing-xl) + 72px) var(--spacing-lg) var(--spacing-xl);
-            }
-        }
-
-        /* Spotlight Search Styles */
-        .spotlight-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            z-index: 10002;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s ease;
-        }
-
-        .spotlight-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .spotlight-container {
-            position: fixed;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%) scale(0.95);
-            width: 90%;
-            max-width: 600px;
-            background: var(--color-bg);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            z-index: 10003;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s ease;
-        }
-
-        .spotlight-container.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) scale(1);
-        }
-
-        .spotlight-search {
-            width: 100%;
-            padding: var(--spacing-lg);
-            font-size: 1.25rem;
-            border: none;
-            border-radius: var(--radius-lg);
-            background: var(--color-bg);
-            color: var(--color-text);
-            outline: none;
-        }
-
-        .spotlight-results {
-            max-height: 400px;
-            overflow-y: auto;
-            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-        }
-
-        .spotlight-result {
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-bottom: 1px solid var(--color-border);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .spotlight-result:last-child {
-            border-bottom: none;
-        }
-
-        .spotlight-result:hover,
-        .spotlight-result.active {
-            background: var(--color-bg-secondary);
-        }
-
-        .spotlight-result-icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            color: var(--color-text-tertiary);
-        }
-
-        .spotlight-result-content {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .spotlight-result-title {
-            font-weight: 600;
-            color: var(--color-text);
-            margin-bottom: 2px;
-        }
-
-        .spotlight-result-description {
-            font-size: 0.875rem;
-            color: var(--color-text-secondary);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .spotlight-no-results {
-            padding: var(--spacing-xl);
-            text-align: center;
-            color: var(--color-text-secondary);
-        }
-
-        .spotlight-shortcut {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--color-bg-secondary);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-sm) var(--spacing-md);
-            font-size: 0.875rem;
-            color: var(--color-text-secondary);
-            z-index: 10001;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s ease;
-        }
-
-        .spotlight-shortcut.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .spotlight-shortcut kbd {
-            background: var(--color-bg);
-            border: 1px solid var(--color-border);
-            border-radius: 4px;
-            padding: 2px 6px;
-            font-family: "SF Mono", "Monaco", "Consolas", monospace;
-            font-size: 0.75rem;
-            margin: 0 2px;
-        }
-
-        @media (max-width: 768px) {
-            .spotlight-container {
-                width: 95%;
-                top: 10%;
-            }
-
-            .spotlight-search {
-                font-size: 1.125rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="doc-style.css">
 </head>
 
 <body>
@@ -697,7 +72,7 @@
         <!-- Sidebar Navigation -->
         <aside class="doc-sidebar">
             <div class="doc-sidebar-header">
-                <!-- <div class="doc-logo">🔐 Tyro Login</div> -->
+                <div class="doc-logo">Tyro Login</div>
                 <div class="doc-version">Documentation v1.0</div>
             </div>
 
@@ -763,42 +138,47 @@
 
             <header class="doc-header">
                 <h1 class="doc-title">Tyro Login Documentation</h1>
-                <p class="doc-subtitle">Complete guide to beautiful, customizable authentication views for Laravel 12</p>
+                <p class="doc-subtitle">Everything you need to build stunning authentication pages with zero configuration required</p>
             </header>
 
             <!-- Introduction -->
             <section id="introduction" class="doc-section">
                 <h2 class="doc-section-title">Introduction</h2>
                 <p class="doc-text">
-                    <strong>Tyro Login</strong> provides beautiful, customizable authentication views for Laravel 12. It includes professional login and registration pages with multiple layout options, dark/light themes, lockout protection, and seamless integration with the <a href="https://github.com/hasinhayder/tyro" target="_blank">Tyro</a> RBAC package.
+                    <strong>Tyro Login</strong> transforms your Laravel 12 authentication experience with stunning, professional-grade login and registration pages. Stop spending weeks building auth UI from scratch – get enterprise-level design in under 5 minutes.
                 </p>
                 <p class="doc-text">
-                    The package requires zero build steps - no npm, webpack, or vite. Just install via Composer and you're ready to go.
+                    This comprehensive package delivers everything you need: 5 beautiful layouts, dark/light themes, security features, and seamless integration with the <a href="https://github.com/hasinhayder/tyro" target="_blank">Tyro</a> RBAC system. No build tools, no complex setup – just pure Laravel magic.
                 </p>
 
                 <div class="doc-alert doc-alert-success">
-                    <strong>✓ Zero Build Step:</strong> No npm, webpack, or vite required. Just install and use immediately.
+                    <strong>Lightning Fast Setup:</strong> Install via Composer and have professional authentication pages running in under 5 minutes. Zero configuration required for the basics.
+                </div>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Enterprise-Grade Design:</strong> Every detail crafted for perfection – from micro-interactions to responsive layouts that work flawlessly on any device.
                 </div>
             </section>
 
             <!-- Features -->
             <section id="features" class="doc-section">
-                <h2 class="doc-section-title">Features</h2>
+                <h2 class="doc-section-title">Powerful Features That Set You Apart</h2>
+                <p class="doc-text">Every feature is designed to save you time while delivering a premium user experience that builds trust and engagement.</p>
                 <ul class="doc-list">
-                    <li><strong>🎨 Multiple Layouts</strong> - 5 beautiful layouts: centered, split-left, split-right, fullscreen, and card</li>
-                    <li><strong>🖼️ Beautiful Design</strong> - Modern, professional UI out of the box</li>
-                    <li><strong>🔧 Highly Configurable</strong> - Customize colors, logos, redirects, and more</li>
-                    <li><strong>🔐 Secure by Default</strong> - Lockout protection, CSRF protection, proper validation</li>
-                    <li><strong>🧮 Math Captcha</strong> - Simple addition/subtraction captcha for login and registration</li>
-                    <li><strong>🔑 Login OTP</strong> - Two-factor authentication via email OTP codes</li>
-                    <li><strong>📧 Email Verification</strong> - Optional email verification for new registrations</li>
-                    <li><strong>🔄 Password Reset</strong> - Built-in forgot password and reset functionality</li>
-                    <li><strong>✉️ Beautiful Emails</strong> - Sleek, minimal HTML email templates for OTP, password reset, verification, and welcome</li>
-                    <li><strong>🔗 Tyro Integration</strong> - Automatic role assignment if Tyro is installed</li>
-                    <li><strong>🌓 Dark/Light Theme</strong> - Automatic theme detection with manual toggle</li>
-                    <li><strong>📱 Fully Responsive</strong> - Works perfectly on all devices</li>
-                    <li><strong>⚡ Zero Build Step</strong> - No npm or webpack required</li>
-                    <li><strong>🐛 Debug Mode</strong> - Global debug toggle for development logging</li>
+                    <li><strong>5 Stunning Layouts</strong> - Choose from centered, split-screen, fullscreen, or card designs that adapt to your brand</li>
+                    <li><strong>Professional Design Language</strong> - Enterprise-grade UI with attention to every pixel and interaction</li>
+                    <li><strong>Effortless Customization</strong> - Modify everything from colors to copy with simple environment variables</li>
+                    <li><strong>Security-First Approach</strong> - Built-in protection against brute force attacks with configurable lockouts</li>
+                    <li><strong>Smart Bot Protection</strong> - Lightweight math captcha that blocks bots without external APIs</li>
+                    <li><strong>Two-Factor Authentication</strong> - Email-based OTP that adds security without complexity</li>
+                    <li><strong>Email Verification System</strong> - Seamless email verification flow that reduces support tickets</li>
+                    <li><strong>Password Recovery</strong> - Complete password reset flow with secure token management</li>
+                    <li><strong>Beautiful Email Templates</strong> - Modern, responsive email designs that represent your brand professionally</li>
+                    <li><strong>RBAC Integration</strong> - Automatic role assignment works seamlessly with the Tyro RBAC package</li>
+                    <li><strong>Smart Theming</strong> - Auto-detects user preferences with manual override for complete control</li>
+                    <li><strong>Mobile-First Responsive</strong> - Perfect experience across phones, tablets, and desktop devices</li>
+                    <li><strong>Zero Build Complexity</strong> - Skip npm, webpack, and other build tools – it just works out of the box</li>
+                    <li><strong>Developer-Friendly Debugging</strong> - Comprehensive logging helps you troubleshoot during development</li>
                 </ul>
             </section>
 
@@ -895,30 +275,24 @@
 
             <!-- Installation -->
             <section id="installation" class="doc-section">
-                <h2 class="doc-section-title">Installation</h2>
+                <h2 class="doc-section-title">Get Started in Under 5 Minutes</h2>
+                <p class="doc-text">Two simple commands and you'll have enterprise-grade authentication pages running in your Laravel app.</p>
 
-                <h3 class="doc-section-subtitle">Step 1: Install the Package</h3>
                 <div class="doc-code-block">
                     <div class="doc-code-header">
-                        <span class="doc-code-title">Terminal</span>
+                        <span class="doc-code-title">Install Tyro Login</span>
+                        <button class="doc-code-copy" type="button">Copy</button>
                     </div>
-                    <pre><code class="language-bash">composer require hasinhayder/tyro-login</code></pre>
+                    <pre><code class="language-bash">composer require hasinhayder/tyro-login
+php artisan tyro-login:install</code></pre>
                 </div>
 
-                <h3 class="doc-section-subtitle">Step 2: Run the Installer</h3>
-                <div class="doc-code-block">
-                    <div class="doc-code-header">
-                        <span class="doc-code-title">Terminal</span>
-                    </div>
-                    <pre><code class="language-bash">php artisan tyro-login:install</code></pre>
+                <div class="doc-alert doc-alert-success">
+                    <strong>Done!</strong> Your new authentication pages are ready at <code class="doc-inline-code">/login</code>. No additional configuration required – it works immediately with beautiful defaults.
                 </div>
-
-                <p class="doc-text">
-                    That's it! Visit <code class="doc-inline-code">/login</code> to see your new authentication pages.
-                </p>
 
                 <div class="doc-alert doc-alert-info">
-                    <strong>💡 Tip:</strong> The install command publishes the configuration file automatically. You can customize it at <code class="doc-inline-code">config/tyro-login.php</code>.
+                    <strong>Customize:</strong> Edit <code class="doc-inline-code">config/tyro-login.php</code> to match your brand. Everything is configurable through environment variables.
                 </div>
             </section>
 
@@ -1062,7 +436,7 @@ TYRO_LOGIN_LOGO_HEIGHT=48px</code></pre>
                 </div>
 
                 <div class="doc-alert doc-alert-warning">
-                    <strong>⚠️ Note:</strong> To disable registration, set <code class="doc-inline-code">TYRO_LOGIN_REGISTRATION_ENABLED=false</code> in your <code class="doc-inline-code">.env</code> file.
+                    <strong>Note:</strong> To disable registration, set <code class="doc-inline-code">TYRO_LOGIN_REGISTRATION_ENABLED=false</code> in your <code class="doc-inline-code">.env</code> file.
                 </div>
             </section>
 
@@ -1112,7 +486,7 @@ TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
                 </div>
 
                 <div class="doc-alert doc-alert-info">
-                    <strong>💡 How It Works:</strong> A simple addition or subtraction problem is displayed (e.g., "5 + 3 = ?"). The answer is stored in the session and validated on form submission.
+                    <strong>How It Works:</strong> A simple addition or subtraction problem is displayed (e.g., "5 + 3 = ?"). The answer is stored in the session and validated on form submission.
                 </div>
             </section>
 
@@ -1176,7 +550,7 @@ TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
                 </ul>
 
                 <div class="doc-alert doc-alert-info">
-                    <strong>💡 For Development:</strong> When <code class="doc-inline-code">TYRO_LOGIN_DEBUG=true</code>, the OTP code is logged to <code class="doc-inline-code">storage/logs/laravel.log</code> for easy testing.
+                    <strong>For Development:</strong> When <code class="doc-inline-code">TYRO_LOGIN_DEBUG=true</code>, the OTP code is logged to <code class="doc-inline-code">storage/logs/laravel.log</code> for easy testing.
                 </div>
             </section>
 
@@ -1217,7 +591,7 @@ TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
                 </ul>
 
                 <div class="doc-alert doc-alert-info">
-                    <strong>💡 For Development:</strong> The verification URL is printed to your Laravel logs and <code class="doc-inline-code">error_log</code>, so you can easily test without setting up email.
+                    <strong>For Development:</strong> The verification URL is printed to your Laravel logs and <code class="doc-inline-code">error_log</code>, so you can easily test without setting up email.
                 </div>
 
                 <h3 class="doc-section-subtitle">Environment Variables</h3>
@@ -1268,7 +642,7 @@ TYRO_LOGIN_REDIRECT_AFTER_EMAIL_VERIFICATION=/login</code></pre>
                 </ul>
 
                 <div class="doc-alert doc-alert-info">
-                    <strong>💡 For Development:</strong> The reset URL is printed to your Laravel logs and <code class="doc-inline-code">error_log</code>, so you can easily test without setting up email.
+                    <strong>For Development:</strong> The reset URL is printed to your Laravel logs and <code class="doc-inline-code">error_log</code>, so you can easily test without setting up email.
                 </div>
 
                 <h3 class="doc-section-subtitle">Environment Variables</h3>
@@ -1434,7 +808,7 @@ TYRO_LOGIN_EMAIL_VERIFY_SUBJECT="Verify Your Email"</code></pre>
                 </ul>
 
                 <div class="doc-alert doc-alert-warning">
-                    <strong>⚠️ Security Warning:</strong> Never enable debug mode in production! OTP codes and sensitive URLs will be logged.
+                    <strong>Security Warning:</strong> Never enable debug mode in production! OTP codes and sensitive URLs will be logged.
                 </div>
 
                 <h3 class="doc-section-subtitle">Environment Variable</h3>
@@ -2205,20 +1579,82 @@ class User extends Authenticatable
                         </tr>
                         <tr>
                             <td><code class="doc-inline-code">php artisan tyro-login:star</code></td>
-                            <td>Open GitHub repository to give it a star ⭐</td>
+                            <td>Open GitHub repository to give it a star</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <h3 class="doc-section-subtitle">Publish Options</h3>
+                <h3 class="doc-section-subtitle">Install Command Options</h3>
+                <p class="doc-text">The <code class="doc-inline-code">tyro-login:install</code> command supports the following options:</p>
+
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">--force</code></td>
+                            <td>Overwrite existing files during installation</td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 <div class="doc-code-block">
                     <div class="doc-code-header">
                         <span class="doc-code-title">Terminal</span>
                     </div>
-                    <pre><code class="language-bash"># Publish everything
+                    <pre><code class="language-bash"># Basic installation
+php artisan tyro-login:install
+
+# Force overwrite existing files
+php artisan tyro-login:install --force</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Publish Command Options</h3>
+                <p class="doc-text">The <code class="doc-inline-code">tyro-login:publish</code> command supports the following options:</p>
+
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">--config</code></td>
+                            <td>Publish only the configuration file</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--views</code></td>
+                            <td>Publish only the view templates</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--emails</code></td>
+                            <td>Publish only the email templates</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--assets</code></td>
+                            <td>Publish only the public assets (CSS, JS, images)</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">--force</code></td>
+                            <td>Overwrite existing files when publishing</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash"># Publish everything (default behavior)
 php artisan tyro-login:publish
 
-# Publish only config
+# Publish only configuration
 php artisan tyro-login:publish --config
 
 # Publish only views
@@ -2233,169 +1669,170 @@ php artisan tyro-login:publish --assets
 # Force overwrite existing files
 php artisan tyro-login:publish --force</code></pre>
                 </div>
-            </section>
 
-            <!-- Routes -->
-            <section id="routes" class="doc-section">
-                <h2 class="doc-section-title">Routes Reference</h2>
-                <p class="doc-text">Tyro Login registers the following routes:</p>
 
-                <table class="doc-table">
-                    <thead>
-                        <tr>
-                            <th>Method</th>
-                            <th>URI</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/login</code></td>
-                            <td><code class="doc-inline-code">tyro-login.login</code></td>
-                            <td>Show login form</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
-                            <td><code class="doc-inline-code">/login</code></td>
-                            <td><code class="doc-inline-code">tyro-login.login.submit</code></td>
-                            <td>Handle login</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/register</code></td>
-                            <td><code class="doc-inline-code">tyro-login.register</code></td>
-                            <td>Show registration form</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
-                            <td><code class="doc-inline-code">/register</code></td>
-                            <td><code class="doc-inline-code">tyro-login.register.submit</code></td>
-                            <td>Handle registration</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #ef4444; font-weight: 600;">GET/POST</span></td>
-                            <td><code class="doc-inline-code">/logout</code></td>
-                            <td><code class="doc-inline-code">tyro-login.logout</code></td>
-                            <td>Handle logout</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/lockout</code></td>
-                            <td><code class="doc-inline-code">tyro-login.lockout</code></td>
-                            <td>Show lockout page</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/email/verify</code></td>
-                            <td><code class="doc-inline-code">tyro-login.verification.notice</code></td>
-                            <td>Show verification notice</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/email/not-verified</code></td>
-                            <td><code class="doc-inline-code">tyro-login.verification.not-verified</code></td>
-                            <td>Show unverified email page</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/email/verify/{token}</code></td>
-                            <td><code class="doc-inline-code">tyro-login.verification.verify</code></td>
-                            <td>Verify email</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
-                            <td><code class="doc-inline-code">/email/resend</code></td>
-                            <td><code class="doc-inline-code">tyro-login.verification.resend</code></td>
-                            <td>Resend verification email</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/forgot-password</code></td>
-                            <td><code class="doc-inline-code">tyro-login.password.request</code></td>
-                            <td>Show forgot password form</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
-                            <td><code class="doc-inline-code">/forgot-password</code></td>
-                            <td><code class="doc-inline-code">tyro-login.password.email</code></td>
-                            <td>Send reset link</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/reset-password/{token}</code></td>
-                            <td><code class="doc-inline-code">tyro-login.password.reset</code></td>
-                            <td>Show reset form</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
-                            <td><code class="doc-inline-code">/reset-password</code></td>
-                            <td><code class="doc-inline-code">tyro-login.password.update</code></td>
-                            <td>Reset password</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/otp/verify</code></td>
-                            <td><code class="doc-inline-code">tyro-login.otp.verify</code></td>
-                            <td>Show OTP form</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
-                            <td><code class="doc-inline-code">/otp/verify</code></td>
-                            <td><code class="doc-inline-code">tyro-login.otp.submit</code></td>
-                            <td>Verify OTP code</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
-                            <td><code class="doc-inline-code">/otp/resend</code></td>
-                            <td><code class="doc-inline-code">tyro-login.otp.resend</code></td>
-                            <td>Resend OTP</td>
-                        </tr>
-                        <tr>
-                            <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
-                            <td><code class="doc-inline-code">/otp/cancel</code></td>
-                            <td><code class="doc-inline-code">tyro-login.otp.cancel</code></td>
-                            <td>Cancel OTP</td>
-                        </tr>
-                    </tbody>
-                </table>
 
-                <h3 class="doc-section-subtitle">Customizing Route Prefix</h3>
-                <div class="doc-code-block">
-                    <div class="doc-code-header">
-                        <span class="doc-code-title">config/tyro-login.php</span>
-                    </div>
-                    <pre><code class="language-php">'routes' => [
+                <!-- Routes -->
+                <section id="routes" class="doc-section">
+                    <h2 class="doc-section-title">Routes Reference</h2>
+                    <p class="doc-text">Tyro Login registers the following routes:</p>
+
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>URI</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/login</code></td>
+                                <td><code class="doc-inline-code">tyro-login.login</code></td>
+                                <td>Show login form</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
+                                <td><code class="doc-inline-code">/login</code></td>
+                                <td><code class="doc-inline-code">tyro-login.login.submit</code></td>
+                                <td>Handle login</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/register</code></td>
+                                <td><code class="doc-inline-code">tyro-login.register</code></td>
+                                <td>Show registration form</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
+                                <td><code class="doc-inline-code">/register</code></td>
+                                <td><code class="doc-inline-code">tyro-login.register.submit</code></td>
+                                <td>Handle registration</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #ef4444; font-weight: 600;">GET/POST</span></td>
+                                <td><code class="doc-inline-code">/logout</code></td>
+                                <td><code class="doc-inline-code">tyro-login.logout</code></td>
+                                <td>Handle logout</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/lockout</code></td>
+                                <td><code class="doc-inline-code">tyro-login.lockout</code></td>
+                                <td>Show lockout page</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/email/verify</code></td>
+                                <td><code class="doc-inline-code">tyro-login.verification.notice</code></td>
+                                <td>Show verification notice</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/email/not-verified</code></td>
+                                <td><code class="doc-inline-code">tyro-login.verification.not-verified</code></td>
+                                <td>Show unverified email page</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/email/verify/{token}</code></td>
+                                <td><code class="doc-inline-code">tyro-login.verification.verify</code></td>
+                                <td>Verify email</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
+                                <td><code class="doc-inline-code">/email/resend</code></td>
+                                <td><code class="doc-inline-code">tyro-login.verification.resend</code></td>
+                                <td>Resend verification email</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/forgot-password</code></td>
+                                <td><code class="doc-inline-code">tyro-login.password.request</code></td>
+                                <td>Show forgot password form</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
+                                <td><code class="doc-inline-code">/forgot-password</code></td>
+                                <td><code class="doc-inline-code">tyro-login.password.email</code></td>
+                                <td>Send reset link</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/reset-password/{token}</code></td>
+                                <td><code class="doc-inline-code">tyro-login.password.reset</code></td>
+                                <td>Show reset form</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
+                                <td><code class="doc-inline-code">/reset-password</code></td>
+                                <td><code class="doc-inline-code">tyro-login.password.update</code></td>
+                                <td>Reset password</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/otp/verify</code></td>
+                                <td><code class="doc-inline-code">tyro-login.otp.verify</code></td>
+                                <td>Show OTP form</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
+                                <td><code class="doc-inline-code">/otp/verify</code></td>
+                                <td><code class="doc-inline-code">tyro-login.otp.submit</code></td>
+                                <td>Verify OTP code</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #3b82f6; font-weight: 600;">POST</span></td>
+                                <td><code class="doc-inline-code">/otp/resend</code></td>
+                                <td><code class="doc-inline-code">tyro-login.otp.resend</code></td>
+                                <td>Resend OTP</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/otp/cancel</code></td>
+                                <td><code class="doc-inline-code">tyro-login.otp.cancel</code></td>
+                                <td>Cancel OTP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="doc-section-subtitle">Customizing Route Prefix</h3>
+                    <div class="doc-code-block">
+                        <div class="doc-code-header">
+                            <span class="doc-code-title">config/tyro-login.php</span>
+                        </div>
+                        <pre><code class="language-php">'routes' => [
     // Add a prefix to all routes
     'prefix' => env('TYRO_LOGIN_ROUTE_PREFIX', ''),
     // Routes will be: /auth/login, /auth/register, etc.
 ],</code></pre>
+                    </div>
+                </section>
+
+                <!-- FAQ -->
+                <section id="faq" class="doc-section">
+                    <h2 class="doc-section-title">Frequently Asked Questions</h2>
+
+                    <h3 class="doc-section-subtitle">How do I disable registration?</h3>
+                    <p class="doc-text">Set <code class="doc-inline-code">TYRO_LOGIN_REGISTRATION_ENABLED=false</code> in your <code class="doc-inline-code">.env</code> file.</p>
+
+                    <h3 class="doc-section-subtitle">Can I use this without the Tyro RBAC package?</h3>
+                    <p class="doc-text">Yes! Tyro Login works completely independently. The Tyro integration is optional and only activates if the Tyro package is installed.</p>
+
+                    <h3 class="doc-section-subtitle">How do I change the redirect after login?</h3>
+                    <p class="doc-text">Set <code class="doc-inline-code">TYRO_LOGIN_REDIRECT_AFTER_LOGIN=/dashboard</code> in your <code class="doc-inline-code">.env</code> file.</p>
+
+                    <h3 class="doc-section-subtitle">How does lockout work?</h3>
+                    <p class="doc-text">Failed login attempts are tracked in the cache. After 5 failed attempts (configurable), the user is shown a lockout page with a countdown timer. The lockout expires after 15 minutes (configurable).</p>
+                </section>
+
+                <!-- Footer Navigation -->
+                <div style="margin-top: var(--spacing-3xl); padding-top: var(--spacing-xl); border-top: 2px solid var(--color-border); text-align: center;">
+                    <a href="index.html" class="btn btn-primary">← Back to Home</a>
+                    <a href="https://github.com/hasinhayder/tyro-login" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
                 </div>
-            </section>
-
-            <!-- FAQ -->
-            <section id="faq" class="doc-section">
-                <h2 class="doc-section-title">Frequently Asked Questions</h2>
-
-                <h3 class="doc-section-subtitle">How do I disable registration?</h3>
-                <p class="doc-text">Set <code class="doc-inline-code">TYRO_LOGIN_REGISTRATION_ENABLED=false</code> in your <code class="doc-inline-code">.env</code> file.</p>
-
-                <h3 class="doc-section-subtitle">Can I use this without the Tyro RBAC package?</h3>
-                <p class="doc-text">Yes! Tyro Login works completely independently. The Tyro integration is optional and only activates if the Tyro package is installed.</p>
-
-                <h3 class="doc-section-subtitle">How do I change the redirect after login?</h3>
-                <p class="doc-text">Set <code class="doc-inline-code">TYRO_LOGIN_REDIRECT_AFTER_LOGIN=/dashboard</code> in your <code class="doc-inline-code">.env</code> file.</p>
-
-                <h3 class="doc-section-subtitle">How does lockout work?</h3>
-                <p class="doc-text">Failed login attempts are tracked in the cache. After 5 failed attempts (configurable), the user is shown a lockout page with a countdown timer. The lockout expires after 15 minutes (configurable).</p>
-            </section>
-
-            <!-- Footer Navigation -->
-            <div style="margin-top: var(--spacing-3xl); padding-top: var(--spacing-xl); border-top: 2px solid var(--color-border); text-align: center;">
-                <a href="index.html" class="btn btn-primary">← Back to Home</a>
-                <a href="https://github.com/hasinhayder/tyro-login" class="btn btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
-            </div>
         </main>
     </div>
 
