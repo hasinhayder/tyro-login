@@ -29,6 +29,8 @@ class LoginController extends Controller
         // Generate captcha if enabled
         $captcha = $this->generateCaptcha($request, 'login');
 
+        $loginField = config('tyro-login.login_field', 'email');
+
         return view('tyro-login::login', [
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
@@ -39,6 +41,7 @@ class LoginController extends Controller
             'captchaEnabled' => config('tyro-login.captcha.enabled_login', false),
             'captchaQuestion' => $captcha['question'] ?? null,
             'captchaConfig' => config('tyro-login.captcha'),
+            'loginField' => $loginField,
         ]);
     }
 
@@ -94,8 +97,17 @@ class LoginController extends Controller
         if (config('tyro-login.captcha.enabled_login', false)) {
             $rules['captcha_answer'] = ['required', 'numeric'];
         }
-        
+
+
         $credentials = $request->validate($rules);
+
+        // Handle 'both' login field - determine if input is email or username
+        if ($loginField === 'both') {
+            $loginValue = $credentials['login'];
+            $field = filter_var($loginValue, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+            $credentials[$field] = $loginValue;
+            unset($credentials['login']);
+        }
 
         // Validate captcha if enabled
         if (config('tyro-login.captcha.enabled_login', false)) {
@@ -180,8 +192,11 @@ class LoginController extends Controller
             }
         }
 
+        // Use 'login' as error field when loginField is 'both', otherwise use the actual field name
+        $errorField = $loginField === 'both' ? 'login' : $loginField;
+
         throw ValidationException::withMessages([
-            $loginField => $errorMessage,
+            $errorField => $errorMessage,
         ]);
     }
 

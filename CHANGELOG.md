@@ -2,6 +2,34 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [1.4.0] - 2025-12-02
+
+### Added
+
+-   **Social Login (OAuth)** - Sign in with popular social providers using Laravel Socialite
+    -   Support for Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, and GitLab
+    -   Beautiful social login buttons integrated into login and registration pages
+    -   Automatic account linking when email matches existing user
+    -   Auto-register new users from social login (configurable)
+    -   Secure token storage with encryption
+    -   Easy installation with `--with-social` flag
+-   **Social Accounts Table** - New migration for storing social account connections
+    -   Links social provider accounts to users
+    -   Stores provider user ID, email, and avatar
+    -   Encrypted access and refresh tokens
+-   **Social Login Configuration** - Granular control over social login behavior
+    -   `TYRO_LOGIN_SOCIAL_ENABLED` - Global toggle for social login
+    -   Individual provider toggles (e.g., `TYRO_LOGIN_SOCIAL_GOOGLE`)
+    -   `TYRO_LOGIN_SOCIAL_LINK_EXISTING` - Link to existing accounts by email
+    -   `TYRO_LOGIN_SOCIAL_AUTO_REGISTER` - Auto-create users from social login
+    -   Customizable button labels and icons per provider
+-   **New Install Option** - `php artisan tyro-login:install --with-social` for social login setup
+
+### Changed
+
+-   Updated install command to optionally include Laravel Socialite
+-   Login and registration views now display social login buttons when enabled
+
 ## [1.3.0] - 2025-12-01
 
 ### Added

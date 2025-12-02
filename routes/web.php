@@ -91,3 +91,6 @@ Route::middleware('auth')->group(function () {
     Route::match(['get', 'post'], config('tyro-login.routes.logout', 'logout'), [LoginController::class, 'logout'])
         ->name('logout');
 });
+
+Route::match(['get', 'post'], config('tyro-login.routes.logout', 'logout'), [LoginController::class, 'logout'])
+        ->name('logout');

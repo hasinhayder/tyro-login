@@ -6,7 +6,7 @@ return [
     | Tyro Login Version
     |--------------------------------------------------------------------------
     */
-    'version' => '1.3.1',
+    'version' => '1.3.2',
 
     /*
     |--------------------------------------------------------------------------
@@ -507,7 +507,7 @@ return [
     'lockout' => [
         // Enable/disable the entire lockout system
         // Set to false only during development/testing
-        'enabled' => env('TYRO_LOGIN_LOCKOUT_ENABLED', true),
+        'enabled' => env('TYRO_LOGIN_LOCKOUT_ENABLED', false),
 
         // Maximum failed login attempts before lockout
         // Recommended: 3-5 for public apps, 10+ for admin panels
