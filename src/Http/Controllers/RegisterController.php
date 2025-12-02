@@ -109,7 +109,7 @@ class RegisterController extends Controller
             Auth::login($user);
         }
 
-        return redirect(config('tyro-login.redirects.after_register', '/dashboard'));
+        return redirect(config('tyro-login.redirects.after_register', '/'));
     }
 
     /**

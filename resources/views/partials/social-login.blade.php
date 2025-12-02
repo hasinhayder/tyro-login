@@ -15,7 +15,6 @@
                class="social-btn social-btn-{{ $provider }}"
                title="{{ $config['label'] ?? ucfirst($provider) }}">
                 @include('tyro-login::partials.social-icons', ['icon' => $config['icon'] ?? $provider])
-                <span>{{ $config['label'] ?? ucfirst($provider) }}</span>
             </a>
         @endforeach
     </div>
@@ -55,7 +54,9 @@
 
     .social-buttons {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 0.75rem;
     }
 
@@ -63,9 +64,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.75rem;
-        width: 100%;
-        padding: 0.75rem 1rem;
+        width: 3rem;
+        height: 3rem;
         font-size: 0.9375rem;
         font-weight: 500;
         font-family: inherit;
@@ -81,10 +81,11 @@
     .social-btn:hover {
         background-color: var(--bg-secondary);
         border-color: var(--input-focus-border);
+        transform: translateY(-2px);
     }
 
     .social-btn:active {
-        transform: scale(0.98);
+        transform: scale(0.95);
     }
 
     .social-btn svg {
@@ -96,38 +97,47 @@
     /* Provider-specific colors on hover */
     .social-btn-google:hover {
         border-color: #4285f4;
+        background-color: rgba(66, 133, 244, 0.1);
     }
 
     .social-btn-facebook:hover {
         border-color: #1877f2;
+        background-color: rgba(24, 119, 242, 0.1);
     }
 
     .social-btn-github:hover {
         border-color: #333;
+        background-color: rgba(51, 51, 51, 0.1);
     }
 
     html.dark .social-btn-github:hover {
         border-color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
     .social-btn-twitter:hover {
         border-color: #000;
+        background-color: rgba(0, 0, 0, 0.1);
     }
 
     html.dark .social-btn-twitter:hover {
         border-color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
     .social-btn-linkedin:hover {
         border-color: #0a66c2;
+        background-color: rgba(10, 102, 194, 0.1);
     }
 
     .social-btn-bitbucket:hover {
         border-color: #0052cc;
+        background-color: rgba(0, 82, 204, 0.1);
     }
 
     .social-btn-gitlab:hover {
         border-color: #fc6d26;
+        background-color: rgba(252, 109, 38, 0.1);
     }
 
     .social-error {
@@ -139,22 +149,6 @@
         color: var(--error-color);
         font-size: 0.875rem;
         text-align: center;
-    }
-
-    /* Grid layout for many providers */
-    @media (min-width: 480px) {
-        .social-buttons.grid-layout {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .social-buttons.grid-layout .social-btn span {
-            display: none;
-        }
-
-        .social-buttons.grid-layout .social-btn {
-            padding: 0.875rem;
-        }
     }
 </style>
 @endif
