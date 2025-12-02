@@ -83,15 +83,9 @@ class LoginController extends Controller
      */
     public function login(Request $request): RedirectResponse
     {
-        // Check if user is locked out (only when lockout is enabled)
+        // Check if user is locked out
         if ($this->isLockedOut($request)) {
             return redirect()->route('tyro-login.lockout');
-        }
-
-        // Clear any stale lockout data when lockout is disabled
-        // This ensures clean state if lockout was previously enabled
-        if (!config('tyro-login.lockout.enabled', false)) {
-            $this->clearLockout($request);
         }
 
         $loginField = config('tyro-login.login_field', 'email');
@@ -187,7 +181,7 @@ class LoginController extends Controller
         // Build error message with remaining attempts if configured
         $errorMessage = __('auth.failed');
         
-        if (config('tyro-login.lockout.enabled', false) && config('tyro-login.lockout.show_attempts_left', false)) {
+        if (config('tyro-login.lockout.enabled', true) && config('tyro-login.lockout.show_attempts_left', false)) {
             $attemptsLeft = $this->getRemainingAttempts($request);
             if ($attemptsLeft > 0) {
                 $errorMessage .= ' ' . trans_choice(
@@ -553,7 +547,7 @@ class LoginController extends Controller
      */
     protected function isLockedOut(Request $request): bool
     {
-        if (!config('tyro-login.lockout.enabled', false)) {
+        if (!config('tyro-login.lockout.enabled', true)) {
             return false;
         }
 
@@ -585,7 +579,7 @@ class LoginController extends Controller
      */
     protected function incrementLockoutAttempts(Request $request): void
     {
-        if (!config('tyro-login.lockout.enabled', false)) {
+        if (!config('tyro-login.lockout.enabled', true)) {
             return;
         }
 
@@ -602,12 +596,12 @@ class LoginController extends Controller
      */
     protected function shouldLockout(Request $request): bool
     {
-        if (!config('tyro-login.lockout.enabled', false)) {
+        if (!config('tyro-login.lockout.enabled', true)) {
             return false;
         }
 
         $attempts = Cache::get($this->lockoutAttemptsKey($request), 0);
-        $maxAttempts = config('tyro-login.lockout.max_attempts', 3);
+        $maxAttempts = config('tyro-login.lockout.max_attempts', 5);
 
         return $attempts >= $maxAttempts;
     }
@@ -618,7 +612,7 @@ class LoginController extends Controller
     protected function getRemainingAttempts(Request $request): int
     {
         $attempts = Cache::get($this->lockoutAttemptsKey($request), 0);
-        $maxAttempts = config('tyro-login.lockout.max_attempts', 3);
+        $maxAttempts = config('tyro-login.lockout.max_attempts', 5);
 
         return max(0, $maxAttempts - $attempts);
     }
