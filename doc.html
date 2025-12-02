@@ -167,7 +167,7 @@
                 <p class="doc-text">Every feature is designed to save you time while delivering a premium user experience that builds trust and engagement.</p>
                 <ul class="doc-list">
                     <li><strong>5 Stunning Layouts</strong> - Choose from centered, split-screen, fullscreen, or card designs that adapt to your brand</li>
-                    <li><strong>Social Login</strong> - Sign in with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, and GitLab via OAuth</li>
+                    <li><strong>Social Login</strong> - Sign in with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack via OAuth</li>
                     <li><strong>Professional Design Language</strong> - Enterprise-grade UI with attention to every pixel and interaction</li>
                     <li><strong>Effortless Customization</strong> - Modify everything from colors to copy with simple environment variables</li>
                     <li><strong>Security-First Approach</strong> - Built-in protection against brute force attacks with configurable lockouts</li>
@@ -261,6 +261,14 @@
                     <div class="doc-screenshot">
                         <img src="images/tyro-login-verify-if-not-verified-but-logging-in.png" alt="Unverified Email - Login Attempt" loading="lazy">
                         <span class="doc-screenshot-label">Unverified Email - Login Attempt</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-social-light.png" alt="Social Login - Light" loading="lazy">
+                        <span class="doc-screenshot-label">Social Login - Light</span>
+                    </div>
+                    <div class="doc-screenshot">
+                        <img src="images/tyro-login-social-dark.png" alt="Social Login - Dark" loading="lazy">
+                        <span class="doc-screenshot-label">Social Login - Dark</span>
                     </div>
                 </div>
             </section>
@@ -458,6 +466,7 @@ TYRO_LOGIN_LOGO_HEIGHT=48px</code></pre>
                     <li><strong>LinkedIn</strong></li>
                     <li><strong>Bitbucket</strong></li>
                     <li><strong>GitLab</strong></li>
+                    <li><strong>Slack</strong></li>
                 </ul>
 
                 <h3 class="doc-section-subtitle">Installation</h3>
@@ -495,10 +504,12 @@ TYRO_LOGIN_SOCIAL_TWITTER=true
 TYRO_LOGIN_SOCIAL_LINKEDIN=true
 TYRO_LOGIN_SOCIAL_BITBUCKET=true
 TYRO_LOGIN_SOCIAL_GITLAB=true
+TYRO_LOGIN_SOCIAL_SLACK=true
 
 # Behavior settings
 TYRO_LOGIN_SOCIAL_LINK_EXISTING=true    # Link to existing accounts by email
-TYRO_LOGIN_SOCIAL_AUTO_REGISTER=true    # Create new users from social login</code></pre>
+TYRO_LOGIN_SOCIAL_AUTO_REGISTER=true    # Create new users from social login
+TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL=true # Auto-verify email after social login</code></pre>
                 </div>
 
                 <h3 class="doc-section-subtitle">Provider Credentials</h3>
@@ -556,6 +567,10 @@ FACEBOOK_REDIRECT_URI="${APP_URL}/auth/facebook/callback"</code></pre>
                     <li><strong>Step 5:</strong> If user email exists and linking is enabled → Link account and log in</li>
                     <li><strong>Step 6:</strong> If user doesn't exist and auto-register is enabled → Create user and log in</li>
                 </ul>
+
+                <div class="doc-alert doc-alert-success">
+                    <strong>Automatic Email Verification:</strong> When users authenticate via social login, their email is automatically marked as verified (if <code class="doc-inline-code">auto_verify_email</code> is enabled). OAuth providers confirm email ownership, so the email address can be trusted.
+                </div>
 
                 <div class="doc-alert doc-alert-info">
                     <strong>Tip:</strong> The <code class="doc-inline-code">social_accounts</code> table stores provider connections, tokens, and avatars securely. Tokens are encrypted at rest.
@@ -1537,6 +1552,11 @@ class User extends Authenticatable
                             <td><code class="doc-inline-code">false</code></td>
                         </tr>
                         <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_SLACK</code></td>
+                            <td>Enable Slack OAuth login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
                             <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_LINK_EXISTING</code></td>
                             <td>Link social accounts to existing users by email</td>
                             <td><code class="doc-inline-code">true</code></td>
@@ -1753,12 +1773,24 @@ class User extends Authenticatable
                             <td>Install the package and publish configuration</td>
                         </tr>
                         <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-login:install --with-social</code></td>
+                            <td>Install with social login (Laravel Socialite) support</td>
+                        </tr>
+                        <tr>
                             <td><code class="doc-inline-code">php artisan tyro-login:publish</code></td>
                             <td>Publish config, views, email templates, and assets</td>
                         </tr>
                         <tr>
                             <td><code class="doc-inline-code">php artisan tyro-login:publish --emails</code></td>
                             <td>Publish only email templates</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-login:verify-user {email|id}</code></td>
+                            <td>Mark a user's email as verified</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-login:unverify-user {email|id}</code></td>
+                            <td>Remove email verification from a user</td>
                         </tr>
                         <tr>
                             <td><code class="doc-inline-code">php artisan tyro-login:version</code></td>
@@ -1787,6 +1819,10 @@ class User extends Authenticatable
                     </thead>
                     <tbody>
                         <tr>
+                            <td><code class="doc-inline-code">--with-social</code></td>
+                            <td>Install Laravel Socialite and run social login migrations</td>
+                        </tr>
+                        <tr>
                             <td><code class="doc-inline-code">--force</code></td>
                             <td>Overwrite existing files during installation</td>
                         </tr>
@@ -1799,6 +1835,9 @@ class User extends Authenticatable
                     </div>
                     <pre><code class="language-bash"># Basic installation
 php artisan tyro-login:install
+
+# Install with social login support
+php artisan tyro-login:install --with-social
 
 # Force overwrite existing files
 php artisan tyro-login:install --force</code></pre>
@@ -1859,6 +1898,33 @@ php artisan tyro-login:publish --assets
 
 # Force overwrite existing files
 php artisan tyro-login:publish --force</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">User Verification Commands</h3>
+                <p class="doc-text">Tyro Login provides commands to manually verify or unverify user email addresses:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash"># Verify a single user by email
+php artisan tyro-login:verify-user john@example.com
+
+# Verify a single user by ID
+php artisan tyro-login:verify-user 123
+
+# Verify all unverified users
+php artisan tyro-login:verify-user --all
+
+# Unverify a single user by email
+php artisan tyro-login:unverify-user john@example.com
+
+# Unverify all verified users (use with caution!)
+php artisan tyro-login:unverify-user --all</code></pre>
+                </div>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Use Cases:</strong> These commands are useful for manually verifying users during development, bulk verification of imported users, or resetting verification status for testing email flows.
                 </div>
 
 
