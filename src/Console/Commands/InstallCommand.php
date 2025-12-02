@@ -25,13 +25,13 @@ class InstallCommand extends Command
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
-        $this->info('  ║     🔐 Tyro Login Installation         ║');
+        $this->info('  ║     Tyro Login Installation            ║');
         $this->info('  ║                                        ║');
         $this->info('  ╚════════════════════════════════════════╝');
         $this->info('');
 
         // Publish config
-        $this->info('📄 Publishing configuration...');
+        $this->info('Publishing configuration...');
         $this->callSilently('vendor:publish', [
             '--tag' => 'tyro-login-config',
             '--force' => $this->option('force'),
@@ -40,7 +40,7 @@ class InstallCommand extends Command
 
         // Ask about views
         if ($this->confirm('Would you like to publish the views for customization?', false)) {
-            $this->info('📄 Publishing views...');
+            $this->info('Publishing views...');
             $this->callSilently('vendor:publish', [
                 '--tag' => 'tyro-login-views',
                 '--force' => $this->option('force'),
@@ -50,7 +50,7 @@ class InstallCommand extends Command
 
         // Ask about email templates
         if ($this->confirm('Would you like to publish the email templates for customization?', false)) {
-            $this->info('📄 Publishing email templates...');
+            $this->info('Publishing email templates...');
             $this->callSilently('vendor:publish', [
                 '--tag' => 'tyro-login-emails',
                 '--force' => $this->option('force'),
@@ -59,7 +59,7 @@ class InstallCommand extends Command
         }
 
         $this->info('');
-        $this->info('  ✨ Tyro Login installed successfully!');
+        $this->info('  Tyro Login installed successfully!');
         $this->info('');
         $this->info('  Next steps:');
         $this->info('  1. Review config/tyro-login.php for customization options');
@@ -81,7 +81,7 @@ class InstallCommand extends Command
         $this->info('  - tyro-login:publish --emails : Publish email templates');
         $this->info('  - tyro-login:version          : Show version info');
         $this->info('  - tyro-login:doc              : Open documentation');
-        $this->info('  - tyro-login:star             : Star on GitHub ⭐');
+        $this->info('  - tyro-login:star             : Star on GitHub');
         $this->info('');
 
         return self::SUCCESS;

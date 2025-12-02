@@ -6,33 +6,57 @@ return [
     | Tyro Login Version
     |--------------------------------------------------------------------------
     */
-    'version' => '1.3.0',
+    'version' => '1.3.1',
 
     /*
     |--------------------------------------------------------------------------
-    | Debug Mode
+    | Developer Debug Mode
     |--------------------------------------------------------------------------
     |
-    | When enabled, debug information such as OTP codes, verification tokens,
-    | and password reset tokens will be logged to storage/logs/laravel.log.
-    | This should be disabled in production environments.
+    | SECURITY WARNING: Never enable in production!
+    |
+    | When enabled, sensitive information is logged to help with development:
+    | - OTP codes and verification tokens
+    | - Password reset links  
+    | - Email verification URLs
+    | - User authentication attempts
+    |
+    | This data is logged to storage/logs/laravel.log and should ONLY be
+    | used in local development environments.
+    |
+    | Environment: TYRO_LOGIN_DEBUG=true
     |
     */
     'debug' => env('TYRO_LOGIN_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
-    | Layout Style
+    | Authentication Page Layout
     |--------------------------------------------------------------------------
     |
-    | Choose the layout style for the authentication pages.
-    | Options: 'centered', 'split-left', 'split-right', 'fullscreen', 'card'
+    | Choose from 5 stunning pre-designed layouts for your auth pages:
     |
-    | - centered: Form in the center of the page
-    | - split-left: Two-column layout with background image on left, form on right
-    | - split-right: Two-column layout with form on left, background image on right
-    | - fullscreen: Full-screen background with glassmorphism form overlay
-    | - card: Floating card design with subtle background pattern
+    | 'centered' (Default)
+    |    Clean, minimal design with the form centered on screen
+    |    Perfect for: SaaS apps, simple forms, mobile-first design
+    |
+    | 'split-left'
+    |    Two-column layout: background image left, form right
+    |    Perfect for: Marketing sites, showcasing product imagery
+    |
+    | 'split-right'
+    |    Two-column layout: form left, background image right  
+    |    Perfect for: Content-heavy sites, storytelling layouts
+    |
+    | 'fullscreen'
+    |    Immersive full-screen background with glassmorphism form overlay
+    |    Perfect for: Landing pages, premium applications, portfolios
+    |
+    | 'card'
+    |    Floating card design with subtle background patterns
+    |    Perfect for: Modern web apps, enterprise dashboards
+    |
+    | Environment: TYRO_LOGIN_LAYOUT=centered
     |
     */
     'layout' => env('TYRO_LOGIN_LAYOUT', 'centered'),
@@ -50,12 +74,31 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Branding
+    | Brand Identity & Customization
     |--------------------------------------------------------------------------
+    |
+    | 🎨 Customize the visual identity of your authentication pages
+    | Make them feel like they're truly part of your application
+    |
+    | Pro Tips:
+    | - Use high-resolution logos (minimum 200px height recommended)
+    | - SVG logos work best for crisp scaling across devices
+    | - Keep app names concise for better mobile display
+    |
     */
     'branding' => [
+        // Your application name shown on all auth pages
+        // Defaults to APP_NAME from Laravel config, or 'Laravel' if not set
         'app_name' => env('TYRO_LOGIN_APP_NAME', env('APP_NAME', 'Laravel')),
+        
+        // Logo URL (recommended: SVG or high-res PNG)
+        // Set to null to use text-based logo with app name
+        // Example: 'https://yourapp.com/logo.svg' or '/images/logo.png'
         'logo' => env('TYRO_LOGIN_LOGO', null),
+        
+        // Logo height for proper display scaling
+        // Accepts any valid CSS height value (px, rem, etc.)
+        // Common values: '32px', '48px', '3rem'
         'logo_height' => env('TYRO_LOGIN_LOGO_HEIGHT', '48px'),
     ],
 
@@ -362,38 +405,54 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Lockout Settings
+    | Security Lockout Protection
     |--------------------------------------------------------------------------
     |
-    | When enabled, users will be locked out after too many failed login
-    | attempts. The lockout state is stored in cache (no database required).
-    | After the lockout duration expires, the user can try again and the
-    | cache will be automatically cleared.
+    | Protect your application from brute-force attacks
+    |
+    | Automatically locks out users after too many failed login attempts.
+    | This prevents automated bots and attackers from guessing passwords.
+    | 
+    | Technical Details:
+    | - Uses Laravel Cache (Redis, Memcached, or file-based)
+    | - No database modifications required
+    | - Automatically cleans up expired lockouts
+    | - IP-based tracking for anonymous users
+    |
+    | Best Practices:
+    | - 3-5 attempts for standard apps, 10+ for admin areas
+    | - 15-30 minutes lockout for production, 2-5 for development
+    | - Consider longer lockouts for sensitive applications
     |
     */
     'lockout' => [
-        // Whether lockout feature is enabled
+        // Enable/disable the entire lockout system
+        // Set to false only during development/testing
         'enabled' => env('TYRO_LOGIN_LOCKOUT_ENABLED', true),
 
-        // Number of failed attempts before lockout
+        // Maximum failed login attempts before lockout
+        // Recommended: 3-5 for public apps, 10+ for admin panels
         'max_attempts' => env('TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS', 3),
 
         // Lockout duration in minutes
-        'duration_minutes' => env('TYRO_LOGIN_LOCKOUT_DURATION', 2),
+        // Recommended: 15-30 for production, 2-5 for development
+        'duration_minutes' => env('TYRO_LOGIN_LOCKOUT_DURATION', 15),
 
-        // Show remaining attempts after failed login
+        // Show remaining attempts in error messages
+        // Helps users understand how many tries they have left
         'show_attempts_left' => env('TYRO_LOGIN_SHOW_ATTEMPTS_LEFT', false),
 
-        // Auto-redirect to login page when countdown expires
+        // Automatically redirect to login when lockout expires
+        // Set to false if you want users to manually navigate back
         'auto_redirect' => env('TYRO_LOGIN_LOCKOUT_AUTO_REDIRECT', true),
 
-        // Message shown on lockout page (supports :minutes placeholder)
+        // Lockout page message (supports :minutes placeholder)
         'message' => env('TYRO_LOGIN_LOCKOUT_MESSAGE', 'Too many failed login attempts. Please try again in :minutes minutes.'),
 
         // Lockout page title
         'title' => env('TYRO_LOGIN_LOCKOUT_TITLE', 'Account Temporarily Locked'),
 
-        // Lockout page subtitle
+        // Lockout page subtitle/explanation
         'subtitle' => env('TYRO_LOGIN_LOCKOUT_SUBTITLE', 'For your security, we\'ve temporarily locked your account.'),
     ],
 ];

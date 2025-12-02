@@ -35,7 +35,7 @@ class PublishCommand extends Command
         $this->info('');
 
         if ($publishConfig || $publishAll) {
-            $this->info('📄 Publishing configuration...');
+            $this->info('Publishing configuration...');
             $this->callSilently('vendor:publish', [
                 '--tag' => 'tyro-login-config',
                 '--force' => $this->option('force'),
@@ -44,7 +44,7 @@ class PublishCommand extends Command
         }
 
         if ($publishViews || $publishAll) {
-            $this->info('📄 Publishing views...');
+            $this->info('Publishing views...');
             $this->callSilently('vendor:publish', [
                 '--tag' => 'tyro-login-views',
                 '--force' => $this->option('force'),
@@ -53,7 +53,7 @@ class PublishCommand extends Command
         }
 
         if ($publishEmails || $publishAll) {
-            $this->info('📧 Publishing email templates...');
+            $this->info('Publishing email templates...');
             $this->callSilently('vendor:publish', [
                 '--tag' => 'tyro-login-emails',
                 '--force' => $this->option('force'),
@@ -62,7 +62,7 @@ class PublishCommand extends Command
         }
 
         if ($publishAssets || $publishAll) {
-            $this->info('📄 Publishing assets...');
+            $this->info('Publishing assets...');
             $this->callSilently('vendor:publish', [
                 '--tag' => 'tyro-login-assets',
                 '--force' => $this->option('force'),
@@ -71,7 +71,7 @@ class PublishCommand extends Command
         }
 
         $this->info('');
-        $this->info('✨ Resources published successfully!');
+        $this->info('Resources published successfully!');
         $this->info('');
 
         return self::SUCCESS;

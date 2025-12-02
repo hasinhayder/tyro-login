@@ -29,7 +29,7 @@ class StarCommand extends Command
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
-        $this->info('  ║     ⭐ Star Tyro Login on GitHub!      ║');
+        $this->info('  ║        Star Tyro Login on GitHub!      ║');
         $this->info('  ║                                        ║');
         $this->info('  ╚════════════════════════════════════════╝');
         $this->info('');
@@ -50,7 +50,7 @@ class StarCommand extends Command
         if ($command) {
             exec("{$command} {$this->repoUrl}");
             $this->info('  ✓ GitHub repository opened in your default browser.');
-            $this->info('  ⭐ Don\'t forget to click the star button!');
+            $this->info('  Don\'t forget to click the star button!');
         } else {
             $this->warn('  Could not detect your operating system.');
             $this->info('  Please open the URL manually in your browser.');
