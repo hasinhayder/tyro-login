@@ -76,7 +76,7 @@
             <div class="hero-content">
                 <div class="hero-badge">
                     <span class="badge-dot"></span>
-                    Multiple Layouts &nbsp; • &nbsp; OTP &nbsp; • &nbsp; Captcha &nbsp; • &nbsp; Brute Force Lockouts &nbsp; • &nbsp; Beautiful UI &nbsp; • &nbsp; Email Templates &nbsp; • &nbsp; Free &nbsp;
+                    Social Login &nbsp; • &nbsp; Multiple Layouts &nbsp; • &nbsp; OTP &nbsp; • &nbsp; Captcha &nbsp; • &nbsp; Brute Force Lockouts &nbsp; • &nbsp; Beautiful UI &nbsp; • &nbsp; Email Templates &nbsp; • &nbsp; Free &nbsp;
                 </div>
 
                 <h1 class="hero-title">
@@ -114,12 +114,12 @@
 
                 <div class="hero-stats">
                     <div class="stat">
-                        <div class="stat-value">5</div>
-                        <div class="stat-label">Layout Options</div>
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Social Providers</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">4</div>
-                        <div class="stat-label">Email Templates</div>
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Layout Options</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value">100%</div>
@@ -243,6 +243,19 @@
                     </div>
                     <h3 class="feature-title">Tyro Integration</h3>
                     <p class="feature-description">Seamless integration with the Tyro package. Auto-assign roles to new users upon registration.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Social Login</h3>
+                    <p class="feature-description">Sign in with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, and GitLab. Auto-link accounts by email.</p>
                 </div>
 
                 <div class="feature-card">
@@ -1151,6 +1164,18 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
                             <td><code>tyro-login.otp.cancel</code></td>
                             <td>Cancel OTP verification</td>
                         </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/auth/{provider}/redirect</code></td>
+                            <td><code>tyro-login.social.redirect</code></td>
+                            <td>Redirect to OAuth provider</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-badge get">GET</span></td>
+                            <td><code>/auth/{provider}/callback</code></td>
+                            <td><code>tyro-login.social.callback</code></td>
+                            <td>Handle OAuth callback</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -1213,6 +1238,48 @@ TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
             </div> -->
 
             <div class="faq-list">
+                <!-- Social Login -->
+                <div class="faq-category" id="social-login">
+                    <h3 class="faq-category-title">Social Login</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Which social providers are supported?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login supports 7 OAuth providers: Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, and GitLab. Each provider can be individually enabled or disabled.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I enable social login?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Run <code>php artisan tyro-login:install --with-social</code> to install with social login support. Then set <code>TYRO_LOGIN_SOCIAL_ENABLED=true</code> and enable desired providers like <code>TYRO_LOGIN_SOCIAL_GOOGLE=true</code>. Configure provider credentials in <code>config/services.php</code>.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Does social login work with existing users?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! When <code>TYRO_LOGIN_SOCIAL_LINK_EXISTING=true</code> (default), if a user signs in with a social account that has the same email as an existing user, the accounts are automatically linked and the user is logged in.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Getting Started -->
                 <div class="faq-category" id="getting-started">
                     <h3 class="faq-category-title">Getting Started</h3>

@@ -95,6 +95,7 @@
                         <li><a href="#branding" class="doc-nav-link">Branding</a></li>
                         <li><a href="#redirects" class="doc-nav-link">Redirects</a></li>
                         <li><a href="#registration" class="doc-nav-link">Registration</a></li>
+                        <li><a href="#social-login" class="doc-nav-link">Social Login</a></li>
                         <li><a href="#captcha" class="doc-nav-link">Math Captcha</a></li>
                         <li><a href="#otp" class="doc-nav-link">Login OTP</a></li>
                         <li><a href="#email-verification" class="doc-nav-link">Email Verification</a></li>
@@ -166,6 +167,7 @@
                 <p class="doc-text">Every feature is designed to save you time while delivering a premium user experience that builds trust and engagement.</p>
                 <ul class="doc-list">
                     <li><strong>5 Stunning Layouts</strong> - Choose from centered, split-screen, fullscreen, or card designs that adapt to your brand</li>
+                    <li><strong>Social Login</strong> - Sign in with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, and GitLab via OAuth</li>
                     <li><strong>Professional Design Language</strong> - Enterprise-grade UI with attention to every pixel and interaction</li>
                     <li><strong>Effortless Customization</strong> - Modify everything from colors to copy with simple environment variables</li>
                     <li><strong>Security-First Approach</strong> - Built-in protection against brute force attacks with configurable lockouts</li>
@@ -437,6 +439,126 @@ TYRO_LOGIN_LOGO_HEIGHT=48px</code></pre>
 
                 <div class="doc-alert doc-alert-warning">
                     <strong>Note:</strong> To disable registration, set <code class="doc-inline-code">TYRO_LOGIN_REGISTRATION_ENABLED=false</code> in your <code class="doc-inline-code">.env</code> file.
+                </div>
+            </section>
+
+            <!-- Social Login -->
+            <section id="social-login" class="doc-section">
+                <h2 class="doc-section-title">Social Login (OAuth)</h2>
+                <p class="doc-text">
+                    Tyro Login supports OAuth authentication using Laravel Socialite. Users can sign in with their social media accounts for a seamless authentication experience.
+                </p>
+
+                <h3 class="doc-section-subtitle">Supported Providers</h3>
+                <ul class="doc-list">
+                    <li><strong>Google</strong></li>
+                    <li><strong>Facebook</strong></li>
+                    <li><strong>GitHub</strong></li>
+                    <li><strong>Twitter/X</strong></li>
+                    <li><strong>LinkedIn</strong></li>
+                    <li><strong>Bitbucket</strong></li>
+                    <li><strong>GitLab</strong></li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Installation</h3>
+                <p class="doc-text">Install with social login support:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash">php artisan tyro-login:install --with-social</code></pre>
+                </div>
+
+                <p class="doc-text">Or add social login to an existing installation:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash">composer require laravel/socialite
+php artisan vendor:publish --tag=tyro-login-migrations
+php artisan migrate</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Configuration</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                    </div>
+                    <pre><code class="language-bash"># Enable social login globally
+TYRO_LOGIN_SOCIAL_ENABLED=true
+
+# Enable specific providers
+TYRO_LOGIN_SOCIAL_GOOGLE=true
+TYRO_LOGIN_SOCIAL_GITHUB=true
+TYRO_LOGIN_SOCIAL_FACEBOOK=true
+TYRO_LOGIN_SOCIAL_TWITTER=true
+TYRO_LOGIN_SOCIAL_LINKEDIN=true
+TYRO_LOGIN_SOCIAL_BITBUCKET=true
+TYRO_LOGIN_SOCIAL_GITLAB=true
+
+# Behavior settings
+TYRO_LOGIN_SOCIAL_LINK_EXISTING=true    # Link to existing accounts by email
+TYRO_LOGIN_SOCIAL_AUTO_REGISTER=true    # Create new users from social login</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Provider Credentials</h3>
+                <p class="doc-text">Add provider credentials to <code class="doc-inline-code">config/services.php</code>:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/services.php</span>
+                    </div>
+                    <pre><code class="language-php">'google' => [
+    'client_id' => env('GOOGLE_CLIENT_ID'),
+    'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+    'redirect' => env('GOOGLE_REDIRECT_URI'),
+],
+
+'github' => [
+    'client_id' => env('GITHUB_CLIENT_ID'),
+    'client_secret' => env('GITHUB_CLIENT_SECRET'),
+    'redirect' => env('GITHUB_REDIRECT_URI'),
+],
+
+'facebook' => [
+    'client_id' => env('FACEBOOK_CLIENT_ID'),
+    'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+    'redirect' => env('FACEBOOK_REDIRECT_URI'),
+],</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Environment Variables</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                    </div>
+                    <pre><code class="language-bash"># Google
+GOOGLE_CLIENT_ID=your-client-id
+GOOGLE_CLIENT_SECRET=your-client-secret
+GOOGLE_REDIRECT_URI="${APP_URL}/auth/google/callback"
+
+# GitHub
+GITHUB_CLIENT_ID=your-client-id
+GITHUB_CLIENT_SECRET=your-client-secret
+GITHUB_REDIRECT_URI="${APP_URL}/auth/github/callback"
+
+# Facebook
+FACEBOOK_CLIENT_ID=your-client-id
+FACEBOOK_CLIENT_SECRET=your-client-secret
+FACEBOOK_REDIRECT_URI="${APP_URL}/auth/facebook/callback"</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">How It Works</h3>
+                <ul class="doc-list">
+                    <li><strong>Step 1:</strong> User clicks a social login button on login/register page</li>
+                    <li><strong>Step 2:</strong> User is redirected to the OAuth provider for authentication</li>
+                    <li><strong>Step 3:</strong> After approval, user is redirected back to your app</li>
+                    <li><strong>Step 4:</strong> If user has linked social account → Log them in</li>
+                    <li><strong>Step 5:</strong> If user email exists and linking is enabled → Link account and log in</li>
+                    <li><strong>Step 6:</strong> If user doesn't exist and auto-register is enabled → Create user and log in</li>
+                </ul>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Tip:</strong> The <code class="doc-inline-code">social_accounts</code> table stores provider connections, tokens, and avatars securely. Tokens are encrypted at rest.
                 </div>
             </section>
 
@@ -1363,6 +1485,75 @@ class User extends Authenticatable
                     </tbody>
                 </table>
 
+                <!-- Social Login -->
+                <h3 class="doc-section-subtitle">Social Login</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_ENABLED</code></td>
+                            <td>Enable social login globally</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_GOOGLE</code></td>
+                            <td>Enable Google OAuth login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_GITHUB</code></td>
+                            <td>Enable GitHub OAuth login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_FACEBOOK</code></td>
+                            <td>Enable Facebook OAuth login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_TWITTER</code></td>
+                            <td>Enable Twitter/X OAuth login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_LINKEDIN</code></td>
+                            <td>Enable LinkedIn OAuth login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_BITBUCKET</code></td>
+                            <td>Enable Bitbucket OAuth login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_GITLAB</code></td>
+                            <td>Enable GitLab OAuth login</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_LINK_EXISTING</code></td>
+                            <td>Link social accounts to existing users by email</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_AUTO_REGISTER</code></td>
+                            <td>Auto-create users from social login</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_SOCIAL_DIVIDER</code></td>
+                            <td>Text shown above social login buttons</td>
+                            <td><code class="doc-inline-code">Or continue with</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 <!-- Email Configuration -->
                 <h3 class="doc-section-subtitle">Email Configuration</h3>
                 <table class="doc-table">
@@ -1795,6 +1986,18 @@ php artisan tyro-login:publish --force</code></pre>
                                 <td><code class="doc-inline-code">tyro-login.otp.cancel</code></td>
                                 <td>Cancel OTP</td>
                             </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/auth/{provider}/redirect</code></td>
+                                <td><code class="doc-inline-code">tyro-login.social.redirect</code></td>
+                                <td>Redirect to OAuth provider</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color: #10b981; font-weight: 600;">GET</span></td>
+                                <td><code class="doc-inline-code">/auth/{provider}/callback</code></td>
+                                <td><code class="doc-inline-code">tyro-login.social.callback</code></td>
+                                <td>Handle OAuth callback</td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -2040,6 +2243,7 @@ php artisan tyro-login:publish --force</code></pre>
                 { id: 'branding', title: 'Branding', description: 'Customize app name and logo', icon: '🏷️' },
                 { id: 'redirects', title: 'Redirects', description: 'Configure post-auth redirects', icon: '🔄' },
                 { id: 'registration', title: 'Registration Settings', description: 'Control user registration', icon: '📝' },
+                { id: 'social-login', title: 'Social Login', description: 'OAuth with Google, GitHub, Facebook, etc.', icon: '👥' },
                 { id: 'captcha', title: 'Math Captcha', description: 'Simple math captcha protection', icon: '🧮' },
                 { id: 'otp', title: 'Login OTP', description: 'Two-factor authentication', icon: '🔑' },
                 { id: 'email-verification', title: 'Email Verification', description: 'Verify user email addresses', icon: '✉️' },
