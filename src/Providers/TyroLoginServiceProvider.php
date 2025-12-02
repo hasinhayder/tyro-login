@@ -23,6 +23,7 @@ class TyroLoginServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerViews();
         $this->registerCommands();
+        $this->registerMigrations();
     }
 
     protected function registerRoutes(): void
@@ -39,6 +40,14 @@ class TyroLoginServiceProvider extends ServiceProvider
     protected function registerViews(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'tyro-login');
+    }
+
+    protected function registerMigrations(): void
+    {
+        // Only load migrations if social login is enabled
+        if (config('tyro-login.social.enabled', false)) {
+            $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        }
     }
 
     protected function registerPublishing(): void
@@ -66,6 +75,11 @@ class TyroLoginServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../resources/assets' => public_path('vendor/tyro-login'),
         ], 'tyro-login-assets');
+
+        // Publish migrations (for social login)
+        $this->publishes([
+            __DIR__ . '/../../database/migrations' => database_path('migrations'),
+        ], 'tyro-login-migrations');
 
         // Publish all
         $this->publishes([

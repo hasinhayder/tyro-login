@@ -101,6 +101,9 @@
                     <a href="{{ route('tyro-login.login') }}" class="form-link">Log in</a>
                 </p>
             </div>
+
+            <!-- Social Login -->
+            @include('tyro-login::partials.social-login', ['action' => 'register'])
         </div>
     </div>
 </div>

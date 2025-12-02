@@ -405,6 +405,85 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Social Login (OAuth)
+    |--------------------------------------------------------------------------
+    |
+    | Enable social login using Laravel Socialite. Users can authenticate
+    | using their social media accounts. Requires laravel/socialite package.
+    |
+    | Supported providers: google, facebook, github, twitter, linkedin, bitbucket, gitlab
+    |
+    | Each provider requires credentials in config/services.php:
+    | 'github' => [
+    |     'client_id' => env('GITHUB_CLIENT_ID'),
+    |     'client_secret' => env('GITHUB_CLIENT_SECRET'),
+    |     'redirect' => env('GITHUB_REDIRECT_URI'),
+    | ],
+    |
+    */
+    'social' => [
+        // Enable/disable social login globally
+        'enabled' => env('TYRO_LOGIN_SOCIAL_ENABLED', false),
+
+        // Available providers (enable/disable each individually)
+        'providers' => [
+            'google' => [
+                'enabled' => env('TYRO_LOGIN_SOCIAL_GOOGLE', false),
+                'label' => 'Google',
+                'icon' => 'google', // Icon identifier for the button
+            ],
+            'facebook' => [
+                'enabled' => env('TYRO_LOGIN_SOCIAL_FACEBOOK', false),
+                'label' => 'Facebook',
+                'icon' => 'facebook',
+            ],
+            'github' => [
+                'enabled' => env('TYRO_LOGIN_SOCIAL_GITHUB', false),
+                'label' => 'GitHub',
+                'icon' => 'github',
+            ],
+            'twitter' => [
+                'enabled' => env('TYRO_LOGIN_SOCIAL_TWITTER', false),
+                'label' => 'X',
+                'icon' => 'twitter',
+            ],
+            'linkedin' => [
+                'enabled' => env('TYRO_LOGIN_SOCIAL_LINKEDIN', false),
+                'label' => 'LinkedIn',
+                'icon' => 'linkedin',
+            ],
+            'bitbucket' => [
+                'enabled' => env('TYRO_LOGIN_SOCIAL_BITBUCKET', false),
+                'label' => 'Bitbucket',
+                'icon' => 'bitbucket',
+            ],
+            'gitlab' => [
+                'enabled' => env('TYRO_LOGIN_SOCIAL_GITLAB', false),
+                'label' => 'GitLab',
+                'icon' => 'gitlab',
+            ],
+        ],
+
+        // Allow users to link social accounts to existing accounts (matched by email)
+        'link_existing_accounts' => env('TYRO_LOGIN_SOCIAL_LINK_EXISTING', true),
+
+        // Automatically create new user if social email doesn't exist
+        'auto_register' => env('TYRO_LOGIN_SOCIAL_AUTO_REGISTER', true),
+
+        // Text displayed above social login buttons
+        'divider_text' => env('TYRO_LOGIN_SOCIAL_DIVIDER', 'Or continue with'),
+
+        // Error messages
+        'messages' => [
+            'account_not_found' => 'No account found with this email. Please register first.',
+            'email_required' => 'Email address is required for social login.',
+            'provider_error' => 'An error occurred with the social login provider.',
+            'account_disabled' => 'Social login is not available for your account.',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Security Lockout Protection
     |--------------------------------------------------------------------------
     |

@@ -3,6 +3,7 @@
 use HasinHayder\TyroLogin\Http\Controllers\LoginController;
 use HasinHayder\TyroLogin\Http\Controllers\PasswordResetController;
 use HasinHayder\TyroLogin\Http\Controllers\RegisterController;
+use HasinHayder\TyroLogin\Http\Controllers\SocialAuthController;
 use HasinHayder\TyroLogin\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +76,13 @@ Route::middleware('guest')->group(function () {
     
     Route::get('otp/cancel', [LoginController::class, 'cancelOtp'])
         ->name('otp.cancel');
+
+    // Social login routes
+    Route::get('auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])
+        ->name('social.redirect');
+    
+    Route::get('auth/{provider}/callback', [SocialAuthController::class, 'callback'])
+        ->name('social.callback');
 });
 
 // Authenticated routes

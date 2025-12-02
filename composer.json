@@ -8,7 +8,9 @@
         "register",
         "auth",
         "blade",
-        "ui"
+        "ui",
+        "socialite",
+        "oauth"
     ],
     "license": "MIT",
     "type": "library",
@@ -22,6 +24,9 @@
         "orchestra/testbench": "^10.0",
         "pestphp/pest": "^3.0",
         "pestphp/pest-plugin-laravel": "^3.0"
+    },
+    "suggest": {
+        "laravel/socialite": "Required for social login functionality (^5.0)"
     },
     "autoload": {
         "psr-4": {

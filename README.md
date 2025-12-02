@@ -18,6 +18,7 @@
 
 -   **Multiple Layouts** - 5 beautiful layouts: centered, split-left, split-right, fullscreen, and card
 -   **Beautiful Design** - Modern, professional UI out of the box
+-   **Social Login** - OAuth authentication with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, and GitLab
 -   **Highly Configurable** - Customize colors, logos, redirects, and more
 -   **Secure by Default** - Lockout protection, CSRF protection, and proper validation
 -   **Math Captcha** - Simple addition/subtraction captcha for login and registration
@@ -48,6 +49,12 @@ Run the installation command:
 
 ```bash
 php artisan tyro-login:install
+```
+
+For social login support, use:
+
+```bash
+php artisan tyro-login:install --with-social
 ```
 
 That's it! Visit `/login` to see your new authentication pages.
@@ -286,6 +293,164 @@ When enabled, users will be locked out after too many failed login attempts. The
 -   Automatic cache cleanup when lockout expires
 -   Real-time countdown timer on lockout page
 
+### Social Login (OAuth)
+
+Tyro Login supports OAuth authentication using Laravel Socialite. Users can sign in with their social media accounts.
+
+**Supported Providers:**
+- Google
+- Facebook
+- GitHub
+- Twitter/X
+- LinkedIn
+- Bitbucket
+- GitLab
+
+#### Installation
+
+Install with social login support:
+
+```bash
+php artisan tyro-login:install --with-social
+```
+
+Or add social login to an existing installation:
+
+```bash
+composer require laravel/socialite
+php artisan vendor:publish --tag=tyro-login-migrations
+php artisan migrate
+```
+
+#### Configuration
+
+1. **Enable Social Login Globally:**
+
+```env
+TYRO_LOGIN_SOCIAL_ENABLED=true
+```
+
+2. **Enable Desired Providers:**
+
+```env
+TYRO_LOGIN_SOCIAL_GOOGLE=true
+TYRO_LOGIN_SOCIAL_GITHUB=true
+TYRO_LOGIN_SOCIAL_FACEBOOK=true
+```
+
+3. **Configure Provider Credentials:**
+
+Add credentials to `config/services.php`:
+
+```php
+'google' => [
+    'client_id' => env('GOOGLE_CLIENT_ID'),
+    'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+    'redirect' => env('GOOGLE_REDIRECT_URI'),
+],
+
+'github' => [
+    'client_id' => env('GITHUB_CLIENT_ID'),
+    'client_secret' => env('GITHUB_CLIENT_SECRET'),
+    'redirect' => env('GITHUB_REDIRECT_URI'),
+],
+
+'facebook' => [
+    'client_id' => env('FACEBOOK_CLIENT_ID'),
+    'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+    'redirect' => env('FACEBOOK_REDIRECT_URI'),
+],
+
+// For Twitter/X (OAuth 2.0)
+'twitter' => [
+    'client_id' => env('TWITTER_CLIENT_ID'),
+    'client_secret' => env('TWITTER_CLIENT_SECRET'),
+    'redirect' => env('TWITTER_REDIRECT_URI'),
+],
+
+// For LinkedIn (OpenID Connect)
+'linkedin-openid' => [
+    'client_id' => env('LINKEDIN_CLIENT_ID'),
+    'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
+    'redirect' => env('LINKEDIN_REDIRECT_URI'),
+],
+```
+
+4. **Add Environment Variables:**
+
+```env
+# Google
+GOOGLE_CLIENT_ID=your-client-id
+GOOGLE_CLIENT_SECRET=your-client-secret
+GOOGLE_REDIRECT_URI="${APP_URL}/auth/google/callback"
+
+# GitHub
+GITHUB_CLIENT_ID=your-client-id
+GITHUB_CLIENT_SECRET=your-client-secret
+GITHUB_REDIRECT_URI="${APP_URL}/auth/github/callback"
+
+# Facebook
+FACEBOOK_CLIENT_ID=your-client-id
+FACEBOOK_CLIENT_SECRET=your-client-secret
+FACEBOOK_REDIRECT_URI="${APP_URL}/auth/facebook/callback"
+```
+
+#### Social Login Behavior
+
+```php
+'social' => [
+    'enabled' => env('TYRO_LOGIN_SOCIAL_ENABLED', false),
+    
+    // Link social accounts to existing users (matched by email)
+    'link_existing_accounts' => env('TYRO_LOGIN_SOCIAL_LINK_EXISTING', true),
+    
+    // Automatically create new users from social login
+    'auto_register' => env('TYRO_LOGIN_SOCIAL_AUTO_REGISTER', true),
+    
+    // Text shown above social buttons
+    'divider_text' => env('TYRO_LOGIN_SOCIAL_DIVIDER', 'Or continue with'),
+],
+```
+
+**How it works:**
+
+1. User clicks a social login button on login/register page
+2. User is redirected to the OAuth provider for authentication
+3. After approval, user is redirected back to your app
+4. If user has linked social account → Log them in
+5. If user email exists and linking is enabled → Link social account and log in
+6. If user doesn't exist and auto-register is enabled → Create new user and log in
+
+**Social Accounts Table:**
+
+A migration creates the `social_accounts` table to store:
+- `user_id` - Link to your users table
+- `provider` - The OAuth provider (google, github, etc.)
+- `provider_user_id` - User ID from the provider
+- `provider_email` - Email from the provider
+- `provider_avatar` - Avatar URL from the provider
+- `access_token` / `refresh_token` - OAuth tokens (encrypted)
+- `token_expires_at` - Token expiration time
+
+#### Customizing Provider Labels and Icons
+
+```php
+'social' => [
+    'providers' => [
+        'google' => [
+            'enabled' => true,
+            'label' => 'Google',  // Button text
+            'icon' => 'google',   // Icon identifier
+        ],
+        'github' => [
+            'enabled' => true,
+            'label' => 'GitHub',
+            'icon' => 'github',
+        ],
+    ],
+],
+```
+
 ## Layout Examples
 
 Tyro Login provides 5 stunning layout options to match your application's branding:
@@ -387,26 +552,28 @@ Tyro Login provides several artisan commands:
 
 Tyro Login registers the following routes:
 
-| Method   | URI                       | Name                                   | Description                |
-| -------- | ------------------------- | -------------------------------------- | -------------------------- |
-| GET      | `/login`                  | `tyro-login.login`                     | Show login form            |
-| POST     | `/login`                  | `tyro-login.login.submit`              | Handle login               |
-| GET      | `/register`               | `tyro-login.register`                  | Show registration form     |
-| POST     | `/register`               | `tyro-login.register.submit`           | Handle registration        |
-| GET/POST | `/logout`                 | `tyro-login.logout`                    | Handle logout              |
-| GET      | `/lockout`                | `tyro-login.lockout`                   | Show lockout page          |
-| GET      | `/email/verify`           | `tyro-login.verification.notice`       | Show verification notice   |
-| GET      | `/email/not-verified`     | `tyro-login.verification.not-verified` | Show unverified email page |
-| GET      | `/email/verify/{token}`   | `tyro-login.verification.verify`       | Verify email               |
-| POST     | `/email/resend`           | `tyro-login.verification.resend`       | Resend verification email  |
-| GET      | `/forgot-password`        | `tyro-login.password.request`          | Show forgot password form  |
-| POST     | `/forgot-password`        | `tyro-login.password.email`            | Send reset link            |
-| GET      | `/reset-password/{token}` | `tyro-login.password.reset`            | Show reset form            |
-| POST     | `/reset-password`         | `tyro-login.password.update`           | Reset password             |
-| GET      | `/otp/verify`             | `tyro-login.otp.verify`                | Show OTP form              |
-| POST     | `/otp/verify`             | `tyro-login.otp.submit`                | Verify OTP                 |
-| POST     | `/otp/resend`             | `tyro-login.otp.resend`                | Resend OTP                 |
-| GET      | `/otp/cancel`             | `tyro-login.otp.cancel`                | Cancel OTP verification    |
+| Method   | URI                           | Name                                   | Description                |
+| -------- | ----------------------------- | -------------------------------------- | -------------------------- |
+| GET      | `/login`                      | `tyro-login.login`                     | Show login form            |
+| POST     | `/login`                      | `tyro-login.login.submit`              | Handle login               |
+| GET      | `/register`                   | `tyro-login.register`                  | Show registration form     |
+| POST     | `/register`                   | `tyro-login.register.submit`           | Handle registration        |
+| GET/POST | `/logout`                     | `tyro-login.logout`                    | Handle logout              |
+| GET      | `/lockout`                    | `tyro-login.lockout`                   | Show lockout page          |
+| GET      | `/email/verify`               | `tyro-login.verification.notice`       | Show verification notice   |
+| GET      | `/email/not-verified`         | `tyro-login.verification.not-verified` | Show unverified email page |
+| GET      | `/email/verify/{token}`       | `tyro-login.verification.verify`       | Verify email               |
+| POST     | `/email/resend`               | `tyro-login.verification.resend`       | Resend verification email  |
+| GET      | `/forgot-password`            | `tyro-login.password.request`          | Show forgot password form  |
+| POST     | `/forgot-password`            | `tyro-login.password.email`            | Send reset link            |
+| GET      | `/reset-password/{token}`     | `tyro-login.password.reset`            | Show reset form            |
+| POST     | `/reset-password`             | `tyro-login.password.update`           | Reset password             |
+| GET      | `/otp/verify`                 | `tyro-login.otp.verify`                | Show OTP form              |
+| POST     | `/otp/verify`                 | `tyro-login.otp.submit`                | Verify OTP                 |
+| POST     | `/otp/resend`                 | `tyro-login.otp.resend`                | Resend OTP                 |
+| GET      | `/otp/cancel`                 | `tyro-login.otp.cancel`                | Cancel OTP verification    |
+| GET      | `/auth/{provider}/redirect`   | `tyro-login.social.redirect`           | Redirect to OAuth provider |
+| GET      | `/auth/{provider}/callback`   | `tyro-login.social.callback`           | Handle OAuth callback      |
 
 ### Customizing Route Prefix
 
