@@ -29,14 +29,37 @@
             <!-- Header -->
             <div class="form-header">
                 <h2>Log in to your account</h2>
+                @if(($loginField ?? 'email') === 'both')
+                <p>Enter your email or username and password below to log in</p>
+                @elseif(($loginField ?? 'email') === 'username')
+                <p>Enter your username and password below to log in</p>
+                @else
                 <p>Enter your email and password below to log in</p>
+                @endif
             </div>
 
             <!-- Login Form -->
             <form method="POST" action="{{ route('tyro-login.login.submit') }}">
                 @csrf
 
-                <!-- Email Field -->
+                <!-- Login Field (Email, Username, or Both) -->
+                @if(($loginField ?? 'email') === 'both')
+                <div class="form-group">
+                    <label for="login" class="form-label">Email or Username</label>
+                    <input type="text" id="login" name="login" class="form-input @error('login') is-invalid @enderror" value="{{ old('login') }}" required autocomplete="username" autofocus placeholder="Email or username">
+                    @error('login')
+                    <span class="error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+                @elseif(($loginField ?? 'email') === 'username')
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-input @error('username') is-invalid @enderror" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Username">
+                    @error('username')
+                    <span class="error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+                @else
                 <div class="form-group">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" id="email" name="email" class="form-input @error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="email@example.com">
@@ -44,6 +67,7 @@
                     <span class="error-message">{{ $message }}</span>
                     @enderror
                 </div>
+                @endif
 
                 <!-- Password Field -->
                 <div class="form-group">
