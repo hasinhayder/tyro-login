@@ -28,6 +28,7 @@ class SocialAuthController extends Controller
         'linkedin',
         'bitbucket',
         'gitlab',
+        'slack',
     ];
 
     /**
@@ -52,8 +53,12 @@ class SocialAuthController extends Controller
         $request->session()->put('tyro-login.social.action', $action);
 
         try {
-            // Use the correct driver name for LinkedIn
-            $driverName = $provider === 'linkedin' ? 'linkedin-openid' : $provider;
+            // Use the correct driver name for providers with different naming
+            $driverName = match($provider) {
+                'linkedin' => 'linkedin-openid',
+                'slack' => 'slack-openid',
+                default => $provider,
+            };
             
             return Socialite::driver($driverName)->redirect();
         } catch (\Exception $e) {
@@ -85,8 +90,12 @@ class SocialAuthController extends Controller
         }
 
         try {
-            // Use the correct driver name for LinkedIn
-            $driverName = $provider === 'linkedin' ? 'linkedin-openid' : $provider;
+            // Use the correct driver name for providers with different naming
+            $driverName = match($provider) {
+                'linkedin' => 'linkedin-openid',
+                'slack' => 'slack-openid',
+                default => $provider,
+            };
             
             $socialUser = Socialite::driver($driverName)->user();
         } catch (\Exception $e) {
@@ -137,6 +146,9 @@ class SocialAuthController extends Controller
             // Update token information
             $this->updateSocialAccount($socialAccount, $socialUser);
 
+            // Mark email as verified (social login confirms email ownership)
+            $this->markEmailAsVerified($socialAccount->user);
+
             // Log the user in
             Auth::login($socialAccount->user);
             $request->session()->regenerate();
@@ -152,6 +164,9 @@ class SocialAuthController extends Controller
             // Link social account to existing user if enabled
             if (config('tyro-login.social.link_existing_accounts', true)) {
                 $this->createSocialAccount($user, $socialUser, $provider);
+
+                // Mark email as verified (social login confirms email ownership)
+                $this->markEmailAsVerified($user);
 
                 Auth::login($user);
                 $request->session()->regenerate();
@@ -301,6 +316,30 @@ class SocialAuthController extends Controller
         } catch (\Exception $e) {
             // Silently fail if role assignment fails
             report($e);
+        }
+    }
+
+    /**
+     * Mark user's email as verified if not already verified.
+     * Social login confirms email ownership through the OAuth provider.
+     */
+    protected function markEmailAsVerified($user): void
+    {
+        if (!config('tyro-login.social.auto_verify_email', true)) {
+            return;
+        }
+
+        // Only update if email is not already verified
+        if (empty($user->email_verified_at)) {
+            $user->email_verified_at = now();
+            $user->save();
+
+            if (config('tyro-login.debug', false)) {
+                Log::info('=== TYRO LOGIN EMAIL VERIFIED VIA SOCIAL ===');
+                Log::info("User ID: {$user->id}");
+                Log::info("Email: {$user->email}");
+                Log::info('=============================================');
+            }
         }
     }
 

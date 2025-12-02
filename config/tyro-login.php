@@ -411,7 +411,7 @@ return [
     | Enable social login using Laravel Socialite. Users can authenticate
     | using their social media accounts. Requires laravel/socialite package.
     |
-    | Supported providers: google, facebook, github, twitter, linkedin, bitbucket, gitlab
+    | Supported providers: google, facebook, github, twitter, linkedin, bitbucket, gitlab, slack
     |
     | Each provider requires credentials in config/services.php:
     | 'github' => [
@@ -462,6 +462,11 @@ return [
                 'label' => 'GitLab',
                 'icon' => 'gitlab',
             ],
+            'slack' => [
+                'enabled' => env('TYRO_LOGIN_SOCIAL_SLACK', false),
+                'label' => 'Slack',
+                'icon' => 'slack',
+            ],
         ],
 
         // Allow users to link social accounts to existing accounts (matched by email)
@@ -472,6 +477,10 @@ return [
 
         // Text displayed above social login buttons
         'divider_text' => env('TYRO_LOGIN_SOCIAL_DIVIDER', 'Or continue with'),
+
+        // Automatically verify user email after social login/register
+        // Social providers confirm email ownership, so we can trust the email
+        'auto_verify_email' => env('TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL', true),
 
         // Error messages
         'messages' => [

@@ -140,6 +140,11 @@
         background-color: rgba(252, 109, 38, 0.1);
     }
 
+    .social-btn-slack:hover {
+        border-color: #4a154b;
+        background-color: rgba(74, 21, 75, 0.1);
+    }
+
     .social-error {
         margin-top: 1rem;
         padding: 0.75rem 1rem;
