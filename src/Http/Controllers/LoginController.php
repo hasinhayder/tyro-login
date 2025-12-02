@@ -94,6 +94,15 @@ class LoginController extends Controller
         if (config('tyro-login.captcha.enabled_login', false)) {
             $rules['captcha_answer'] = ['required', 'numeric'];
         }
+
+
+        if ($loginField === 'both') {
+            $loginValue = $request->input('both');
+            $field = filter_var($loginValue, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+            $request->merge([$field => $loginValue]);
+            $rules[$field] = $rules['login'];
+            unset($rules['login']);
+        }
         
         $credentials = $request->validate($rules);
 
