@@ -1336,48 +1336,6 @@ TYRO_LOGIN_SOCIAL_AUTO_REGISTER=true</code></pre>
             </div> -->
 
             <div class="faq-list">
-                <!-- Social Login -->
-                <div class="faq-category" id="social-login">
-                    <h3 class="faq-category-title">Social Login</h3>
-                    <div class="faq-category-items">
-                        <div class="faq-item">
-                            <button class="faq-question" aria-expanded="false">
-                                <span>Which social providers are supported?</span>
-                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </button>
-                            <div class="faq-answer">
-                                <p>Tyro Login supports 8 OAuth providers: Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack. Each provider can be individually enabled or disabled.</p>
-                            </div>
-                        </div>
-
-                        <div class="faq-item">
-                            <button class="faq-question" aria-expanded="false">
-                                <span>How do I enable social login?</span>
-                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </button>
-                            <div class="faq-answer">
-                                <p>Run <code>php artisan tyro-login:install --with-social</code> to install with social login support. Then set <code>TYRO_LOGIN_SOCIAL_ENABLED=true</code> and enable desired providers like <code>TYRO_LOGIN_SOCIAL_GOOGLE=true</code>. Configure provider credentials in <code>config/services.php</code>.</p>
-                            </div>
-                        </div>
-
-                        <div class="faq-item">
-                            <button class="faq-question" aria-expanded="false">
-                                <span>Does social login work with existing users?</span>
-                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </button>
-                            <div class="faq-answer">
-                                <p>Yes! When <code>TYRO_LOGIN_SOCIAL_LINK_EXISTING=true</code> (default), if a user signs in with a social account that has the same email as an existing user, the accounts are automatically linked and the user is logged in.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Getting Started -->
                 <div class="faq-category" id="getting-started">
                     <h3 class="faq-category-title">Getting Started</h3>
@@ -1631,6 +1589,48 @@ TYRO_LOGIN_SOCIAL_AUTO_REGISTER=true</code></pre>
                             </button>
                             <div class="faq-answer">
                                 <p>Enable debug mode with <code>TYRO_LOGIN_DEBUG=true</code>. All email URLs, OTP codes, and reset tokens will be logged to storage/logs/laravel.log. For development, you can also use email debugging services like <a href="https://mailtrap.io" target="_blank" rel="noopener">MailTrap</a> or <a href="https://mailpit.dev" target="_blank" rel="noopener">Mailpit</a> to capture and inspect sent emails without affecting real users. These services provide real-time email previews, delivery tracking, and webhook testing capabilities.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Login -->
+                <div class="faq-category" id="social-login">
+                    <h3 class="faq-category-title">Social Login</h3>
+                    <div class="faq-category-items">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Which social providers are supported?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Tyro Login supports 8 OAuth providers: Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack. Each provider can be individually enabled or disabled.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I enable social login?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Run <code>php artisan tyro-login:install --with-social</code> to install with social login support. Then set <code>TYRO_LOGIN_SOCIAL_ENABLED=true</code> and enable desired providers like <code>TYRO_LOGIN_SOCIAL_GOOGLE=true</code>. Configure provider credentials in <code>config/services.php</code>.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Does social login work with existing users?</span>
+                                <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Yes! When <code>TYRO_LOGIN_SOCIAL_LINK_EXISTING=true</code> (default), if a user signs in with a social account that has the same email as an existing user, the accounts are automatically linked and the user is logged in.</p>
                             </div>
                         </div>
                     </div>

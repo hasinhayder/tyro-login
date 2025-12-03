@@ -41,6 +41,7 @@
 
 .doc-nav {
     list-style: none;
+    margin-top: var(--spacing-xs);
 }
 
 .doc-nav-section {
@@ -374,6 +375,33 @@
     margin-top: var(--spacing-lg);
 }
 
+.doc-social-providers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.doc-social-provider-item {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    text-align: center;
+    font-weight: 500;
+    color: var(--color-text);
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.doc-social-provider-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--color-shadow);
+    border-color: var(--color-primary);
+}
+
 .doc-screenshot {
     background: var(--color-bg-secondary);
     border-radius: var(--radius-md);
@@ -639,7 +667,7 @@
 
 .spotlight-shortcut {
     position: fixed;
-    top: 20px;
+    top: 110px;
     right: 20px;
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
