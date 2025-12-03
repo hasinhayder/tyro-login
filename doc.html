@@ -2021,6 +2021,39 @@ php artisan tyro-login:publish --assets
 php artisan tyro-login:publish --force</code></pre>
                 </div>
 
+                <h3 class="doc-section-subtitle">Publishing Style & Shadcn Theme</h3>
+                <p class="doc-text">The <code class="doc-inline-code">tyro-login:publish-style</code> command allows you to publish Tailwind CSS theme configurations and shadcn-inspired UI components:</p>
+
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Option</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">--theme-only</code></td>
+                            <td>Publish only the theme variables without UI components</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash"># Publish both themes and shadcn components
+php artisan tyro-login:publish-style
+
+# Publish only theme variables
+php artisan tyro-login:publish-style --theme-only</code></pre>
+                </div>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Integration:</strong> These commands are designed to help you customize the styling and integrate with shadcn-inspired UI components while maintaining the package's design system.
+                </div>
+
                 <h3 class="doc-section-subtitle">User Verification Commands</h3>
                 <p class="doc-text">Tyro Login provides commands to manually verify or unverify user email addresses:</p>
 
