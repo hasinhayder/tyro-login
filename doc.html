@@ -106,6 +106,7 @@
                     <div class="doc-nav-title">Customization</div>
                     <ul class="doc-nav-list">
                         <li><a href="#publishing" class="doc-nav-link">Publishing Assets</a></li>
+                        <li><a href="#theme-customization" class="doc-nav-link">Theme Customization</a></li>
                         <li><a href="#env-variables" class="doc-nav-link">Config Variables</a></li>
                         <li><a href="#artisan-commands" class="doc-nav-link">Artisan Commands</a></li>
                     </ul>
@@ -1085,6 +1086,61 @@ class User extends Authenticatable
                 <p class="doc-text">This publishes config, views, and all assets.</p>
             </section>
 
+            <!-- Theme Customization -->
+            <section id="theme-customization" class="doc-section">
+                <h2 class="doc-section-title">Theme Customization (shadcn Variables)</h2>
+                <p class="doc-text">
+                    Tyro Login uses <a href="https://ui.shadcn.com" target="_blank" rel="noopener">shadcn/ui</a> CSS variables for theming, making it easy to customize colors and integrate with shadcn-based projects.
+                </p>
+
+                <h3 class="doc-section-subtitle">Publishing Theme Files</h3>
+                <p class="doc-text">Publish the theme variables to customize the look and feel:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash"># Publish only theme variables (recommended for color customization)
+php artisan tyro-login:publish-style --theme-only
+
+# Or publish complete styles (theme + component styles)
+php artisan tyro-login:publish-style</code></pre>
+                </div>
+
+                <p class="doc-text">Theme files will be published to <code class="doc-inline-code">resources/views/vendor/tyro-login/partials/</code>.</p>
+
+                <h3 class="doc-section-subtitle">Visual Theme Editing with tweakcn (free)</h3>
+                <p class="doc-text">The easiest way to customize your theme is using <a href="https://tweakcn.com" target="_blank" rel="noopener">tweakcn.com</a>:</p>
+
+                <ul class="doc-list">
+                    <li><strong>Step 1:</strong> Visit <a href="https://tweakcn.com" target="_blank" rel="noopener">tweakcn.com</a></li>
+                    <li><strong>Step 2:</strong> Use the visual editor to create your perfect color palette</li>
+                    <li><strong>Step 3:</strong> Copy the generated CSS variables</li>
+                    <li><strong>Step 4:</strong> Publish your theme: <code class="doc-inline-code">php artisan tyro-login:publish-style --theme-only</code></li>
+                    <li><strong>Step 5:</strong> Paste the variables into <code class="doc-inline-code">resources/views/vendor/tyro-login/partials/shadcn-theme.blade.php</code></li>
+                </ul>
+
+                <div class="doc-alert doc-alert-success">
+                    <strong>Pro Tip:</strong> tweakcn.com generates both light and dark mode variables automatically. Your Tyro Login pages will respect the user's theme preference!
+                </div>
+
+                <h3 class="doc-section-subtitle">Theme File Structure</h3>
+                <p class="doc-text">After publishing, your theme structure will be:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">File Structure</span>
+                    </div>
+                    <pre><code class="language-bash">resources/views/vendor/tyro-login/partials/
+├── shadcn-theme.blade.php  # Theme variables (edit this!)
+└── styles.blade.php        # Component styles (includes theme)</code></pre>
+                </div>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Safe to Edit:</strong> The <code class="doc-inline-code">shadcn-theme.blade.php</code> file contains only CSS variables, making it safe to edit without breaking component styles.
+                </div>
+            </section>
+
             <!-- Environment Variables -->
             <section id="env-variables" class="doc-section">
                 <h2 class="doc-section-title">Environment Variables</h2>
@@ -1842,6 +1898,14 @@ class User extends Authenticatable
                             <td>Publish only email templates</td>
                         </tr>
                         <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-login:publish-style</code></td>
+                            <td>Publish styles (theme + components)</td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-login:publish-style --theme-only</code></td>
+                            <td>Publish only theme variables</td>
+                        </tr>
+                        <tr>
                             <td><code class="doc-inline-code">php artisan tyro-login:verify-user {email|id}</code></td>
                             <td>Mark a user's email as verified</td>
                         </tr>
@@ -2378,6 +2442,7 @@ php artisan tyro-login:unverify-user --all</code></pre>
 
                 // Customization
                 { id: 'publishing', title: 'Publishing Assets', description: 'Publish views and assets', icon: '📦' },
+                { id: 'theme-customization', title: 'Theme Customization', description: 'shadcn CSS variables and tweakcn.com', icon: '🎨' },
                 { id: 'env-variables', title: 'Config Variables', description: 'Environment variables reference', icon: '⚙️' },
                 { id: 'artisan-commands', title: 'Artisan Commands', description: 'Available CLI commands', icon: '⌨️' },
                 { id: 'routes', title: 'Routes Reference', description: 'All available routes', icon: '🛣️' },
