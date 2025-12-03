@@ -76,8 +76,14 @@ class TyroLoginServiceProvider extends ServiceProvider
 
         // Publish styles
         $this->publishes([
+            __DIR__ . '/../../resources/views/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-login/partials/shadcn-theme.blade.php'),
             __DIR__ . '/../../resources/views/partials/styles.blade.php' => resource_path('views/vendor/tyro-login/partials/styles.blade.php'),
         ], 'tyro-login-styles');
+
+        // Publish theme only (for quick theme customization)
+        $this->publishes([
+            __DIR__ . '/../../resources/views/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-login/partials/shadcn-theme.blade.php'),
+        ], 'tyro-login-theme');
 
         // Publish assets
         $this->publishes([
