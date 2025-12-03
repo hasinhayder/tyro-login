@@ -193,7 +193,8 @@ class LoginController extends Controller
         }
 
         // Use 'login' as error field when loginField is 'both', otherwise use the actual field name
-        $errorField = $loginField === 'both' ? 'login' : $loginField;
+        // For 'phone', use 'email' as the field name since that's what the form uses
+        $errorField = $loginField === 'both' ? 'login' : ($loginField === 'phone' ? 'email' : $loginField);
 
         throw ValidationException::withMessages([
             $errorField => $errorMessage,
@@ -390,6 +391,8 @@ class LoginController extends Controller
             $rules['email'] = ['required', 'string', 'email'];
         } elseif ($loginField === 'username') {
             $rules['username'] = ['required', 'string'];
+        } elseif ($loginField === 'phone') {
+            $rules['email'] = ['required', 'string']; // Using 'email' field name but without email format validation
         } else {
             // 'both' - accept either email or username
             $rules['login'] = ['required', 'string'];

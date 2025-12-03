@@ -95,3 +95,56 @@ it('redirects to login when registration is disabled', function () {
 
     $response->assertRedirect(route('tyro-login.login'));
 });
+
+it('validates phone number on registration when phone login is enabled', function () {
+    config(['tyro-login.login_field' => 'phone']);
+    config(['tyro-login.registration.enabled' => true]);
+
+    $response = $this->post('/register', [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'phone' => '01700000000',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
+
+    $response->assertRedirect();
+    $this->assertDatabaseHas('users', [
+        'phone' => '01700000000',
+    ]);
+});
+
+it('requires phone field when phone login is enabled', function () {
+    config(['tyro-login.login_field' => 'phone']);
+    config(['tyro-login.registration.enabled' => true]);
+
+    $response = $this->post('/register', [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
+
+    $response->assertSessionHasErrors('phone');
+});
+
+it('validates phone uniqueness on registration', function () {
+    config(['tyro-login.login_field' => 'phone']);
+    
+    User::forceCreate([
+        'name' => 'Existing User',
+        'email' => 'existing@example.com',
+        'phone' => '01700000000',
+        'password' => Hash::make('password'),
+    ]);
+
+    $response = $this->post('/register', [
+        'name' => 'New User',
+        'email' => 'newuser@example.com',
+        'phone' => '01700000000',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+    ]);
+
+    $response->assertSessionHasErrors('phone');
+});

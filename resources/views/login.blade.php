@@ -33,6 +33,8 @@
                 <p>Enter your email or username and password below to log in</p>
                 @elseif(($loginField ?? 'email') === 'username')
                 <p>Enter your username and password below to log in</p>
+                @elseif(($loginField ?? 'email') === 'phone')
+                <p>Enter your phone number and password below to log in</p>
                 @else
                 <p>Enter your email and password below to log in</p>
                 @endif
@@ -56,6 +58,14 @@
                     <label for="username" class="form-label">Username</label>
                     <input type="text" id="username" name="username" class="form-input @error('username') is-invalid @enderror" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Username">
                     @error('username')
+                    <span class="error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+                @elseif(($loginField ?? 'email') === 'phone')
+                <div class="form-group">
+                    <label for="email" class="form-label">Phone</label>
+                    <input type="text" id="email" name="email" class="form-input @error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="tel" autofocus placeholder="01700000000">
+                    @error('email')
                     <span class="error-message">{{ $message }}</span>
                     @enderror
                 </div>

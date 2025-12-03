@@ -54,6 +54,17 @@
                     @enderror
                 </div>
 
+                <!-- Phone Field (if phone login is enabled) -->
+                @if(config('tyro-login.login_field') === 'phone')
+                <div class="form-group">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" id="phone" name="phone" class="form-input @error('phone') is-invalid @enderror" value="{{ old('phone') }}" required autocomplete="tel" placeholder="01700000000">
+                    @error('phone')
+                    <span class="error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+                @endif
+
                 <!-- Password Field -->
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>

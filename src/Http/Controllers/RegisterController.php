@@ -131,6 +131,11 @@ class RegisterController extends Controller
             $rules['password'][] = 'confirmed';
         }
 
+        // Add phone validation if login_field is set to 'phone'
+        if (config('tyro-login.login_field') === 'phone') {
+            $rules['phone'] = ['required', 'string', 'max:20', 'unique:' . $usersTable . ',phone'];
+        }
+
         return $rules;
     }
 

@@ -225,3 +225,60 @@ it('does not show remaining attempts when show_attempts_left is disabled', funct
     $errors = session('errors')->get('email');
     expect($errors[0])->not->toContain('attempts remaining');
 });
+
+it('can login with phone number when phone field is enabled', function () {
+    config(['tyro-login.login_field' => 'phone']);
+    
+    $user = User::forceCreate([
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'phone' => '01700000000',
+        'password' => Hash::make('password'),
+    ]);
+
+    $response = $this->post('/login', [
+        'email' => '01700000000',
+        'password' => 'password',
+    ]);
+
+    $response->assertRedirect(config('tyro-login.redirects.after_login', '/'));
+    $this->assertAuthenticated();
+});
+
+it('fails login with invalid phone number', function () {
+    config(['tyro-login.login_field' => 'phone']);
+    
+    User::forceCreate([
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'phone' => '01700000000',
+        'password' => Hash::make('password'),
+    ]);
+
+    $response = $this->post('/login', [
+        'email' => '01799999999',
+        'password' => 'password',
+    ]);
+
+    $response->assertSessionHasErrors('email');
+    $this->assertGuest();
+});
+
+it('validates phone number format on login', function () {
+    config(['tyro-login.login_field' => 'phone']);
+    
+    User::forceCreate([
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'phone' => '01700000000',
+        'password' => Hash::make('password'),
+    ]);
+
+    $response = $this->post('/login', [
+        'email' => '01700000000',
+        'password' => 'password',
+    ]);
+
+    $response->assertRedirect();
+    $this->assertAuthenticated();
+});
