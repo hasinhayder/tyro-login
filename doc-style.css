@@ -402,6 +402,41 @@
     border-color: var(--color-primary);
 }
 
+/* Feature Grid */
+.doc-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+}
+
+.doc-feature-item {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+    transition: all var(--transition-base);
+}
+
+.doc-feature-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px var(--color-shadow);
+    border-color: var(--color-primary);
+}
+
+.doc-feature-title {
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.1rem;
+}
+
+.doc-feature-desc {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+}
+
 .doc-screenshot {
     background: var(--color-bg-secondary);
     border-radius: var(--radius-md);
@@ -667,7 +702,7 @@
 
 .spotlight-shortcut {
     position: fixed;
-    top: 110px;
+    top: 160px;
     right: 20px;
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
