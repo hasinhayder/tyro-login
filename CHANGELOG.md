@@ -2,6 +2,25 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+-   **Phone Number Login Support** - Users can now login using phone numbers instead of email
+    -   New 'phone' option for `login_field` configuration
+    -   Phone number validation in registration when phone login is enabled
+    -   Updated login and register views with conditional phone field rendering
+    -   Comprehensive documentation for phone login setup in README
+    -   Migration example for adding phone column to users table (`docs/PHONE_LOGIN_MIGRATION.md`)
+    -   Test coverage for phone login and registration functionality
+
+### Changed
+
+-   Extended LoginController validation to support phone numbers without email format requirement
+-   Updated login error message handling to properly display errors for phone field
+-   Enhanced RegisterController to validate phone field when phone login is enabled
+-   Updated configuration file to include 'phone' as a valid `login_field` option
+
 ## [1.5.0] - 2025-12-02
 
 ### Added

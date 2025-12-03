@@ -179,6 +179,28 @@ Add a simple math captcha to your login and/or registration forms to prevent aut
 ],
 ```
 
+### Login Field
+
+Configure which field users should use to log in:
+
+```php
+'login_field' => env('TYRO_LOGIN_FIELD', 'email'),
+```
+
+**Options:**
+- `'email'` - Users log in with email address (default)
+- `'username'` - Users log in with username
+- `'phone'` - Users log in with phone number
+- `'both'` - Users can log in with either email or username
+
+**Example for phone login:**
+
+```env
+TYRO_LOGIN_FIELD=phone
+```
+
+**Note:** When using `'phone'` login, ensure your User model has a `'phone'` column in the database. See the [Phone Number Login](#phone-number-login) section below for setup instructions.
+
 ### Login OTP Verification
 
 Add two-factor authentication via email OTP. After entering valid credentials, users receive a one-time code:
@@ -471,6 +493,143 @@ A migration creates the `social_accounts` table to store:
     ],
 ],
 ```
+
+## Phone Number Login
+
+Tyro Login supports phone number-based authentication. When enabled, users can log in using their phone numbers instead of email addresses.
+
+### Setup Phone Login
+
+1. **Set the login field in your `.env`:**
+
+```env
+TYRO_LOGIN_FIELD=phone
+```
+
+2. **Add a phone column to your users table:**
+
+```bash
+php artisan make:migration add_phone_to_users_table
+```
+
+Migration content:
+
+```php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('phone')->unique()->nullable()->after('email');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('phone');
+        });
+    }
+};
+```
+
+Run the migration:
+
+```bash
+php artisan migrate
+```
+
+3. **Add phone to your User model's fillable attributes:**
+
+```php
+protected $fillable = [
+    'name',
+    'email',
+    'phone', // Add this
+    'password',
+];
+```
+
+4. **Create a custom authentication provider to handle phone lookups:**
+
+In your `AppServiceProvider.php` (or a custom service provider):
+
+```php
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\EloquentUserProvider;
+
+public function boot(): void
+{
+    Auth::provider('phone', function ($app, array $config) {
+        return new class($app['hash'], $config['model']) extends EloquentUserProvider {
+            public function retrieveByCredentials(array $credentials)
+            {
+                if (empty($credentials) ||
+                   (count($credentials) === 1 &&
+                    str_contains($this->firstCredentialKey($credentials), 'password'))) {
+                    return;
+                }
+
+                $query = $this->newModelQuery();
+
+                foreach ($credentials as $key => $value) {
+                    if (str_contains($key, 'password')) {
+                        continue;
+                    }
+
+                    // When email field contains phone number, search by phone
+                    if ($key === 'email' && preg_match('/^[0-9+\-\s()]+$/', $value)) {
+                        $query->where('phone', $value);
+                    } else {
+                        $query->where($key, $value);
+                    }
+                }
+
+                return $query->first();
+            }
+
+            protected function firstCredentialKey(array $credentials)
+            {
+                foreach ($credentials as $key => $value) {
+                    return $key;
+                }
+            }
+        };
+    });
+}
+```
+
+5. **Update your auth configuration** in `config/auth.php`:
+
+```php
+'providers' => [
+    'users' => [
+        'driver' => 'phone', // Change from 'eloquent' to 'phone'
+        'model' => App\Models\User::class,
+    ],
+],
+```
+
+### How It Works
+
+- The login form will display "Phone" as the label when `login_field` is set to `'phone'`
+- Users enter their phone number in the login field
+- The custom authentication provider detects phone number patterns and searches by the `phone` column
+- Registration form will include a phone field that validates and stores the phone number
+- Phone numbers must be unique in the users table
+
+### Example Phone Formats
+
+The phone login supports various formats:
+- `01700000000` (Bangladesh format)
+- `+8801700000000` (International format)
+- `(555) 123-4567` (US format with parentheses and dashes)
 
 ## Layout Examples
 
