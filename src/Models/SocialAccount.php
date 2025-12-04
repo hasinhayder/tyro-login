@@ -2,6 +2,7 @@
 
 namespace HasinHayder\TyroLogin\Models;
 
+use HasinHayder\TyroLogin\Casts\EncryptedOrPlaintext;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -38,8 +39,8 @@ class SocialAccount extends Model {
      */
     protected function casts(): array {
         return [
-            'access_token' => 'encrypted',
-            'refresh_token' => 'encrypted',
+            'access_token' => EncryptedOrPlaintext::class,
+            'refresh_token' => EncryptedOrPlaintext::class,
             'token_expires_at' => 'datetime',
         ];
     }
