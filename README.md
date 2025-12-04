@@ -19,8 +19,14 @@
 -   **Multiple Layouts** - 5 beautiful layouts: centered, split-left, split-right, fullscreen, and card
 -   **Beautiful Design** - Modern, professional UI out of the box
 -   **Social Login** - OAuth authentication with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack
+-   **Enhanced Security** - Industry-standard security features
+    -   Encrypted OAuth token storage at rest (using Laravel's encryption)
+    -   Cryptographically secure OTP generation (Better Randomness)
+    -   Session regeneration to prevent fixation attacks (on successful login and logout)
+    -   CSRF-protected logout (only accept POST calls)
+    -   Privacy-compliant debug logging (email addresses masked)
 -   **Highly Configurable** - Customize colors, logos, redirects, and more
--   **Secure by Default** - Lockout protection, CSRF protection, and proper validation
+-   **Lockout Protection** - Rate limiting with configurable attempts and duration
 -   **Math Captcha** - Simple addition/subtraction captcha for login and registration
 -   **Login OTP** - Two-factor authentication via email OTP codes
 -   **Email Verification** - Optional email verification for new registrations
@@ -30,7 +36,7 @@
 -   **Dark/Light Theme** - Automatic theme detection with manual toggle
 -   **Fully Responsive** - Works perfectly on all devices
 -   **Zero Build Step** - No npm or webpack required, just install and use
--   **Debug Mode** - Global debug toggle for development logging
+-   **Debug Mode** - Privacy-safe debug logging for development
 
 ## Requirements
 
@@ -298,14 +304,15 @@ When enabled, users will be locked out after too many failed login attempts. The
 Tyro Login supports OAuth authentication using Laravel Socialite. Users can sign in with their social media accounts.
 
 **Supported Providers:**
-- Google
-- Facebook
-- GitHub
-- Twitter/X
-- LinkedIn
-- Bitbucket
-- GitLab
-- Slack
+
+-   Google
+-   Facebook
+-   GitHub
+-   Twitter/X
+-   LinkedIn
+-   Bitbucket
+-   GitLab
+-   Slack
 
 #### Installation
 
@@ -413,17 +420,17 @@ SLACK_REDIRECT_URI="${APP_URL}/auth/slack/callback"
 ```php
 'social' => [
     'enabled' => env('TYRO_LOGIN_SOCIAL_ENABLED', false),
-    
+
     // Link social accounts to existing users (matched by email)
     'link_existing_accounts' => env('TYRO_LOGIN_SOCIAL_LINK_EXISTING', true),
-    
+
     // Automatically create new users from social login
     'auto_register' => env('TYRO_LOGIN_SOCIAL_AUTO_REGISTER', true),
-    
+
     // Automatically verify user email after social login/register
     // Social providers confirm email ownership, so we can trust the email
     'auto_verify_email' => env('TYRO_LOGIN_SOCIAL_AUTO_VERIFY_EMAIL', true),
-    
+
     // Text shown above social buttons
     'divider_text' => env('TYRO_LOGIN_SOCIAL_DIVIDER', 'Or continue with'),
 ],
@@ -445,13 +452,14 @@ When users authenticate via social login, their email is automatically marked as
 **Social Accounts Table:**
 
 A migration creates the `social_accounts` table to store:
-- `user_id` - Link to your users table
-- `provider` - The OAuth provider (google, github, etc.)
-- `provider_user_id` - User ID from the provider
-- `provider_email` - Email from the provider
-- `provider_avatar` - Avatar URL from the provider
-- `access_token` / `refresh_token` - OAuth tokens (encrypted)
-- `token_expires_at` - Token expiration time
+
+-   `user_id` - Link to your users table
+-   `provider` - The OAuth provider (google, github, etc.)
+-   `provider_user_id` - User ID from the provider
+-   `provider_email` - Email from the provider
+-   `provider_avatar` - Avatar URL from the provider
+-   `access_token` / `refresh_token` - OAuth tokens (encrypted)
+-   `token_expires_at` - Token expiration time
 
 #### Customizing Provider Labels and Icons
 
@@ -584,34 +592,6 @@ The easiest way to customize your theme is using [tweakcn.com](https://tweakcn.c
 4. Publish your theme: `php artisan tyro-login:publish-style --theme-only`
 5. Paste the variables into `resources/views/vendor/tyro-login/partials/shadcn-theme.blade.php`
 
-Tyro Login uses standard shadcn CSS variables in oklch color format:
-
-```css
-:root {
-    --background: 100% 0 0;           /* Page background */
-    --foreground: 12.9% 0 0;          /* Default text color */
-    --card: 100% 0 0;                 /* Card backgrounds */
-    --card-foreground: 12.9% 0 0;     /* Card text */
-    --primary: 15.9% 0 0;             /* Primary buttons, links */
-    --primary-foreground: 100% 0 0;   /* Text on primary elements */
-    --secondary: 96.9% 0 0;           /* Secondary elements */
-    --muted: 96.9% 0 0;               /* Muted backgrounds */
-    --muted-foreground: 39.5% 0 0;    /* Muted text */
-    --accent: 96.9% 0 0;              /* Accent elements */
-    --destructive: 50.6% 0.213 27.518; /* Error/danger states */
-    --border: 91.4% 0 0;              /* Border colors */
-    --input: 91.4% 0 0;               /* Input borders */
-    --ring: 15.9% 0 0;                /* Focus rings */
-    --radius: 0.5rem;                 /* Border radius */
-}
-
-html.dark {
-    --background: 12.9% 0 0;          /* Dark mode background */
-    --foreground: 100% 0 0;           /* Dark mode text */
-    /* ... and more dark mode variables */
-}
-```
-
 #### Theme File Structure
 
 After publishing, your theme structure will be:
@@ -628,80 +608,86 @@ The `shadcn-theme.blade.php` file contains only CSS variables, making it safe to
 
 Tyro Login provides several artisan commands:
 
-| Command                                   | Description                                        |
-| ----------------------------------------- | -------------------------------------------------- |
-| `php artisan tyro-login:install`          | Install the package and publish configuration      |
-| `php artisan tyro-login:install --with-social` | Install with social login (Laravel Socialite) support |
-| `php artisan tyro-login:publish`          | Publish config, views, email templates, and assets |
-| `php artisan tyro-login:publish --emails` | Publish only email templates                       |
-| `php artisan tyro-login:publish-style`    | Publish styles (theme + components)                |
-| `php artisan tyro-login:publish-style --theme-only` | Publish only theme variables           |
-| `php artisan tyro-login:verify-user`      | Mark a user's email as verified                    |
-| `php artisan tyro-login:unverify-user`    | Remove email verification from a user              |
-| `php artisan tyro-login:version`          | Display the current Tyro Login version             |
-| `php artisan tyro-login:doc`              | Open the documentation in your browser             |
-| `php artisan tyro-login:star`             | Open GitHub repository to star the project         |
+| Command                                             | Description                                           |
+| --------------------------------------------------- | ----------------------------------------------------- |
+| `php artisan tyro-login:install`                    | Install the package and publish configuration         |
+| `php artisan tyro-login:install --with-social`      | Install with social login (Laravel Socialite) support |
+| `php artisan tyro-login:publish`                    | Publish config, views, email templates, and assets    |
+| `php artisan tyro-login:publish --emails`           | Publish only email templates                          |
+| `php artisan tyro-login:publish-style`              | Publish styles (theme + components)                   |
+| `php artisan tyro-login:publish-style --theme-only` | Publish only theme variables                          |
+| `php artisan tyro-login:verify-user`                | Mark a user's email as verified                       |
+| `php artisan tyro-login:unverify-user`              | Remove email verification from a user                 |
+| `php artisan tyro-login:version`                    | Display the current Tyro Login version                |
+| `php artisan tyro-login:doc`                        | Open the documentation in your browser                |
+| `php artisan tyro-login:star`                       | Open GitHub repository to star the project            |
 
 ### User Verification Commands
 
 Tyro Login provides commands to manually verify or unverify user email addresses.
 
 **Verify a single user by email:**
+
 ```bash
 php artisan tyro-login:verify-user john@example.com
 ```
 
 **Verify a single user by ID:**
+
 ```bash
 php artisan tyro-login:verify-user 123
 ```
 
 **Verify all unverified users:**
+
 ```bash
 php artisan tyro-login:verify-user --all
 ```
 
 **Unverify a single user:**
+
 ```bash
 php artisan tyro-login:unverify-user john@example.com
 ```
 
 **Unverify all verified users:**
+
 ```bash
 php artisan tyro-login:unverify-user --all
 ```
 
 These commands are useful for:
-- Manually verifying users during development or testing
-- Bulk verification of imported users
-- Resetting verification status for testing email flows
+
+-   Manually verifying users during development or testing
+-   Bulk verification of imported users
+-   Resetting verification status for testing email flows
 
 ## Routes
 
 Tyro Login registers the following routes:
 
-| Method   | URI                           | Name                                   | Description                |
-| -------- | ----------------------------- | -------------------------------------- | -------------------------- |
-| GET      | `/login`                      | `tyro-login.login`                     | Show login form            |
-| POST     | `/login`                      | `tyro-login.login.submit`              | Handle login               |
-| GET      | `/register`                   | `tyro-login.register`                  | Show registration form     |
-| POST     | `/register`                   | `tyro-login.register.submit`           | Handle registration        |
-| GET/POST | `/logout`                     | `tyro-login.logout`                    | Handle logout              |
-| GET      | `/lockout`                    | `tyro-login.lockout`                   | Show lockout page          |
-| GET      | `/email/verify`               | `tyro-login.verification.notice`       | Show verification notice   |
-| GET      | `/email/not-verified`         | `tyro-login.verification.not-verified` | Show unverified email page |
-| GET      | `/email/verify/{token}`       | `tyro-login.verification.verify`       | Verify email               |
-| POST     | `/email/resend`               | `tyro-login.verification.resend`       | Resend verification email  |
-| GET      | `/forgot-password`            | `tyro-login.password.request`          | Show forgot password form  |
-| POST     | `/forgot-password`            | `tyro-login.password.email`            | Send reset link            |
-| GET      | `/reset-password/{token}`     | `tyro-login.password.reset`            | Show reset form            |
-| POST     | `/reset-password`             | `tyro-login.password.update`           | Reset password             |
-| GET      | `/otp/verify`                 | `tyro-login.otp.verify`                | Show OTP form              |
-| POST     | `/otp/verify`                 | `tyro-login.otp.submit`                | Verify OTP                 |
-| POST     | `/otp/resend`                 | `tyro-login.otp.resend`                | Resend OTP                 |
-| GET      | `/otp/cancel`                 | `tyro-login.otp.cancel`                | Cancel OTP verification    |
-| GET      | `/auth/{provider}/redirect`   | `tyro-login.social.redirect`           | Redirect to OAuth provider |
-| GET      | `/auth/{provider}/callback`   | `tyro-login.social.callback`           | Handle OAuth callback      |
+| Method   | URI                         | Name                                   | Description                |
+| -------- | --------------------------- | -------------------------------------- | -------------------------- |
+| GET      | `/login`                    | `tyro-login.login`                     | Show login form            |
+| POST     | `/login`                    | `tyro-login.login.submit`              | Handle login               |
+| GET      | `/register`                 | `tyro-login.register`                  | Show registration form     |
+| POST     | `/register`                 | `tyro-login.register.submit`           | Handle registration        |
+| GET/POST | `/logout`                   | `tyro-login.logout`                    | Handle logout              |
+| GET      | `/lockout`                  | `tyro-login.lockout`                   | Show lockout page          |
+| GET      | `/email/verify`             | `tyro-login.verification.notice`       | Show verification notice   |
+| GET      | `/email/not-verified`       | `tyro-login.verification.not-verified` | Show unverified email page |
+| GET      | `/email/verify/{token}`     | `tyro-login.verification.verify`       | Verify email               |
+| POST     | `/email/resend`             | `tyro-login.verification.resend`       | Resend verification email  |
+| GET      | `/forgot-password`          | `tyro-login.password.request`          | Show forgot password form  |
+| POST     | `/forgot-password`          | `tyro-login.password.email`            | Send reset link            |
+| GET      | `/reset-password/{token}`   | `tyro-login.password.reset`            | Show reset form            |
+| POST     | `/reset-password`           | `tyro-login.password.update`           | Reset password             |
+| GET      | `/otp/verify`               | `tyro-login.otp.verify`                | Show OTP form              |
+| POST     | `/otp/verify`               | `tyro-login.otp.submit`                | Verify OTP                 |
+| POST     | `/otp/resend`               | `tyro-login.otp.resend`                | Resend OTP                 |
+| GET      | `/otp/cancel`               | `tyro-login.otp.cancel`                | Cancel OTP verification    |
+| GET      | `/auth/{provider}/redirect` | `tyro-login.social.redirect`           | Redirect to OAuth provider |
+| GET      | `/auth/{provider}/callback` | `tyro-login.social.callback`           | Handle OAuth callback      |
 
 ### Customizing Route Prefix
 
@@ -714,13 +700,48 @@ Tyro Login registers the following routes:
 
 ## Security Features
 
--   **CSRF Protection** - All forms include CSRF tokens
--   **Lockout Protection** - Temporarily lock accounts after failed attempts (cache-based, no database)
--   **Email Verification** - Optional email verification for new registrations
--   **Secure Password Reset** - Time-limited, signed URLs for password reset
--   **Password Hashing** - Uses Laravel's secure hashing
--   **Session Regeneration** - Prevents session fixation attacks
--   **Input Validation** - Server-side validation with proper error messages
+Tyro Login implements industry-standard security practices:
+
+-   **Encrypted Data Storage**
+    -   OAuth access and refresh tokens encrypted at rest using Laravel's encryption
+    -   Custom `EncryptedOrPlaintext` cast for seamless migration
+    -   Protects against database compromise
+-   **Cryptographically Secure Random**
+    -   OTP codes generated using `random_int()` (cryptographically secure)
+    -   Eliminates predictable patterns and statistical analysis attacks
+-   **Session Security**
+    -   Session regeneration after logout in OTP flow prevents fixation attacks
+    -   Session regeneration on successful login prevents session fixation
+    -   Secure session handling throughout authentication flows
+-   **CSRF Protection**
+    -   All forms include CSRF tokens
+    -   Logout requires POST request with CSRF token
+    -   Protection against cross-site request forgery attacks
+-   **Lockout Protection**
+    -   Temporarily lock accounts after failed attempts (cache-based, no database)
+    -   Configurable attempts and duration
+    -   Automatic cache cleanup when lockout expires
+-   **Email Verification**
+    -   Optional email verification for new registrations
+    -   Secure signed URLs with expiration
+    -   Automatic verification via social login
+-   **Secure Password Reset**
+    -   Time-limited, signed URLs for password reset
+    -   Tokens stored in cache with expiration
+    -   Automatic token cleanup
+-   **Password Security**
+    -   Laravel's bcrypt/argon2 hashing
+    -   Configurable minimum password length
+    -   Password confirmation requirement
+-   **Privacy-Safe Debug Logging**
+    -   Email addresses masked in logs (e.g., `use***@example.com`)
+    -   No security tokens or sensitive URLs logged
+    -   GDPR/CCPA compliant logging
+    -   Structured logging format
+-   **Input Validation**
+    -   Server-side validation with proper error messages
+    -   Protection against malicious input
+    -   Email format validation
 
 ## Integration with Tyro
 

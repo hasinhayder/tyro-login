@@ -2,6 +2,60 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [1.6.0] - 2025-12-04
+
+### Security Improvements
+
+-   **Encrypted OAuth Tokens** - Social login tokens now encrypted at rest
+    -   Custom `EncryptedOrPlaintext` cast for seamless migration from plaintext to encrypted tokens
+    -   Backward compatible - existing plaintext tokens work immediately and are encrypted on next update
+    -   Protects against unauthorized access if database is compromised
+-   **Cryptographically Secure OTP Generation** - OTP codes now use `random_int()` instead of `rand()`
+    -   Eliminates predictable patterns in OTP generation
+    -   Resistant to statistical analysis attacks
+    -   More efficient implementation
+-   **Session Regeneration in OTP Flow** - Prevents session fixation attacks
+    -   Session ID regenerated after logout before OTP verification
+    -   User data preserved correctly across regeneration
+    -   Eliminates session hijacking risk during two-factor authentication
+-   **CSRF Protection on Logout** - Logout now requires POST request with CSRF token
+    -   Prevents logout CSRF attacks via malicious links
+    -   Removed duplicate logout route definitions
+    -   **Breaking Change:** GET logout links must be updated to POST forms
+-   **Improved Debug Logging** - Enhanced privacy and compliance
+    -   Email addresses now masked in debug logs (e.g., `use***@example.com`)
+    -   Security-sensitive URLs (verification, password reset) no longer logged
+    -   OTP codes not logged (only metadata)
+    -   Structured logging format for better parsing
+
+### Changed
+
+-   Logout route now POST-only (was GET/POST) for security
+-   Debug logging format changed to structured arrays
+-   OAuth token storage upgraded from plaintext to encrypted
+
+### Removed
+
+-   Duplicate logout route definition
+-   TODO comments and dead code in LoginController
+
+### Migration Guide
+
+**Logout Links:** Update any custom logout links from GET to POST:
+
+```html
+<!-- Before (will no longer work) -->
+<a href="{{ route('tyro-login.logout') }}">Logout</a>
+
+<!-- After (correct implementation) -->
+<form method="POST" action="{{ route('tyro-login.logout') }}">
+    @csrf
+    <button type="submit">Logout</button>
+</form>
+```
+
+**OAuth Tokens:** No manual migration needed - existing plaintext tokens automatically work and are encrypted on next update.
+
 ## [1.5.0] - 2025-12-03
 
 ### Added
