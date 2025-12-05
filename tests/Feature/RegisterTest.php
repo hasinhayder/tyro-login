@@ -140,44 +140,6 @@ it('validates password requires special characters when configured', function ()
     $response->assertSessionHasErrors('password');
 });
 
-it('validates password minimum letters when configured', function () {
-    config(['tyro-login.password.complexity.min_letters' => 5]);
-
-    $response = $this->post('/register', [
-        'name' => 'New User',
-        'email' => 'newuser@example.com',
-        'password' => '1234',
-        'password_confirmation' => '1234',
-    ]);
-
-    $response->assertSessionHasErrors('password');
-});
-
-it('validates password minimum numbers when configured', function () {
-    config(['tyro-login.password.complexity.min_numbers' => 3]);
-
-    $response = $this->post('/register', [
-        'name' => 'New User',
-        'email' => 'newuser@example.com',
-        'password' => 'password12',
-        'password_confirmation' => 'password12',
-    ]);
-
-    $response->assertSessionHasErrors('password');
-});
-
-it('validates password minimum special characters when configured', function () {
-    config(['tyro-login.password.complexity.min_special_chars' => 2]);
-
-    $response = $this->post('/register', [
-        'name' => 'New User',
-        'email' => 'newuser@example.com',
-        'password' => 'password123!',
-        'password_confirmation' => 'password123!',
-    ]);
-
-    $response->assertSessionHasErrors('password');
-});
 
 it('validates against common passwords when configured', function () {
     config(['tyro-login.password.check_common_passwords' => true]);

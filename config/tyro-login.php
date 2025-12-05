@@ -215,17 +215,6 @@ return [
             // Require at least one special character
             'require_special_chars' => env('TYRO_LOGIN_PASSWORD_REQUIRE_SPECIAL_CHARS', false),
             
-            // Define allowed special characters (if require_special_chars is enabled)
-            'special_chars' => env('TYRO_LOGIN_PASSWORD_SPECIAL_CHARS', '!@#$%^&*?_-'),
-            
-            // Require at least this many letters (null for no specific requirement)
-            'min_letters' => env('TYRO_LOGIN_PASSWORD_MIN_LETTERS', null),
-            
-            // Require at least this many numbers (null for no specific requirement)
-            'min_numbers' => env('TYRO_LOGIN_PASSWORD_MIN_NUMBERS', null),
-            
-            // Require at least this many special characters (null for no specific requirement)
-            'min_special_chars' => env('TYRO_LOGIN_PASSWORD_MIN_SPECIAL_CHARS', null),
         ],
         
         // Common password validation

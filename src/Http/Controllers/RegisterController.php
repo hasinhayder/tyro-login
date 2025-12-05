@@ -158,43 +158,8 @@ class RegisterController extends Controller
             $passwordRule->mixedCase();
         }
         
-        // Add custom validation rules for specific counts
+        // Add custom validation rules
         $passwordRules = ['required', 'string', $passwordRule];
-        
-        // Add custom rule for minimum letters if specified
-        if ($complexity['min_letters'] ?? null) {
-            $passwordRules[] = function ($attribute, $value, $fail) use ($complexity) {
-                $minLetters = $complexity['min_letters'];
-                $letterCount = preg_match_all('/[a-zA-Z]/', $value);
-                if ($letterCount < $minLetters) {
-                    $fail("Password must contain at least {$minLetters} letters.");
-                }
-            };
-        }
-        
-        // Add custom rule for minimum numbers if specified
-        if ($complexity['min_numbers'] ?? null) {
-            $passwordRules[] = function ($attribute, $value, $fail) use ($complexity) {
-                $minNumbers = $complexity['min_numbers'];
-                $numberCount = preg_match_all('/[0-9]/', $value);
-                if ($numberCount < $minNumbers) {
-                    $fail("Password must contain at least {$minNumbers} numbers.");
-                }
-            };
-        }
-        
-        // Add custom rule for minimum special characters if specified
-        if ($complexity['min_special_chars'] ?? null) {
-            $passwordRules[] = function ($attribute, $value, $fail) use ($complexity) {
-                $minSpecial = $complexity['min_special_chars'];
-                $specialChars = $complexity['special_chars'] ?? '!@#$%^&*?_-';
-                $pattern = '/[' . preg_quote($specialChars, '/') . ']/';
-                $specialCount = preg_match_all($pattern, $value);
-                if ($specialCount < $minSpecial) {
-                    $fail("Password must contain at least {$minSpecial} special characters (" . $specialChars . ").");
-                }
-            };
-        }
         
         // Add rule to check common passwords if enabled
         if (config('tyro-login.password.check_common_passwords', false)) {
