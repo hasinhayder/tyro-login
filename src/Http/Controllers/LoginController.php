@@ -570,7 +570,7 @@ class LoginController extends Controller {
         $attempts = Cache::get($key, 0) + 1;
 
         // Store attempts for the lockout duration + some buffer time
-        $durationMinutes = config('tyro-login.lockout.duration_minutes', 15);
+        $durationMinutes = (int) config('tyro-login.lockout.duration_minutes', 15);
         Cache::put($key, $attempts, now()->addMinutes($durationMinutes + 5));
     }
 
@@ -602,7 +602,7 @@ class LoginController extends Controller {
      * Lock out the user.
      */
     protected function lockoutUser(Request $request): void {
-        $durationMinutes = config('tyro-login.lockout.duration_minutes', 15);
+        $durationMinutes = (int) config('tyro-login.lockout.duration_minutes', 15);
         $releaseTime = now()->addMinutes($durationMinutes)->timestamp;
 
         Cache::put($this->lockoutKey($request), $releaseTime, now()->addMinutes($durationMinutes));
