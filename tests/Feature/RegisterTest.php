@@ -88,6 +88,136 @@ it('hashes the password on registration', function () {
     expect(Hash::check('password123', $user->password))->toBeTrue();
 });
 
+it('validates password maximum length when configured', function () {
+    config(['tyro-login.password.max_length' => 10]);
+
+    $response = $this->post('/register', [
+        'name' => 'New User',
+        'email' => 'newuser@example.com',
+        'password' => 'verylongpassword',
+        'password_confirmation' => 'verylongpassword',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('validates password requires uppercase when configured', function () {
+    config(['tyro-login.password.complexity.require_uppercase' => true]);
+
+    $response = $this->post('/register', [
+        'name' => 'New User',
+        'email' => 'newuser@example.com',
+        'password' => 'lowercase123',
+        'password_confirmation' => 'lowercase123',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('validates password requires numbers when configured', function () {
+    config(['tyro-login.password.complexity.require_numbers' => true]);
+
+    $response = $this->post('/register', [
+        'name' => 'New User',
+        'email' => 'newuser@example.com',
+        'password' => 'nonumbers',
+        'password_confirmation' => 'nonumbers',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('validates password requires special characters when configured', function () {
+    config(['tyro-login.password.complexity.require_special_chars' => true]);
+
+    $response = $this->post('/register', [
+        'name' => 'New User',
+        'email' => 'newuser@example.com',
+        'password' => 'nospecial123',
+        'password_confirmation' => 'nospecial123',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('validates password minimum letters when configured', function () {
+    config(['tyro-login.password.complexity.min_letters' => 5]);
+
+    $response = $this->post('/register', [
+        'name' => 'New User',
+        'email' => 'newuser@example.com',
+        'password' => '1234',
+        'password_confirmation' => '1234',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('validates password minimum numbers when configured', function () {
+    config(['tyro-login.password.complexity.min_numbers' => 3]);
+
+    $response = $this->post('/register', [
+        'name' => 'New User',
+        'email' => 'newuser@example.com',
+        'password' => 'password12',
+        'password_confirmation' => 'password12',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('validates password minimum special characters when configured', function () {
+    config(['tyro-login.password.complexity.min_special_chars' => 2]);
+
+    $response = $this->post('/register', [
+        'name' => 'New User',
+        'email' => 'newuser@example.com',
+        'password' => 'password123!',
+        'password_confirmation' => 'password123!',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('validates against common passwords when configured', function () {
+    config(['tyro-login.password.check_common_passwords' => true]);
+
+    $response = $this->post('/register', [
+        'name' => 'New User',
+        'email' => 'newuser@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('validates password contains user info when configured', function () {
+    config(['tyro-login.password.disallow_user_info' => true]);
+
+    $response = $this->post('/register', [
+        'name' => 'John Doe',
+        'email' => 'johndoe@example.com',
+        'password' => 'johndoe123',
+        'password_confirmation' => 'johndoe123',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
+it('validates password contains email username when configured', function () {
+    config(['tyro-login.password.disallow_user_info' => true]);
+
+    $response = $this->post('/register', [
+        'name' => 'Jane Smith',
+        'email' => 'janesmith@example.com',
+        'password' => 'janesmith123',
+        'password_confirmation' => 'janesmith123',
+    ]);
+
+    $response->assertSessionHasErrors('password');
+});
+
 it('redirects to login when registration is disabled', function () {
     config(['tyro-login.registration.enabled' => false]);
 

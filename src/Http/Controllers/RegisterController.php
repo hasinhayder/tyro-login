@@ -72,6 +72,11 @@ class RegisterController extends Controller
             unset($validated['captcha_answer']);
         }
 
+        // Check if password contains user information (if enabled)
+        if (config('tyro-login.password.disallow_user_info', false)) {
+            $this->validatePasswordNotContainingUserInfo($request, $validated);
+        }
+
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
 
         $user = $userModel::create([
@@ -120,11 +125,105 @@ class RegisterController extends Controller
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $usersTable = (new $userModel)->getTable();
         $minLength = config('tyro-login.password.min_length', 8);
+        $maxLength = config('tyro-login.password.max_length');
+        
+        // Start with basic password rule
+        $passwordRule = Password::min($minLength);
+        
+        // Add maximum length if specified
+        if ($maxLength) {
+            $passwordRule->max($maxLength);
+        }
+        
+        // Add complexity requirements
+        $complexity = config('tyro-login.password.complexity', []);
+        
+        if ($complexity['require_uppercase'] ?? false) {
+            $passwordRule->mixedCase();
+        }
+        
+        if ($complexity['require_lowercase'] ?? false) {
+            $passwordRule->mixedCase();
+        }
+        
+        if ($complexity['require_numbers'] ?? false) {
+            $passwordRule->numbers();
+        }
+        
+        if ($complexity['require_special_chars'] ?? false) {
+            $passwordRule->symbols();
+        }
+        
+        if ($complexity['require_uppercase'] ?? false || $complexity['require_lowercase'] ?? false) {
+            $passwordRule->mixedCase();
+        }
+        
+        // Add custom validation rules for specific counts
+        $passwordRules = ['required', 'string', $passwordRule];
+        
+        // Add custom rule for minimum letters if specified
+        if ($complexity['min_letters'] ?? null) {
+            $passwordRules[] = function ($attribute, $value, $fail) use ($complexity) {
+                $minLetters = $complexity['min_letters'];
+                $letterCount = preg_match_all('/[a-zA-Z]/', $value);
+                if ($letterCount < $minLetters) {
+                    $fail("Password must contain at least {$minLetters} letters.");
+                }
+            };
+        }
+        
+        // Add custom rule for minimum numbers if specified
+        if ($complexity['min_numbers'] ?? null) {
+            $passwordRules[] = function ($attribute, $value, $fail) use ($complexity) {
+                $minNumbers = $complexity['min_numbers'];
+                $numberCount = preg_match_all('/[0-9]/', $value);
+                if ($numberCount < $minNumbers) {
+                    $fail("Password must contain at least {$minNumbers} numbers.");
+                }
+            };
+        }
+        
+        // Add custom rule for minimum special characters if specified
+        if ($complexity['min_special_chars'] ?? null) {
+            $passwordRules[] = function ($attribute, $value, $fail) use ($complexity) {
+                $minSpecial = $complexity['min_special_chars'];
+                $specialChars = $complexity['special_chars'] ?? '!@#$%^&*?_-';
+                $pattern = '/[' . preg_quote($specialChars, '/') . ']/';
+                $specialCount = preg_match_all($pattern, $value);
+                if ($specialCount < $minSpecial) {
+                    $fail("Password must contain at least {$minSpecial} special characters (" . $specialChars . ").");
+                }
+            };
+        }
+        
+        // Add rule to check common passwords if enabled
+        if (config('tyro-login.password.check_common_passwords', false)) {
+            $passwordRules[] = function ($attribute, $value, $fail) {
+                $commonPasswords = [
+                    'password', '123456', '123456789', '12345678', '12345', '1234567',
+                    '1234567890', '1234', 'qwerty', 'abc123', 'password123', 'admin',
+                    'letmein', 'welcome', 'monkey', '1234567890', 'password1'
+                ];
+                
+                if (in_array(strtolower($value), $commonPasswords)) {
+                    $fail('This password is too common. Please choose a more secure password.');
+                }
+            };
+        }
+        
+        // Add rule to disallow user information if enabled
+        if (config('tyro-login.password.disallow_user_info', false)) {
+            $passwordRules[] = function ($attribute, $value, $fail) {
+                // This will be checked after we have the user data
+                // We'll store this rule for later execution
+                $this->disallowUserInfoRule = true;
+            };
+        }
 
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . $usersTable],
-            'password' => ['required', 'string', Password::min($minLength)],
+            'password' => $passwordRules,
         ];
 
         if (config('tyro-login.password.require_confirmation', true)) {
@@ -222,6 +321,44 @@ class RegisterController extends Controller
             // Silently fail if role assignment fails
             // This prevents breaking registration if Tyro tables don't exist
             report($e);
+        }
+    }
+
+    /**
+     * Validate that password doesn't contain user information.
+     */
+    protected function validatePasswordNotContainingUserInfo(Request $request, array $validated): void
+    {
+        $password = strtolower($validated['password']);
+        $name = strtolower($validated['name']);
+        $email = strtolower($validated['email']);
+        
+        // Extract email username (part before @)
+        $emailUsername = explode('@', $email)[0];
+        
+        // Extract name parts (split by spaces)
+        $nameParts = preg_split('/[\s\-_]+/', $name);
+        
+        $errors = [];
+        
+        // Check if password contains the full email username
+        if (strlen($emailUsername) >= 3 && str_contains($password, $emailUsername)) {
+            $errors[] = 'password cannot contain your email username';
+        }
+        
+        // Check if password contains name parts
+        foreach ($nameParts as $namePart) {
+            if (strlen($namePart) >= 3 && str_contains($password, $namePart)) {
+                $errors[] = 'password cannot contain parts of your name';
+                break;
+            }
+        }
+        
+        // If any errors found, throw validation exception
+        if (!empty($errors)) {
+            throw ValidationException::withMessages([
+                'password' => 'For security reasons, your ' . implode(' and ', $errors) . '.',
+            ]);
         }
     }
 }
