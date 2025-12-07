@@ -1,28 +1,26 @@
 @php
-    $enabledProviders = \HasinHayder\TyroLogin\Http\Controllers\SocialAuthController::getEnabledProviders();
-    $dividerText = config('tyro-login.social.divider_text', 'Or continue with');
+$enabledProviders = \HasinHayder\TyroLogin\Http\Controllers\SocialAuthController::getEnabledProviders();
+$dividerText = config('tyro-login.social.divider_text', 'Or continue with');
 @endphp
 
-@if(count($enabledProviders) > 0)
+@if (count($enabledProviders) > 0)
 <div class="social-login-container">
     <div class="social-divider">
         <span>{{ $dividerText }}</span>
     </div>
 
     <div class="social-buttons">
-        @foreach($enabledProviders as $provider => $config)
-            <a href="{{ route('tyro-login.social.redirect', ['provider' => $provider, 'action' => $action ?? 'login']) }}" 
-               class="social-btn social-btn-{{ $provider }}"
-               title="{{ $config['label'] ?? ucfirst($provider) }}">
-                @include('tyro-login::partials.social-icons', ['icon' => $config['icon'] ?? $provider])
-            </a>
+        @foreach ($enabledProviders as $provider => $config)
+        <a href="{{ route('tyro-login.social.redirect', ['provider' => $provider, 'action' => $action ?? 'login']) }}" class="social-btn social-btn-{{ $provider }}" title="{{ $config['label'] ?? ucfirst($provider) }}">
+            @include('tyro-login::partials.social-icons', ['icon' => $config['icon'] ?? $provider])
+        </a>
         @endforeach
     </div>
 
     @error('social')
-        <div class="social-error">
-            {{ $message }}
-        </div>
+    <div class="social-error">
+        {{ $message }}
+    </div>
     @enderror
 </div>
 
@@ -143,6 +141,46 @@
     .social-btn-slack:hover {
         border-color: #4a154b;
         background-color: rgba(74, 21, 75, 0.1);
+    }
+
+    .social-btn-apple:hover {
+        border-color: #000;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    html.dark .social-btn-apple:hover {
+        border-color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .social-btn-wordpress:hover {
+        border-color: #21759b;
+        background-color: rgba(33, 117, 155, 0.1);
+    }
+
+    .social-btn-auth0:hover {
+        border-color: #eb5424;
+        background-color: rgba(235, 84, 36, 0.1);
+    }
+
+    .social-btn-clerk:hover {
+        border-color: #6C47FF;
+        background-color: rgba(108, 71, 255, 0.1);
+    }
+
+    .social-btn-steam:hover {
+        border-color: #171a21;
+        background-color: rgba(23, 26, 33, 0.1);
+    }
+
+    html.dark .social-btn-steam:hover {
+        border-color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .social-btn-discord:hover {
+        border-color: #5865F2;
+        background-color: rgba(88, 101, 242, 0.1);
     }
 
     .social-error {
