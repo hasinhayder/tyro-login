@@ -2,6 +2,27 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [2.0.0] - 2025-12-07
+
+### Added
+
+-   **Time-Based Two-Factor Authentication (TOTP)** - Secure 2FA usingauthenticator apps (Google Authenticator, Authy, etc.)
+    -   Secure setup flow with QR code and manual entry key
+    -   Encryption for 2FA secrets and recovery codes in database
+    -   Backup recovery codes management (view, copy, download, regenerate)
+    -   Configurable forced setup for new/existing users
+    -   Option to allow skipping 2FA setup (`TYRO_LOGIN_2FA_ALLOW_SKIP`)
+    -   Seamless integration with login flow (Challenge screen)
+    -   "Partial Login" security state during setup/challenge to prevent bypass
+    -   Compatible with `pragmarx/google2fa`
+    -   Customizable UI matching the application theme
+    -   New `HasTwoFactorAuth` trait for User model (optional)
+    -   New `tyro-login:reset-2fa` console command to reset 2FA for users
+
+### Important Changes
+
+-   **Database Schema** - Requires migration to add `two_factor_secret`, `two_factor_recovery_codes`, and `two_factor_confirmed_at` columns to `users` table.
+
 ## [1.6.0] - 2025-12-04
 
 ### Security Improvements

@@ -206,6 +206,80 @@ Add two-factor authentication via email OTP. After entering valid credentials, u
 -   Resend functionality with cooldown
 -   Cache-based storage (no database required)
 
+### Time-Based Two-Factor Authentication (TOTP)
+
+Secure your application with Time-Based One-Time Password (TOTP) two-factor authentication, compatible with apps like Google Authenticator, Authy, and Microsoft Authenticator.
+
+#### Installation
+
+1.  **Run Migrations:**
+    This adds `two_factor_secret`, `two_factor_recovery_codes`, and `two_factor_confirmed_at` columns to your `users` table.
+
+    ```bash
+    php artisan migrate
+    ```
+
+2.  **Add Trait to User Model:**
+    Add the `HasTwoFactorAuth` trait to your User model for automatic attribute casting and encryption/decryption (optional). If this trait is not used, Tyro Login will still encrypt sensitive data using Laravel's built-in encryption.
+
+    ```php
+    use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;
+
+    class User extends Authenticatable
+    {
+        use HasTwoFactorAuth;
+        
+        protected function casts(): array
+        {
+            return [
+                'password' => 'hashed',
+                'two_factor_confirmed_at' => 'datetime',
+            ];
+        }
+        
+        // ...
+        
+        protected static function booted()
+        {
+            static::created(function ($user) {
+                // Initialize the trait's casts
+                $user->initializeHasTwoFactorAuth();
+            });
+        }
+        
+        // OR simply rely on the trait's initialize method if using Laravel 10/11 standard boot
+    }
+    ```
+    *Note: The trait uses a custom cast `EncryptedOrPlaintext` to ensure secrets are stored securely.*
+
+#### Configuration
+
+Enable and configure 2FA in `config/tyro-login.php`:
+
+```php
+'two_factor' => [
+    // Enable/disable 2FA globally
+    'enabled' => env('TYRO_LOGIN_2FA_ENABLED', false),
+
+    // Page titles and subtitles
+    'setup_title' => env('TYRO_LOGIN_2FA_SETUP_TITLE', 'Two Factor Authentication'),
+    'setup_subtitle' => env('TYRO_LOGIN_2FA_SETUP_SUBTITLE', 'Scan the QR code with your authenticator app.'),
+    'challenge_title' => env('TYRO_LOGIN_2FA_CHALLENGE_TITLE', 'Two Factor Authentication'),
+    'challenge_subtitle' => env('TYRO_LOGIN_2FA_CHALLENGE_SUBTITLE', 'Enter the code from your authenticator app.'),
+    
+    // Allow users to skip setup (if false, setup is mandatory)
+    'allow_skip' => env('TYRO_LOGIN_2FA_ALLOW_SKIP', false),
+],
+```
+
+**How it works:**
+
+1.  **Mandatory Setup:** If enabled and `allow_skip` is false, new users (and existing users without 2FA) are redirected to the setup wizard immediately after login/registration.
+2.  **Secure Setup:** Users must verify a code from their authenticator app to enable 2FA.
+3.  **Recovery Codes:** Upon successful setup, users are shown a set of recovery codes that can be used if they lose access to their device.
+4.  **Challenge Screen:** On subsequent logins, users must provide a TOTP code or a recovery code.
+5.  **Security:** Secrets are encrypted in the database. Users are not fully authenticated until they pass the 2FA challenge.
+
 ### Debug Mode
 
 Enable debug logging for development:
@@ -214,7 +288,7 @@ Enable debug logging for development:
 'debug' => env('TYRO_LOGIN_DEBUG', false),
 ```
 
-When enabled, OTP codes, verification URLs, and password reset URLs are logged to `storage/logs/laravel.log`.
+When enabled, OTP codes, verification URLs, and password reset URLs are logged to `storage/logs/laravel.log` in masked form.
 
 ### Email Configuration
 
@@ -654,6 +728,16 @@ php artisan tyro-login:unverify-user john@example.com
 
 ```bash
 php artisan tyro-login:unverify-user --all
+```
+
+**Reset 2FA for a user:**
+
+Currently locked out users or those who lost their device/codes can have their 2FA reset by an admin:
+
+```bash
+php artisan tyro-login:reset-2fa user@example.com
+# OR
+php artisan tyro-login:reset-2fa 1
 ```
 
 These commands are useful for:
