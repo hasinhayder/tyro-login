@@ -398,6 +398,32 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Two Factor Authentication (2FA)
+    |--------------------------------------------------------------------------
+    |
+    | Secure your account with TOTP based two-factor authentication.
+    | Compatible with Google Authenticator, Authy, etc.
+    |
+    */
+    'two_factor' => [
+        // Enable/disable 2FA globally
+        'enabled' => env('TYRO_LOGIN_2FA_ENABLED', false),
+
+        // Page title for setup
+        'setup_title' => env('TYRO_LOGIN_2FA_SETUP_TITLE', 'Two Factor Authentication'),
+
+        // Page subtitle for setup
+        'setup_subtitle' => env('TYRO_LOGIN_2FA_SETUP_SUBTITLE', 'Scan the QR code with your authenticator app.'),
+
+        // Page title for challenge
+        'challenge_title' => env('TYRO_LOGIN_2FA_CHALLENGE_TITLE', 'Two Factor Authentication'),
+
+        // Page subtitle for challenge
+        'challenge_subtitle' => env('TYRO_LOGIN_2FA_CHALLENGE_SUBTITLE', 'Please enter the code from your authenticator app.'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Email Settings
     |--------------------------------------------------------------------------
     |

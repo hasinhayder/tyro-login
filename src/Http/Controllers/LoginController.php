@@ -144,6 +144,23 @@ class LoginController extends Controller {
                 return redirect()->route('tyro-login.verification.not-verified');
             }
 
+            // Check if 2FA is enabled
+            if (config('tyro-login.two_factor.enabled', false)) {
+                if ($user->two_factor_confirmed_at) {
+                    // User has 2FA enabled - lock them out until verified
+                    Auth::logout();
+                    
+                    $request->session()->put('login.id', $user->id);
+                    $request->session()->put('login.remember', $remember);
+                    
+                    return redirect()->route('tyro-login.two-factor.challenge');
+                } else {
+                    // User hasn't set up 2FA yet - redirect to setup
+                    // They remain logged in for this
+                    return redirect()->route('tyro-login.two-factor.setup');
+                }
+            }
+
             // Check if OTP is enabled
             if (config('tyro-login.otp.enabled', false)) {
                 // Store user ID and remember preference before logout

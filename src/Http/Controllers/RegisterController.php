@@ -109,9 +109,12 @@ class RegisterController extends Controller
             ));
         }
 
-        // Auto-login if enabled and email verification is not required
         if (config('tyro-login.registration.auto_login', true)) {
             Auth::login($user);
+
+            if (config('tyro-login.two_factor.enabled', false)) {
+                return redirect()->route('tyro-login.two-factor.setup');
+            }
         }
 
         return redirect(config('tyro-login.redirects.after_register', '/'));
@@ -138,11 +141,10 @@ class RegisterController extends Controller
         // Add complexity requirements
         $complexity = config('tyro-login.password.complexity', []);
         
-        if ($complexity['require_uppercase'] ?? false) {
-            $passwordRule->mixedCase();
-        }
+        $requireUppercase = !empty($complexity['require_uppercase']);
+        $requireLowercase = !empty($complexity['require_lowercase']);
         
-        if ($complexity['require_lowercase'] ?? false) {
+        if ($requireUppercase || $requireLowercase) {
             $passwordRule->mixedCase();
         }
         
@@ -152,10 +154,6 @@ class RegisterController extends Controller
         
         if ($complexity['require_special_chars'] ?? false) {
             $passwordRule->symbols();
-        }
-        
-        if ($complexity['require_uppercase'] ?? false || $complexity['require_lowercase'] ?? false) {
-            $passwordRule->mixedCase();
         }
         
         // Add custom validation rules
