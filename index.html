@@ -27,6 +27,7 @@
                 <a href="#layouts" class="nav-link">Layouts</a>
                 <a href="#captcha" class="nav-link">Captcha</a>
                 <a href="#otp" class="nav-link">OTP</a>
+                <a href="#2fa" class="nav-link">2FA</a>
                 <a href="#social" class="nav-link">Social</a>
                 <a href="#installation" class="nav-link">Install</a>
                 <a href="doc.html" class="nav-link">Docs</a>
@@ -77,7 +78,7 @@
             <div class="hero-content">
                 <div class="hero-badge">
                     <span class="badge-dot"></span>
-                    Shadcn Theme &nbsp; • &nbsp; Social Login &nbsp; • &nbsp; Multiple Layouts &nbsp; • &nbsp; OTP &nbsp; • &nbsp; Captcha &nbsp; • &nbsp; Lockouts &nbsp; • &nbsp; Email Templates &nbsp;
+                    Shadcn Theme &nbsp; • &nbsp; Social Login &nbsp; • &nbsp; Multiple Layouts &nbsp; • &nbsp; TOTP 2FA &nbsp; • &nbsp; OTP &nbsp; • &nbsp; Captcha &nbsp; • &nbsp; Lockouts &nbsp; • &nbsp; Email Templates &nbsp;
                 </div>
 
                 <h1 class="hero-title">
@@ -199,6 +200,19 @@
                     </div>
                     <h3 class="feature-title">Login OTP</h3>
                     <p class="feature-description">Two-factor authentication via email OTP. Beautiful digit-by-digit input with resend and cooldown support.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">TOTP 2FA</h3>
+                    <p class="feature-description">Time-Based 2FA via QR code. Compatible with Google Authenticator, Authy, Microsoft Authenticator, and more.</p>
                 </div>
 
                 <div class="feature-card">
@@ -876,6 +890,83 @@ TYRO_LOGIN_SOCIAL_LINK_EXISTING=true
 
 # Auto-create new users from social login
 TYRO_LOGIN_SOCIAL_AUTO_REGISTER=true</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOTP 2FA Section -->
+    <section id="2fa" class="code-example">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Time-Based 2FA with QR Code</h2>
+                <p class="section-description">Industry-standard TOTP authentication compatible with all major authenticator apps</p>
+            </div>
+
+            <div class="code-showcase" style="margin-top: 2rem;">
+                <div class="code-showcase-content" style="flex: 1.2;">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">Scan & Secure</h3>
+                    <p class="section-description" style="text-align: left; margin-bottom: 1.5rem;">
+                        Enable Time-Based One-Time Password (TOTP) two-factor authentication for maximum security. Users scan a QR code with their authenticator app and enter time-based codes on each login.
+                    </p>
+
+                    <ul class="feature-list">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Works with Google Authenticator, Authy, Microsoft Authenticator
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            QR code setup with manual entry key fallback
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Encrypted secrets and recovery codes in database
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Backup recovery codes (view, copy, download, regenerate)
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Optional mandatory setup for new/existing users
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Admin command to reset 2FA for locked-out users
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-showcase-code">
+                    <div style="background: var(--color-surface); padding: 3rem 2rem; border-radius: 1rem; border: 1px solid var(--color-border); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                        <div style="margin-bottom: 1.5rem; color: var(--color-text-light); font-weight: 500;">Enable with a single line of config</div>
+                        
+                        <div style="background: var(--color-background); padding: 1rem 1.5rem; border-radius: 0.5rem; border: 1px solid var(--color-border); margin-bottom: 2rem; width: 100%; max-width: 400px; display: flex; justify-content: center;">
+                            <code style="font-family: inherit; color: var(--color-primary); font-weight: 600;">TYRO_LOGIN_2FA_ENABLED=true</code>
+                        </div>
+
+                        <a href="doc.html#totp-2fa" class="btn btn-secondary">
+                            View Documentation
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.5rem;">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                        </a>
                     </div>
                 </div>
             </div>

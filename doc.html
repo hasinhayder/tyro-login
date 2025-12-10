@@ -93,6 +93,7 @@
                         <li><a href="#social-login" class="doc-nav-link">Social Login</a></li>
                         <li><a href="#captcha" class="doc-nav-link">Math Captcha</a></li>
                         <li><a href="#otp" class="doc-nav-link">Login OTP</a></li>
+                        <li><a href="#totp-2fa" class="doc-nav-link">TOTP 2FA</a></li>
                         <li><a href="#email-verification" class="doc-nav-link">Email Verification</a></li>
                         <li><a href="#password-reset" class="doc-nav-link">Password Reset</a></li>
                         <li><a href="#emails" class="doc-nav-link">Email Templates</a></li>
@@ -189,7 +190,7 @@
                     </div>
                     <div class="doc-feature-item">
                         <h3 class="doc-feature-title">Two-Factor Authentication</h3>
-                        <p class="doc-feature-desc">Email-based OTP that adds security without complexity</p>
+                        <p class="doc-feature-desc">Email-based OTP and Time-Based 2FA (TOTP) with QR code scanning</p>
                     </div>
                     <div class="doc-feature-item">
                         <h3 class="doc-feature-title">Email Verification System</h3>
@@ -746,6 +747,118 @@ TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
 
                 <div class="doc-alert doc-alert-info">
                     <strong>For Development:</strong> When <code class="doc-inline-code">TYRO_LOGIN_DEBUG=true</code>, the OTP code is logged to <code class="doc-inline-code">storage/logs/laravel.log</code> for easy testing.
+                </div>
+            </section>
+
+            <!-- TOTP 2FA -->
+            <section id="totp-2fa" class="doc-section">
+                <h2 class="doc-section-title">Time-Based Two-Factor Authentication (TOTP)</h2>
+                <p class="doc-text">
+                    Secure your application with Time-Based One-Time Password (TOTP) two-factor authentication, compatible with apps like Google Authenticator, Authy, and Microsoft Authenticator. Users scan a QR code to set up their authenticator app and enter time-based codes on each login.
+                </p>
+
+                <h3 class="doc-section-subtitle">Installation</h3>
+                <p class="doc-text">TOTP 2FA requires a database migration to store secrets and recovery codes:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash"># Run migrations to add 2FA columns to users table
+php artisan migrate</code></pre>
+                </div>
+
+                <p class="doc-text">Optionally, add the <code class="doc-inline-code">HasTwoFactorAuth</code> trait to your User model for automatic attribute casting and encryption:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">app/Models/User.php</span>
+                    </div>
+                    <pre><code class="language-php">&lt;?php
+
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;
+
+class User extends Authenticatable
+{
+    use HasTwoFactorAuth;
+}</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Configuration</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-login.php</span>
+                    </div>
+                    <pre><code class="language-php">'two_factor' => [
+    // Enable/disable 2FA globally
+    'enabled' => env('TYRO_LOGIN_2FA_ENABLED', false),
+
+    // Page titles and subtitles
+    'setup_title' => env('TYRO_LOGIN_2FA_SETUP_TITLE', 'Two Factor Authentication'),
+    'setup_subtitle' => env('TYRO_LOGIN_2FA_SETUP_SUBTITLE', 'Scan the QR code with your authenticator app.'),
+    'challenge_title' => env('TYRO_LOGIN_2FA_CHALLENGE_TITLE', 'Two Factor Authentication'),
+    'challenge_subtitle' => env('TYRO_LOGIN_2FA_CHALLENGE_SUBTITLE', 'Enter the code from your authenticator app.'),
+    
+    // Allow users to skip setup (if false, setup is mandatory)
+    'allow_skip' => env('TYRO_LOGIN_2FA_ALLOW_SKIP', false),
+],</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">How It Works</h3>
+                <ul class="doc-list">
+                    <li><strong>Step 1:</strong> If enabled and <code class="doc-inline-code">allow_skip</code> is false, new users (and existing users without 2FA) are redirected to the setup wizard immediately after login/registration.</li>
+                    <li><strong>Step 2:</strong> User scans the QR code with their authenticator app or manually enters the secret key.</li>
+                    <li><strong>Step 3:</strong> User must verify a code from their authenticator app to confirm setup.</li>
+                    <li><strong>Step 4:</strong> Upon successful setup, users are shown a set of recovery codes that can be used if they lose access to their device.</li>
+                    <li><strong>Step 5:</strong> On subsequent logins, users must provide a TOTP code or a recovery code to complete authentication.</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Features</h3>
+                <ul class="doc-list">
+                    <li><strong>QR Code Setup</strong> – Beautiful setup flow with scannable QR code and manual entry fallback</li>
+                    <li><strong>Encrypted Storage</strong> – Secrets are encrypted in the database using Laravel's encryption</li>
+                    <li><strong>Recovery Codes</strong> – Backup codes users can view, copy, download, and regenerate</li>
+                    <li><strong>Mandatory or Optional</strong> – Force all users to set up 2FA or allow them to skip</li>
+                    <li><strong>Partial Login State</strong> – Users are not fully authenticated until they pass the 2FA challenge</li>
+                    <li><strong>Compatible</strong> – Works with Google Authenticator, Authy, Microsoft Authenticator, 1Password, and more</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Admin Commands</h3>
+                <p class="doc-text">Reset 2FA for users who are locked out or have lost their device:</p>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash"># Reset 2FA by email
+php artisan tyro-login:reset-2fa user@example.com
+
+# Reset 2FA by user ID
+php artisan tyro-login:reset-2fa 1</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Environment Variables</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                    </div>
+                    <pre><code class="language-bash"># Enable Time-Based 2FA
+TYRO_LOGIN_2FA_ENABLED=true
+
+# Allow users to skip 2FA setup (false = mandatory for all users)
+TYRO_LOGIN_2FA_ALLOW_SKIP=false
+
+# Customize page titles
+TYRO_LOGIN_2FA_SETUP_TITLE="Two Factor Authentication"
+TYRO_LOGIN_2FA_SETUP_SUBTITLE="Scan the QR code with your authenticator app."
+TYRO_LOGIN_2FA_CHALLENGE_TITLE="Two Factor Authentication"
+TYRO_LOGIN_2FA_CHALLENGE_SUBTITLE="Enter the code from your authenticator app."</code></pre>
+                </div>
+
+                <div class="doc-alert doc-alert-success">
+                    <strong>Security Tip:</strong> TOTP 2FA provides much stronger protection than email-based OTP since the codes are generated locally on the user's device and never transmitted over the network.
                 </div>
             </section>
 
@@ -1330,6 +1443,50 @@ php artisan tyro-login:publish-style</code></pre>
                             <td><code class="doc-inline-code">TYRO_LOGIN_FORGOT_PASSWORD</code></td>
                             <td>Show "Forgot Password" link on login form</td>
                             <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Two-Factor Authentication (TOTP) -->
+                <h3 class="doc-section-subtitle">Two-Factor Authentication (TOTP)</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_2FA_ENABLED</code></td>
+                            <td>Enable Time-Based Two-Factor Authentication (TOTP)</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_2FA_ALLOW_SKIP</code></td>
+                            <td>Allow users to skip 2FA setup (if false, setup is mandatory)</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_2FA_SETUP_TITLE</code></td>
+                            <td>Title shown on the 2FA setup page</td>
+                            <td><code class="doc-inline-code">Two Factor Authentication</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_2FA_SETUP_SUBTITLE</code></td>
+                            <td>Subtitle shown on the 2FA setup page</td>
+                            <td><code class="doc-inline-code">Scan the QR code with your authenticator app.</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_2FA_CHALLENGE_TITLE</code></td>
+                            <td>Title shown on the 2FA challenge page</td>
+                            <td><code class="doc-inline-code">Two Factor Authentication</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_2FA_CHALLENGE_SUBTITLE</code></td>
+                            <td>Subtitle shown on the 2FA challenge page</td>
+                            <td><code class="doc-inline-code">Enter the code from your authenticator app.</code></td>
                         </tr>
                     </tbody>
                 </table>
