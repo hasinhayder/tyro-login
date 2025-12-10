@@ -754,32 +754,25 @@ TYRO_LOGIN_CAPTCHA_REGISTER=true</code></pre>
             <section id="totp-2fa" class="doc-section">
                 <h2 class="doc-section-title">Time-Based Two-Factor Authentication (TOTP)</h2>
                 <p class="doc-text">
-                    Secure your application with Time-Based One-Time Password (TOTP) two-factor authentication, compatible with apps like Google Authenticator, Authy, and Microsoft Authenticator. Users scan a QR code to set up their authenticator app and enter time-based codes on each login.
+                    Secure your application with industry-standard TOTP. Users can scan a QR code with apps like Google Authenticator or Authy to enable 2FA.
                 </p>
 
-                <h3 class="doc-section-subtitle">Installation</h3>
-                <p class="doc-text">TOTP 2FA requires a database migration to store secrets and recovery codes:</p>
-
-                <div class="doc-code-block">
-                    <div class="doc-code-header">
-                        <span class="doc-code-title">Terminal</span>
-                    </div>
-                    <pre><code class="language-bash"># Run migrations to add 2FA columns to users table
-php artisan migrate</code></pre>
+                <div class="doc-alert doc-alert-info">
+                    <strong>Upgrading?</strong> If you're upgrading Tyro Login, simply run <code class="doc-inline-code">php artisan tyro-login:install</code> to automatically configure 2FA support.
                 </div>
 
-                <p class="doc-text">Optionally, add the <code class="doc-inline-code">HasTwoFactorAuth</code> trait to your User model for automatic attribute casting and encryption:</p>
+                <h3 class="doc-section-subtitle">Installation & Setup</h3>
+                <p class="doc-text">If you need to manually set up the database tables, run the migration:</p>
 
                 <div class="doc-code-block">
-                    <div class="doc-code-header">
-                        <span class="doc-code-title">app/Models/User.php</span>
-                    </div>
-                    <pre><code class="language-php">&lt;?php
+                    <pre><code class="language-bash">php artisan migrate</code></pre>
+                </div>
 
-namespace App\Models;
+                <p class="doc-text">While <code class="doc-inline-code">php artisan tyro-login:install</code> automatically adds the necessary trait to your User model, ensure the <code class="doc-inline-code">HasTwoFactorAuth</code> trait is present for TOTP 2FA to function correctly.</p>
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;
+                <div class="doc-code-block">
+                    <div class="doc-code-header"><span class="doc-code-title">app/Models/User.php</span></div>
+                    <pre><code class="language-php">use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;
 
 class User extends Authenticatable
 {
@@ -2077,6 +2070,11 @@ php artisan tyro-login:publish-style</code></pre>
                         <tr>
                             <td><code class="doc-inline-code">php artisan tyro-login:doc</code></td>
                             <td>Open the documentation in your browser</td>
+                        </tr>
+
+                        <tr>
+                            <td><code class="doc-inline-code">php artisan tyro-login:reset-2fa</code></td>
+                            <td>Reset 2FA for a user (email or ID)</td>
                         </tr>
                         <tr>
                             <td><code class="doc-inline-code">php artisan tyro-login:star</code></td>
