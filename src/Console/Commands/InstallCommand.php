@@ -42,6 +42,9 @@ class InstallCommand extends Command {
         // Prepare User Model
         $this->prepareUserModel();
 
+        // Update welcome page
+        $this->updateWelcomePage();
+
         // Ask about views
         if ($this->confirm('Would you like to publish the views for customization?', false)) {
             $this->info('Publishing views...');
@@ -322,6 +325,36 @@ ENV;
         if ($contents !== $original) {
             File::put($path, $contents);
             $this->info('   ✓ HasTwoFactorAuth trait added to User model');
+        }
+    }
+
+    /**
+     * Update the default Laravel welcome page to use tyro-login routes.
+     */
+    protected function updateWelcomePage(): void {
+        $path = resource_path('views/welcome.blade.php');
+
+        if (!File::exists($path)) {
+            return;
+        }
+
+        $contents = File::get($path);
+        $original = $contents;
+
+        $replacements = [
+            "@if (Route::has('login'))" => "@if (Route::has('tyro-login.login'))",
+            "{{ route('login') }}" => "{{ route('tyro-login.login') }}",
+            "@if (Route::has('register'))" => "@if (Route::has('tyro-login.register'))",
+            "{{ route('register') }}" => "{{ route('tyro-login.register') }}",
+        ];
+
+        foreach ($replacements as $search => $replace) {
+            $contents = str_replace($search, $replace, $contents);
+        }
+
+        if ($contents !== $original) {
+            File::put($path, $contents);
+            $this->info('   ✓ welcome.blade.php updated to use tyro-login routes');
         }
     }
 }
