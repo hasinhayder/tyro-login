@@ -125,13 +125,7 @@
     }
 
     .logo-container img {
-        height: {
-                {
-                $branding['logo_height'] ?? '48px'
-            }
-        }
-
-        ;
+        height: {{ $branding['logo_height'] ?? '48px' }};
         width: auto;
     }
 

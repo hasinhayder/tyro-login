@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = config('tyro-login.version', '1.0.0');
+        $version = config('tyro-login.version', '2.0.1');
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
