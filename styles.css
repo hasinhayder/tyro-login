@@ -1558,22 +1558,87 @@ section {
     background: var(--color-bg-secondary);
 }
 
+.faq-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-lg);
+    background: var(--color-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+}
+
+.faq-nav-link {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all var(--transition-base);
+}
+
+.faq-nav-link:hover {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
 .faq-list {
     max-width: 800px;
     margin: 0 auto;
+}
+
+.faq-category {
+    margin-bottom: var(--spacing-2xl);
+    scroll-margin-top: 100px;
+}
+
+.faq-category-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    /* border-bottom: 2px solid var(--color-primary); */
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.faq-category-title::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.faq-category-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
 }
 
 .faq-item {
     background: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-md);
     overflow: hidden;
     transition: all var(--transition-base);
 }
 
 .faq-item:hover {
     border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--color-shadow);
 }
 
 .faq-question {
@@ -1793,6 +1858,11 @@ section {
     text-decoration: underline;
 }
 
+.hljs {
+    background: none;
+}
+
+
 /* ===========================
    Responsive Design
    =========================== */
@@ -1876,3 +1946,4 @@ section {
         justify-content: center;
     }
 }
+
