@@ -54,7 +54,6 @@ class MagicLinkCommand extends Command
             return;
         }
 
-        $sessionLifetime = $this->ask('Session expiry time in minutes (default: 30)', 30);
         $validityInput = $this->ask('Link validity (e.g., 7d, 1h, 30m) (default: 7d)', '7d');
 
         $validity = $this->parseTime($validityInput);
@@ -68,7 +67,6 @@ class MagicLinkCommand extends Command
         $data = [
             'hash' => $hash,
             'user_id' => $userId,
-            'session_lifetime' => (int) $sessionLifetime,
             'expires_at' => now()->addMinutes($validity)->timestamp,
             'created_at' => now()->timestamp,
             'used' => false,
@@ -129,7 +127,7 @@ class MagicLinkCommand extends Command
         }
 
         $this->table(
-            ['Hash', 'User ID', 'Created At', 'Expires At', 'Status'],
+            ['Hash', 'User ID', 'Created At', 'Link Expires', 'Status'],
             $rows
         );
     }

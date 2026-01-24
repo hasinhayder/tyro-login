@@ -683,26 +683,19 @@ class LoginController extends Controller {
         $data['used'] = true;
         $data['ip'] = $request->ip();
         
-        // We need to put it back with the original expiry time relative to now
-        // Or calculate remaining time. Since we have absolute expiry time:
         $expiresAt = Carbon::createFromTimestamp($data['expires_at']);
         Cache::put("tyro_magic_link_{$hash}", $data, $expiresAt);
 
-        // Attempt to set session lifetime (this affects the current request's session configuration)
-        // Note: For this to persist across requests, Laravel's session driver configuration usually takes precedence.
-        // However, we can't easily change the global session lifetime for just one user permanently without 
-        // middleware or database changes. We will set it for this request and hope the session cookie 
-        // inherits it or the session garbage collector respects it if using database/file driver.
-        // A more robust way would be to store 'session_expiry' in the session and have a middleware check it.
-        // For now, we will just login.
-        
-        config(['session.lifetime' => $data['session_lifetime']]);
+        // Regenerate session for security and to ensure a clean state
+        $request->session()->regenerate();
         
         Auth::login($user);
         
-        // If we really want to enforce auto-logout after X minutes for this specific session, 
-        // we should store a timestamp in the session.
-        $request->session()->put('tyro_magic_link_expires_at', now()->addMinutes($data['session_lifetime'])->timestamp);
+        if (config('tyro-login.debug', false)) {
+            Log::info('Tyro Login - Magic Link Login Successful', [
+                'user_id' => $user->id,
+            ]);
+        }
 
         return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
     }

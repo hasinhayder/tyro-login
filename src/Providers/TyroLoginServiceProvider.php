@@ -25,12 +25,6 @@ class TyroLoginServiceProvider extends ServiceProvider {
         $this->registerCommands();
         $this->registerMigrations();
         $this->configureAuthRedirection();
-        $this->registerMiddlewares();
-    }
-
-    protected function registerMiddlewares(): void {
-        $router = $this->app['router'];
-        $router->pushMiddlewareToGroup('web', \HasinHayder\TyroLogin\Http\Middleware\MagicLinkSessionMiddleware::class);
     }
 
     protected function registerRoutes(): void {
