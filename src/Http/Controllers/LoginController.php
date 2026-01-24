@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
 use HasinHayder\TyroLogin\Mail\OtpMail;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -645,5 +646,62 @@ class LoginController extends Controller {
     protected function clearLockout(Request $request): void {
         Cache::forget($this->lockoutKey($request));
         Cache::forget($this->lockoutAttemptsKey($request));
+    }
+
+    /**
+     * Handle magic link login.
+     */
+    public function magicLogin(Request $request): RedirectResponse {
+        if (!config('tyro-login.features.magic_links_enabled', false)) {
+            return redirect()->route('tyro-login.login')
+                ->withErrors(['login' => 'Magic links are currently disabled.']);
+        }
+
+        $hash = $request->input('hash');
+
+        if (!$hash) {
+            return redirect()->route('tyro-login.login')
+                ->withErrors(['login' => 'Invalid magic link.']);
+        }
+
+        $data = Cache::get("tyro_magic_link_{$hash}");
+
+        if (!$data) {
+            return redirect()->route('tyro-login.login')
+                ->withErrors(['login' => 'Invalid or expired magic link.']);
+        }
+
+        if ($data['used']) {
+             return redirect()->route('tyro-login.login')
+                ->withErrors(['login' => 'This magic link has already been used.']);
+        }
+
+        $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+        $user = $userModel::find($data['user_id']);
+
+        if (!$user) {
+            return redirect()->route('tyro-login.login')
+                ->withErrors(['login' => 'User associated with this magic link not found.']);
+        }
+
+        // Mark as used
+        $data['used'] = true;
+        $data['ip'] = $request->ip();
+        
+        $expiresAt = Carbon::createFromTimestamp($data['expires_at']);
+        Cache::put("tyro_magic_link_{$hash}", $data, $expiresAt);
+
+        // Regenerate session for security and to ensure a clean state
+        $request->session()->regenerate();
+        
+        Auth::login($user);
+        
+        if (config('tyro-login.debug', false)) {
+            Log::info('Tyro Login - Magic Link Login Successful', [
+                'user_id' => $user->id,
+            ]);
+        }
+
+        return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
     }
 }

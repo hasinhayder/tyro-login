@@ -173,6 +173,10 @@ return [
 
         // Show "Forgot Password" link on login form
         'forgot_password' => env('TYRO_LOGIN_FORGOT_PASSWORD', true),
+
+        // Enable magic link feature
+        // Environment: TYRO_LOGIN_DISABLE_MAGIC_LINKS=false
+        'magic_links_enabled' => !env('TYRO_LOGIN_DISABLE_MAGIC_LINKS', true),
     ],
 
     /*
