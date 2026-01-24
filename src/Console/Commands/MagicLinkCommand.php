@@ -38,7 +38,6 @@ class MagicLinkCommand extends Command
             $this->info('To enable, set TYRO_LOGIN_DISABLE_MAGIC_LINKS=false in your .env file.');
             return;
         }
-
         if ($this->option('create')) {
             $this->createMagicLink();
         } elseif ($this->option('remove') || $this->option('remove-hash')) {

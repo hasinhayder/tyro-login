@@ -656,7 +656,6 @@ class LoginController extends Controller {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['login' => 'Magic links are currently disabled.']);
         }
-
         $hash = $request->input('hash');
 
         if (!$hash) {
