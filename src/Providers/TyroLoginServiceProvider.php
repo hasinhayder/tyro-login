@@ -25,6 +25,12 @@ class TyroLoginServiceProvider extends ServiceProvider {
         $this->registerCommands();
         $this->registerMigrations();
         $this->configureAuthRedirection();
+        $this->registerMiddlewares();
+    }
+
+    protected function registerMiddlewares(): void {
+        $router = $this->app['router'];
+        $router->pushMiddlewareToGroup('web', \HasinHayder\TyroLogin\Http\Middleware\MagicLinkSessionMiddleware::class);
     }
 
     protected function registerRoutes(): void {
@@ -121,6 +127,7 @@ class TyroLoginServiceProvider extends ServiceProvider {
             VerifyUserCommand::class,
             UnverifyUserCommand::class,
             \HasinHayder\TyroLogin\Console\Commands\ResetTwoFactorCommand::class,
+            \HasinHayder\TyroLogin\Console\Commands\MagicLinkCommand::class,
         ]);
     }
 }
