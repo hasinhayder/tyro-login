@@ -35,7 +35,7 @@ class MagicLinkCommand extends Command
     {
         if (!config('tyro-login.features.magic_links_enabled', false)) {
             $this->error('Magic links are currently disabled in the configuration.');
-            $this->info('To enable, set TYRO_LOGIN_DISABLE_MAGIC_LINKS=false in your .env file.');
+            $this->info('To enable, set TYRO_LOGIN_ENABLE_MAGIC_LINKS=true in your .env file.');
             return;
         }
         if ($this->option('create')) {

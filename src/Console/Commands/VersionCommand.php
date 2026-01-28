@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = '2.0.2';
+        $version = '2.1'; //magic link
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
