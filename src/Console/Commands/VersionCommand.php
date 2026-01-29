@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = '2.1'; //magic link
+        $version = '2.2.0'; //magic link ui
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -41,3 +41,6 @@ class VersionCommand extends Command
         return self::SUCCESS;
     }
 }
+
+//2.2.0 - magic link ui
+//2.1.0 - magic link artisan command
