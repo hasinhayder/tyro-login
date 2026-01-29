@@ -27,6 +27,7 @@
                 <a href="#layouts" class="nav-link">Layouts</a>
                 <a href="#captcha" class="nav-link">Captcha</a>
                 <a href="#otp" class="nav-link">OTP</a>
+                <a href="#magic-links" class="nav-link">Magic Links</a>
                 <a href="#2fa" class="nav-link">2FA</a>
                 <a href="#social" class="nav-link">Social</a>
                 <a href="#installation" class="nav-link">Install</a>
@@ -78,7 +79,7 @@
             <div class="hero-content">
                 <div class="hero-badge">
                     <span class="badge-dot"></span>
-                    Shadcn Theme &nbsp; • &nbsp; Social Login &nbsp; • &nbsp; Multiple Layouts &nbsp; • &nbsp; TOTP 2FA &nbsp; • &nbsp; OTP &nbsp; • &nbsp; Captcha &nbsp; • &nbsp; Lockouts &nbsp; • &nbsp; Email Templates &nbsp;
+                    Social Login &nbsp; • &nbsp; Magic Links &nbsp; • &nbsp; Multiple Layouts &nbsp; • &nbsp; Authenticator &nbsp; • &nbsp; OTP &nbsp; • &nbsp; Captcha &nbsp; • &nbsp; Lockouts &nbsp; • &nbsp; Email Templates &nbsp;
                 </div>
 
                 <h1 class="hero-title">
@@ -89,7 +90,7 @@
 
                 <p class="hero-description">
                     Professional, customizable login and registration pages with multiple layouts,
-                    dark/light themes, captcha, OTP, email verification, password reset, lockout protection, and seamless integration with the <a href="https://hasinhayder.github.io/tyro/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: none;">Tyro</a> package.
+                    shadcn compatible dark/light themes, captcha, OTP, email verification, password reset, lockout protection, and seamless integration with the <a href="https://hasinhayder.github.io/tyro/" target="_blank" rel="noopener" style="color: var(--color-primary); text-decoration: none;">Tyro</a> package.
                 </p>
 
                 <div class="hero-cta">
@@ -141,6 +142,16 @@
             </div>
 
             <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Magic Login Links</h3>
+                    <p class="feature-description">Passwordless authentication via email. Send secure, time-limited magic links that expire after 5 minutes. Manage links via artisan commands.</p>
+                </div>
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -805,6 +816,92 @@ TYRO_LOGIN_OTP_LENGTH=4      # 4-8 digits
 TYRO_LOGIN_OTP_EXPIRE=5      # minutes
 TYRO_LOGIN_OTP_MAX_RESEND=3  # max resend attempts
 TYRO_LOGIN_OTP_RESEND_COOLDOWN=60  # seconds</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Magic Links Section -->
+    <section id="magic-links" class="code-example">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Passwordless Magic Links</h2>
+                <p class="section-description">Secure, one-time login links sent directly to user's email - no password needed</p>
+            </div>
+
+            <div class="code-showcase" style="margin-top: 2rem;">
+                <div class="code-showcase-content">
+                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text);">Frictionless Authentication</h3>
+                    <p class="section-description" style="text-align: left; margin-bottom: 1.5rem;">
+                        Magic links provide a seamless login experience without requiring users to remember passwords. Perfect for improving conversion rates and user experience.
+                    </p>
+
+                    <ul class="feature-list">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>One-Click Login</strong> - Users click a button, receive an email, and instantly sign in</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>Time-Limited</strong> - Links expire after 5 minutes for security</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>Single-Use Only</strong> - Each link can only be used once</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>Beautiful Email Template</strong> - Professional email design with clear CTA button</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>Artisan Commands</strong> - Create, list, remove, and manage magic links via CLI</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>UI Integration</strong> - "Send Magic Login Link" button on login page</span>
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span><strong>Cache-Based</strong> - No database changes required, uses Laravel's cache system</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-showcase-code">
+                    <div class="code-window">
+                        <div class="code-window-header">
+                            <div class="code-window-dots"></div>
+                            <div class="code-window-title">.env</div>
+                        </div>
+                        <pre><code class="language-bash"># Enable magic links
+TYRO_LOGIN_ENABLE_MAGIC_LINKS=true
+
+# Customize email
+TYRO_LOGIN_EMAIL_MAGIC_LINK=true
+TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT="Your Magic Login Link"
+TYRO_LOGIN_MAGIC_LINK_EXPIRE=5  # minutes
+
+# Manage via artisan
+php artisan tyro-login:magic-links --create
+php artisan tyro-login:magic-links --list
+php artisan tyro-login:magic-links --remove
+php artisan tyro-login:magic-links --flush</code></pre>
                     </div>
                 </div>
             </div>

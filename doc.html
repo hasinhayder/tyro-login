@@ -73,7 +73,7 @@
         <aside class="doc-sidebar">
             <div class="doc-sidebar-header">
                 <!-- <div class="doc-logo">🔐 Tyro Login</div> -->
-                <div class="doc-version">Documentation v2.0.2</div>
+                <div class="doc-version">Documentation v2.2.0</div>
             </div>
             <nav class="doc-nav">
                 <div class="doc-nav-section">
@@ -95,6 +95,7 @@
                         <li><a href="#redirects" class="doc-nav-link">Redirects</a></li>
                         <li><a href="#registration" class="doc-nav-link">Registration</a></li>
                         <li><a href="#social-login" class="doc-nav-link">Social Login</a></li>
+                        <li><a href="#magic-links" class="doc-nav-link">Magic Links</a></li>
                         <li><a href="#captcha" class="doc-nav-link">Math Captcha</a></li>
                         <li><a href="#otp" class="doc-nav-link">Login OTP</a></li>
                         <li><a href="#totp-2fa" class="doc-nav-link">TOTP 2FA</a></li>
@@ -637,6 +638,130 @@ FACEBOOK_REDIRECT_URI="${APP_URL}/auth/facebook/callback"</code></pre>
 
                 <div class="doc-alert doc-alert-info">
                     <strong>Tip:</strong> The <code class="doc-inline-code">social_accounts</code> table stores provider connections, tokens, and avatars securely. Tokens are encrypted at rest.
+                </div>
+            </section>
+
+            <!-- Magic Links -->
+            <section id="magic-links" class="doc-section">
+                <h2 class="doc-section-title">Magic Login Links (Passwordless)</h2>
+                <p class="doc-text">
+                    Enable passwordless authentication with secure, time-limited magic links sent via email. Users can log in with a single click without entering a password. Perfect for improving conversion rates and user experience.
+                </p>
+
+                <h3 class="doc-section-subtitle">Configuration</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">config/tyro-login.php</span>
+                    </div>
+                    <pre><code class="language-php">'features' => [
+    // Enable magic link feature
+    'magic_links_enabled' => env('TYRO_LOGIN_ENABLE_MAGIC_LINKS', false),
+],
+
+'emails' => [
+    // Magic link email
+    'magic_link' => [
+        'enabled' => env('TYRO_LOGIN_EMAIL_MAGIC_LINK', true),
+        'subject' => env('TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT', 'Your Magic Login Link'),
+        'expire' => env('TYRO_LOGIN_MAGIC_LINK_EXPIRE', 5), // Minutes
+    ],
+],</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Environment Variables</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">.env</span>
+                    </div>
+                    <pre><code class="language-bash"># Enable magic links
+TYRO_LOGIN_ENABLE_MAGIC_LINKS=true
+
+# Email configuration
+TYRO_LOGIN_EMAIL_MAGIC_LINK=true
+TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT="Your Magic Login Link"
+TYRO_LOGIN_MAGIC_LINK_EXPIRE=5  # Minutes</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">How It Works</h3>
+                <ul class="doc-list">
+                    <li>User enters their email/username on the login page</li>
+                    <li>User clicks "Send Magic Login Link" button</li>
+                    <li>System generates a secure, random 32-character hash</li>
+                    <li>Link is stored in cache with expiration time (default: 5 minutes)</li>
+                    <li>Beautiful email is sent with the magic link</li>
+                    <li>User clicks the link and is instantly logged in</li>
+                    <li>Link becomes invalid after first use</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Features</h3>
+                <ul class="doc-list">
+                    <li><strong>One-Click Login</strong> - Users receive an email and click to sign in instantly</li>
+                    <li><strong>Time-Limited</strong> - Links expire after 5 minutes by default</li>
+                    <li><strong>Single-Use</strong> - Each link can only be used once for security</li>
+                    <li><strong>Beautiful Email</strong> - Professional email template with prominent CTA button</li>
+                    <li><strong>Cache-Based</strong> - No database changes required, uses Laravel's cache system</li>
+                    <li><strong>Security</strong> - Always shows success message even if user doesn't exist</li>
+                    <li><strong>UI Integration</strong> - "Send Magic Login Link" button appears on login page when enabled</li>
+                    <li><strong>Debug Logging</strong> - Magic links are logged when debug mode is enabled</li>
+                </ul>
+
+                <h3 class="doc-section-subtitle">Artisan Commands</h3>
+                <p class="doc-text">Manage magic links via command line:</p>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Terminal</span>
+                    </div>
+                    <pre><code class="language-bash"># Create a new magic link for a user
+php artisan tyro-login:magic-links --create
+# You'll be prompted for user ID and link validity (e.g., 7d, 1h, 30m)
+
+# List all active magic links
+php artisan tyro-login:magic-links --list
+php artisan tyro-login:magic-links  # Default action
+
+# Remove a specific magic link
+php artisan tyro-login:magic-links --remove
+php artisan tyro-login:magic-links --remove-hash=abc123...
+
+# Remove all magic links
+php artisan tyro-login:magic-links --flush</code></pre>
+                </div>
+
+                <h3 class="doc-section-subtitle">Command Examples</h3>
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">Create Magic Link</span>
+                    </div>
+                    <pre><code class="language-bash">$ php artisan tyro-login:magic-links --create
+Enter User ID: 1
+Link validity (e.g., 7d, 1h, 30m) (default: 7d): 24h
+
+Magic link created successfully!
+URL: http://yourapp.com/mlogin?hash=abc123def456...
+Expires: 2026-01-31 14:30:00</code></pre>
+                </div>
+
+                <div class="doc-code-block">
+                    <div class="doc-code-header">
+                        <span class="doc-code-title">List Magic Links</span>
+                    </div>
+                    <pre><code class="language-bash">$ php artisan tyro-login:magic-links --list
+
++----------------------------------+---------+---------------------+---------------------+---------+
+| Hash                             | User ID | Created At          | Link Expires        | Status  |
++----------------------------------+---------+---------------------+---------------------+---------+
+| abc123def456...                  | 1       | 2026-01-30 14:30:00 | 2026-01-31 14:30:00 | Unused  |
+| def456abc123...                  | 2       | 2026-01-29 10:00:00 | 2026-01-30 10:00:00 | Used    |
++----------------------------------+---------+---------------------+---------------------+---------+</code></pre>
+                </div>
+
+                <div class="doc-alert doc-alert-success">
+                    <strong>Pro Tip:</strong> Use artisan commands to create magic links for user onboarding, password reset alternatives, or admin account recovery scenarios.
+                </div>
+
+                <div class="doc-alert doc-alert-info">
+                    <strong>Security:</strong> Magic links are automatically cleaned up when they expire. The system always shows a success message when requesting a link, even if the user doesn't exist, to prevent user enumeration attacks.
                 </div>
             </section>
 
@@ -1620,6 +1745,40 @@ php artisan tyro-login:publish-style</code></pre>
                             <td><code class="doc-inline-code">TYRO_LOGIN_RESET_PASSWORD_BG_DESCRIPTION</code></td>
                             <td>Background description for reset password page</td>
                             <td><code class="doc-inline-code">Create a new secure password for your account.</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Magic Links -->
+                <h3 class="doc-section-subtitle">Magic Links</h3>
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                            <th>Default Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_ENABLE_MAGIC_LINKS</code></td>
+                            <td>Enable magic login links feature</td>
+                            <td><code class="doc-inline-code">false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_MAGIC_LINK</code></td>
+                            <td>Enable magic link emails</td>
+                            <td><code class="doc-inline-code">true</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT</code></td>
+                            <td>Magic link email subject</td>
+                            <td><code class="doc-inline-code">Your Magic Login Link</code></td>
+                        </tr>
+                        <tr>
+                            <td><code class="doc-inline-code">TYRO_LOGIN_MAGIC_LINK_EXPIRE</code></td>
+                            <td>Magic link expiration time in minutes</td>
+                            <td><code class="doc-inline-code">5</code></td>
                         </tr>
                     </tbody>
                 </table>
@@ -2623,8 +2782,10 @@ php artisan tyro-login:unverify-user --all</code></pre>
                 { id: 'redirects', title: 'Redirects', description: 'Configure post-auth redirects', icon: '🔄' },
                 { id: 'registration', title: 'Registration Settings', description: 'Control user registration', icon: '📝' },
                 { id: 'social-login', title: 'Social Login', description: 'OAuth with Google, GitHub, Facebook, etc.', icon: '👥' },
+                { id: 'magic-links', title: 'Magic Links', description: 'Passwordless login via email', icon: '✨' },
                 { id: 'captcha', title: 'Math Captcha', description: 'Simple math captcha protection', icon: '🧮' },
                 { id: 'otp', title: 'Login OTP', description: 'Two-factor authentication', icon: '🔑' },
+                { id: 'totp-2fa', title: 'TOTP 2FA', description: 'Time-based 2FA with QR codes', icon: '🔐' },
                 { id: 'email-verification', title: 'Email Verification', description: 'Verify user email addresses', icon: '✉️' },
                 { id: 'password-reset', title: 'Password Reset', description: 'Forgot password functionality', icon: '🔒' },
                 { id: 'emails', title: 'Email Templates', description: 'Customize email templates', icon: '📧' },
