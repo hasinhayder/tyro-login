@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
 use HasinHayder\TyroLogin\Mail\OtpMail;
+use HasinHayder\TyroLogin\Mail\MagicLinkMail;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -702,5 +703,96 @@ class LoginController extends Controller {
         }
 
         return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+    }
+
+    /**
+     * Request a magic link to be sent via email.
+     */
+    public function requestMagicLink(Request $request): RedirectResponse
+    {
+        if (!config('tyro-login.features.magic_links_enabled', false)) {
+            abort(404);
+        }
+
+        $loginField = config('tyro-login.login_field', 'email');
+
+        // Validate based on login field
+        $rules = [];
+        if ($loginField === 'email') {
+            $rules['email'] = ['required', 'string', 'email'];
+        } elseif ($loginField === 'username') {
+            $rules['username'] = ['required', 'string'];
+        } else {
+            $rules['login'] = ['required', 'string'];
+        }
+
+        $credentials = $request->validate($rules);
+
+        // Find user by email, username, or both
+        $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+        $user = null;
+
+        if ($loginField === 'email') {
+            $user = $userModel::where('email', $credentials['email'])->first();
+        } elseif ($loginField === 'username') {
+            $user = $userModel::where('username', $credentials['username'])->first();
+        } else {
+            // Try both email and username
+            $login = $credentials['login'];
+            $user = $userModel::where('email', $login)
+                ->orWhere('username', $login)
+                ->first();
+        }
+
+        // Always show success message even if user doesn't exist (security best practice)
+        if (!$user) {
+            return redirect()->back()->with('success', 'If an account exists with that information, a magic link has been sent to your email.');
+        }
+
+        // Generate magic link
+        $expiresInMinutes = config('tyro-login.emails.magic_link.expire', 15);
+        $hash = Str::random(32);
+
+        $data = [
+            'hash' => $hash,
+            'user_id' => $user->id,
+            'expires_at' => now()->addMinutes($expiresInMinutes)->timestamp,
+            'created_at' => now()->timestamp,
+            'used' => false,
+            'ip' => null,
+        ];
+
+        // Store link data
+        Cache::put("tyro_magic_link_{$hash}", $data, now()->addMinutes($expiresInMinutes));
+
+        // Update index
+        $index = Cache::get('tyro_magic_links_index', []);
+        $index[] = $hash;
+        Cache::forever('tyro_magic_links_index', array_unique($index));
+
+        $magicLink = url('/mlogin?hash=' . $hash);
+
+        // Log for development
+        if (config('tyro-login.debug', false)) {
+            Log::info('Tyro Login - Magic Link Generated', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'link' => $magicLink,
+                'expires_at' => now()->addMinutes($expiresInMinutes)->toDateTimeString(),
+            ]);
+        }
+
+        // Send email if enabled
+        if (config('tyro-login.emails.magic_link.enabled', true)) {
+            Mail::to($user->email)->send(
+                new MagicLinkMail(
+                    magicLink: $magicLink,
+                    userName: $user->name ?? 'User',
+                    expiresInMinutes: $expiresInMinutes
+                )
+            );
+        }
+
+        return redirect()->back()->with('success', 'A magic link has been sent to your email. Please check your inbox.');
     }
 }

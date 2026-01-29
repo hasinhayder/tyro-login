@@ -29,6 +29,10 @@ Route::middleware('guest')->group(function () {
     Route::post(config('tyro-login.routes.login', 'login'), [LoginController::class, 'login'])
         ->name('login.submit');
 
+    // Magic link request route
+    Route::post('magic-link/request', [LoginController::class, 'requestMagicLink'])
+        ->name('magic-link.request');
+
     // Lockout route
     Route::get('lockout', [LoginController::class, 'showLockout'])
         ->name('lockout');

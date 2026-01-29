@@ -456,6 +456,13 @@ return [
             'enabled' => env('TYRO_LOGIN_EMAIL_WELCOME', true),
             'subject' => env('TYRO_LOGIN_EMAIL_WELCOME_SUBJECT', null), // null = uses default with app name
         ],
+
+        // Magic link email
+        'magic_link' => [
+            'enabled' => env('TYRO_LOGIN_EMAIL_MAGIC_LINK', true),
+            'subject' => env('TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT', 'Your Magic Login Link'),
+            'expire' => env('TYRO_LOGIN_MAGIC_LINK_EXPIRE', 15), // Minutes
+        ],
     ],
 
     /*

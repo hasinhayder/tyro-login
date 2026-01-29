@@ -38,6 +38,12 @@
                 @endif
             </div>
 
+            <!-- Success Message -->
+            @if(session('success'))
+            <div class="alert alert-success" style="padding: 0.875rem 1rem; margin-bottom: 1.5rem; background-color: #d1fae5; border: 1px solid #6ee7b7; border-radius: 0.5rem; color: #065f46; font-size: 0.9375rem;">
+                {{ session('success') }}
+            </div>
+            @endif
             <!-- Login Form -->
             <form method="POST" action="{{ route('tyro-login.login.submit') }}">
                 @csrf
@@ -114,6 +120,46 @@
                 </button>
             </form>
 
+            <!-- Magic Login Button -->
+            @if(config('tyro-login.features.magic_links_enabled', false))
+            <div class="form-divider" style="margin: 1.5rem 0; text-align: center; position: relative;">
+                <span style="background-color: white; padding: 0 1rem; position: relative; z-index: 1; color: #9ca3af; font-size: 0.875rem;">or</span>
+                <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background-color: #e5e7eb;"></div>
+            </div>
+
+            <form method="POST" action="{{ route('tyro-login.magic-link.request') }}" id="magic-link-form">
+                @csrf
+                <input type="hidden" name="email" id="magic-email" value="">
+                <input type="hidden" name="username" id="magic-username" value="">
+                <input type="hidden" name="login" id="magic-login" value="">
+                
+                <button type="submit" class="btn btn-secondary" id="magic-login-btn" style="width: 100%; background-color: #f3f4f6; color: #374151; border: 1px solid #e5e7eb;">
+                    <svg style="width: 1.25rem; height: 1.25rem; display: inline-block; vertical-align: middle; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    Send Magic Login Link
+                </button>
+            </form>
+
+            <script>
+                document.getElementById('magic-login-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    @if(($loginField ?? 'email') === 'both')
+                        var loginValue = document.getElementById('login')?.value || '';
+                        document.getElementById('magic-login').value = loginValue;
+                    @elseif(($loginField ?? 'email') === 'username')
+                        var usernameValue = document.getElementById('username')?.value || '';
+                        document.getElementById('magic-username').value = usernameValue;
+                    @else
+                        var emailValue = document.getElementById('email')?.value || '';
+                        document.getElementById('magic-email').value = emailValue;
+                    @endif
+                    
+                    document.getElementById('magic-link-form').submit();
+                });
+            </script>
+            @endif
             <!-- Register Link -->
             @if($registrationEnabled ?? true)
             <div class="form-footer">
