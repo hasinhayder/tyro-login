@@ -461,7 +461,7 @@ return [
         'magic_link' => [
             'enabled' => env('TYRO_LOGIN_EMAIL_MAGIC_LINK', true),
             'subject' => env('TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT', 'Your Magic Login Link'),
-            'expire' => env('TYRO_LOGIN_MAGIC_LINK_EXPIRE', 15), // Minutes
+            'expire' => env('TYRO_LOGIN_MAGIC_LINK_EXPIRE', 5), // Minutes
         ],
     ],
 

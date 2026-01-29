@@ -750,7 +750,7 @@ class LoginController extends Controller {
         }
 
         // Generate magic link
-        $expiresInMinutes = config('tyro-login.emails.magic_link.expire', 15);
+        $expiresInMinutes = config('tyro-login.emails.magic_link.expire', 5);
         $hash = Str::random(32);
 
         $data = [
