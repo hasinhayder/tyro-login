@@ -42,10 +42,8 @@ class TyroLoginServiceProvider extends ServiceProvider {
     }
 
     protected function registerMigrations(): void {
-        // Only load migrations if social login is enabled
-        if (config('tyro-login.social.enabled', false)) {
-            $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
-        }
+        // Always load migrations - both 2FA and social login are independent features
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
     }
 
     protected function registerPublishing(): void {
