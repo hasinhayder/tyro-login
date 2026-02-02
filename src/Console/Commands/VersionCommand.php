@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = '2.2.0'; //magic link ui
+        $version = '2.2.1'; //Issue #4 Regarding Migrations is now fixed 
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -42,5 +42,6 @@ class VersionCommand extends Command
     }
 }
 
+//2.2.1 - Fix migration loading issue
 //2.2.0 - magic link ui
 //2.1.0 - magic link artisan command
