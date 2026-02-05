@@ -33,6 +33,7 @@
 -   **Password Reset** - Built-in forgot password and reset functionality
 -   **Beautiful Emails** - Sleek, minimal HTML email templates for OTP, password reset, verification, and welcome emails
 -   **Tyro Integration** - Automatic role assignment for new users if Tyro is installed
+-   **Invitation/Referral System** - User-based referral links for tracking signups
 -   **Dark/Light Theme** - Automatic theme detection with manual toggle
 -   **Fully Responsive** - Works perfectly on all devices
 -   **Zero Build Step** - No npm or webpack required, just install and use
@@ -552,6 +553,94 @@ A migration creates the `social_accounts` table to store:
         ],
     ],
 ],
+```
+
+## Invitation/Referral System
+
+Tyro Login includes a built-in invitation/referral system that allows users to invite others to sign up. Each user can create one unique invitation link that tracks all signups made through it.
+
+### Features
+
+-   **One Link Per User** - Each user can have exactly one invitation link
+-   **Automatic Tracking** - Referral signups are automatically tracked during registration
+-   **Silent Invalid Links** - Invalid or non-existing invitation hashes are silently ignored (no errors)
+-   **Prevent Self-Referrals** - Users cannot use their own invitation link
+-   **Prevent Duplicates** - Each user can only be referred once
+-   **Database Backed** - Uses two lightweight tables for persistence
+
+### Database Tables
+
+-   `invitation_links` - Stores unique invitation links for users
+-   `invitation_referrals` - Tracks signups through invitation links
+
+### CLI Commands
+
+Manage invitation links using the console command:
+
+```bash
+# Create a new invitation link for a user
+php artisan tyro-login:invite-links --create
+# or simply
+php artisan tyro-login:invite-links
+
+# List all invitation links with referral counts
+php artisan tyro-login:invite-links --list
+
+# Remove a user's invitation link
+# (warns if there are referral signups)
+php artisan tyro-login:invite-links --remove
+
+# Remove all invitation links
+# (requires confirmation)
+php artisan tyro-login:invite-links --flush
+```
+
+### Integration in Your Application
+
+The registration controller automatically tracks referrals. Users can access invitation links via a query parameter:
+
+```
+https://your-app.com/register?invite={hash}
+```
+
+**Important:** You don't need to do anything special - Tyro Login handles referral tracking automatically during user registration.
+
+### Using the Helper Class
+
+Access invitation data programmatically:
+
+```php
+use HasinHayder\TyroLogin\Helpers\InvitationHelper;
+
+// Get a user's invitation link
+$invitationLink = InvitationHelper::getInvitationLinkForUser($userId);
+if ($invitationLink) {
+    echo $invitationLink->url; // Full URL: /register?invite={hash}
+}
+
+// Get referral count for a user
+$count = InvitationHelper::getReferralCount($userId);
+
+// Get all users referred by a specific user
+$referredUsers = InvitationHelper::getReferredUsers($userId);
+
+// Validate and track a referral manually
+InvitationHelper::trackReferral($invitationHash, $newUserId);
+```
+
+### Models
+
+Access invitation data through Eloquent models:
+
+```php
+use HasinHayder\TyroLogin\Models\InvitationLink;
+use HasinHayder\TyroLogin\Models\InvitationReferral;
+
+// Get invitation link with relationships
+$link = InvitationLink::with('user', 'referrals')->find($id);
+
+// Get referral with relationships
+$referral = InvitationReferral::with('invitationLink', 'referredUser')->find($id);
 ```
 
 ## Layout Examples
