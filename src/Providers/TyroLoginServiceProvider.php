@@ -120,6 +120,7 @@ class TyroLoginServiceProvider extends ServiceProvider {
             UnverifyUserCommand::class,
             \HasinHayder\TyroLogin\Console\Commands\ResetTwoFactorCommand::class,
             \HasinHayder\TyroLogin\Console\Commands\MagicLinkCommand::class,
+            \HasinHayder\TyroLogin\Console\Commands\InviteLinkCommand::class,
         ]);
     }
 }

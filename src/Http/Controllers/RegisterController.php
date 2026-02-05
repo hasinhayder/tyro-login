@@ -3,6 +3,7 @@
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
 use HasinHayder\TyroLogin\Mail\WelcomeMail;
+use HasinHayder\TyroLogin\Helpers\InvitationHelper;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -89,6 +90,10 @@ class RegisterController extends Controller
 
         // Assign Tyro role if package is installed
         $this->assignTyroRole($user);
+
+        // Track invitation referral if invitation hash is provided
+        $invitationHash = $request->query('invite');
+        InvitationHelper::trackReferral($invitationHash, $user->id);
 
         // Check if email verification is required
         if (config('tyro-login.registration.require_email_verification', false)) {
