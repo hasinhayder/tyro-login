@@ -66,6 +66,12 @@ php artisan tyro-login:install --with-social
 
 That's it! Visit `/login` to see your new authentication pages.
 
+**Note:** If you're updating to version 2.3.0 or later, run the migrations to set up the invitation/referral system:
+
+```bash
+php artisan migrate
+```
+
 ## Configuration
 
 After installation, you can customize the package by editing `config/tyro-login.php`:
@@ -558,6 +564,9 @@ A migration creates the `social_accounts` table to store:
 ## Invitation/Referral System
 
 Tyro Login includes a built-in invitation/referral system that allows users to invite others to sign up. Each user can create one unique invitation link that tracks all signups made through it.
+
+### Note 
+For versions older than 2.3.0, run `composer update` to fetch the latest files for the invitation system, then execute `php artisan migrate` to create the necessary database tables.
 
 ### Features
 
