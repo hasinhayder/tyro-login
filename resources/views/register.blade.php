@@ -36,6 +36,11 @@
             <form method="POST" action="{{ route('tyro-login.register.submit') }}">
                 @csrf
 
+                <!-- Preserve invitation hash if present -->
+                @if(request()->query('invite') ?? $inviteHash ?? null)
+                <input type="hidden" name="invite" value="{{ request()->query('invite') ?? $inviteHash }}">
+                @endif
+
                 <!-- Name Field -->
                 <div class="form-group">
                     <label for="name" class="form-label">Name</label>

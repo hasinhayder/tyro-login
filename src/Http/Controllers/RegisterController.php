@@ -38,6 +38,7 @@ class RegisterController extends Controller
             'captchaEnabled' => config('tyro-login.captcha.enabled_register', false),
             'captchaQuestion' => $captcha['question'] ?? null,
             'captchaConfig' => config('tyro-login.captcha'),
+            'inviteHash' => $request->query('invite'),
         ]);
     }
 
@@ -92,8 +93,21 @@ class RegisterController extends Controller
         $this->assignTyroRole($user);
 
         // Track invitation referral if invitation hash is provided
-        $invitationHash = $request->query('invite');
-        InvitationHelper::trackReferral($invitationHash, $user->id);
+        // Check both query parameter (GET) and input (POST from hidden field)
+        $invitationHash = $request->input('invite') ?? $request->query('invite');
+        if ($invitationHash) {
+            try {
+                InvitationHelper::trackReferral($invitationHash, $user->id);
+            } catch (\Exception $e) {
+                // Log the error but don't break registration flow
+                \Log::error('[Tyro-Login] Failed to track invitation referral', [
+                    'user_id' => $user->id,
+                    'invitation_hash' => $invitationHash,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+            }
+        }
 
         // Check if email verification is required
         if (config('tyro-login.registration.require_email_verification', false)) {

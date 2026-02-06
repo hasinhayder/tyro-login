@@ -4,6 +4,7 @@ namespace HasinHayder\TyroLogin\Helpers;
 
 use HasinHayder\TyroLogin\Models\InvitationLink;
 use HasinHayder\TyroLogin\Models\InvitationReferral;
+use Illuminate\Support\Facades\Log;
 
 class InvitationHelper
 {
@@ -32,29 +33,59 @@ class InvitationHelper
      */
     public static function trackReferral(?string $invitationHash, int $newUserId): ?InvitationReferral
     {
+        // If no hash provided, nothing to track
+        if (!$invitationHash) {
+            Log::info('[Tyro-Login] No invitation hash provided for user registration', [
+                'user_id' => $newUserId,
+            ]);
+            return null;
+        }
+
         $invitationLink = self::validateInvitationHash($invitationHash);
 
-        // For invalid/non-existing invitation links, silently return null
-        // (no error, no referral creation)
+        // For invalid/non-existing invitation links, log and return null
         if (!$invitationLink) {
+            Log::warning('[Tyro-Login] Invalid invitation hash used during registration', [
+                'hash' => $invitationHash,
+                'user_id' => $newUserId,
+            ]);
             return null;
         }
 
         // Don't allow self-referrals
         if ($invitationLink->user_id === $newUserId) {
+            Log::warning('[Tyro-Login] Self-referral attempt detected', [
+                'user_id' => $newUserId,
+                'invitation_hash' => $invitationHash,
+            ]);
             return null;
         }
 
         // Check if this user was already referred (prevent duplicate referrals)
         $existingReferral = InvitationReferral::where('referred_user_id', $newUserId)->first();
         if ($existingReferral) {
+            Log::info('[Tyro-Login] User already has a referral record', [
+                'user_id' => $newUserId,
+                'existing_referral_id' => $existingReferral->id,
+            ]);
             return $existingReferral;
         }
 
-        return InvitationReferral::create([
+        // Create the referral record
+        $referral = InvitationReferral::create([
             'invitation_link_id' => $invitationLink->id,
             'referred_user_id' => $newUserId,
         ]);
+
+        Log::info('[Tyro-Login] Referral tracked successfully', [
+            'referral_id' => $referral->id,
+            'invitation_link_id' => $invitationLink->id,
+            'referrer_user_id' => $invitationLink->user_id,
+            'referred_user_id' => $newUserId,
+            'invitation_hash' => $invitationHash,
+        ]);
+
+        return $referral;
     }
 
     /**
