@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = '2.3.0'; //feat: implement invitation/referral system for user signups 
+        $version = '2.3.1'; //Referral tracking bug-fix release
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
@@ -42,6 +42,7 @@ class VersionCommand extends Command
     }
 }
 
+//2.3.1 - Bug fix release for referral tracking logic
 //2.3.0 - Add complete invitation/referral link management with automatic referral tracking during registration, including CLI commands for managing links and models for data persistence.
 //2.2.1 - Fix migration loading issue
 //2.2.0 - magic link ui
