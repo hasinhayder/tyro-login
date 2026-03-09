@@ -47,7 +47,7 @@ class SocialAuthController extends Controller {
         }
 
         // Store the intended action (login or register) in session
-        $action = $request->query('action', 'login');
+        $action = $this->normalizeAction($request->query('action', 'login'));
         $request->session()->put('tyro-login.social.action', $action);
 
         try {
@@ -106,7 +106,7 @@ class SocialAuthController extends Controller {
         }
 
         // Get the intended action
-        $action = $request->session()->pull('tyro-login.social.action', 'login');
+        $action = $this->normalizeAction($request->session()->pull('tyro-login.social.action', 'login'));
 
         // Process the social login
         return $this->handleSocialUser($request, $socialUser, $provider, $action);
@@ -176,7 +176,7 @@ class SocialAuthController extends Controller {
         }
 
         // No user exists - check if auto-registration is enabled
-        if (!config('tyro-login.social.auto_register', true)) {
+        if (!$this->shouldCreateMissingUser($action)) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['social' => config('tyro-login.social.messages.account_not_found', 'No account found with this email. Please register first.')]);
         }
@@ -217,12 +217,17 @@ class SocialAuthController extends Controller {
     protected function createUser(SocialiteUser $socialUser): mixed {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
 
-        return $userModel::create([
+        $user = new $userModel();
+        $user->forceFill([
             'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'User',
             'email' => $socialUser->getEmail(),
             'password' => Hash::make(Str::random(32)), // Random password for social users
             'email_verified_at' => now(), // Social emails are considered verified
         ]);
+
+        $user->save();
+
+        return $user;
     }
 
     /**
@@ -274,6 +279,24 @@ class SocialAuthController extends Controller {
         }
 
         return config("tyro-login.social.providers.{$provider}.enabled", false);
+    }
+
+    /**
+     * Normalize the intended social auth action.
+     */
+    protected function normalizeAction(string $action): string {
+        return in_array($action, ['login', 'register'], true) ? $action : 'login';
+    }
+
+    /**
+     * Determine whether a missing social user should be created.
+     */
+    protected function shouldCreateMissingUser(string $action): bool {
+        if (in_array($this->normalizeAction($action), ['login', 'register'], true)) {
+            return true;
+        }
+
+        return config('tyro-login.social.auto_register', true);
     }
 
     /**
