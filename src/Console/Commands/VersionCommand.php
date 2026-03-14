@@ -21,7 +21,7 @@ class VersionCommand extends Command
      */
     public function handle(): int
     {
-        $version = '2.3.2'; //fix(social): automatically create account if the user doesn't exist after social login
+        $version = config('tyro-login.version', '2.3.2');
         
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');

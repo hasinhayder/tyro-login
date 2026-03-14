@@ -11,12 +11,9 @@ abstract class TestCase extends Orchestra
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
+    protected function defineDatabaseMigrations(): void
     {
-        parent::setUp();
-
-        // Run migrations manually in setUp
-        $this->loadLaravelMigrations(['--database' => 'testing']);
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
     }
 
     protected function getPackageProviders($app): array

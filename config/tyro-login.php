@@ -24,6 +24,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Package Version
+    |--------------------------------------------------------------------------
+    */
+    'version' => '2.3.2',
+
+    /*
+    |--------------------------------------------------------------------------
     | Authentication Page Layout
     |--------------------------------------------------------------------------
     |
@@ -133,7 +140,7 @@ return [
         'enabled' => env('TYRO_LOGIN_REGISTRATION_ENABLED', true),
 
         // Whether to automatically log in the user after registration
-        'auto_login' => env('TYRO_LOGIN_REGISTRATION_AUTO_LOGIN', false),
+        'auto_login' => env('TYRO_LOGIN_REGISTRATION_AUTO_LOGIN', true),
 
         // Whether to require email verification after registration
         'require_email_verification' => env('TYRO_LOGIN_REQUIRE_EMAIL_VERIFICATION', false),
@@ -578,11 +585,11 @@ return [
     'lockout' => [
         // Enable/disable the entire lockout system
         // Set to false only during development/testing
-        'enabled' => env('TYRO_LOGIN_LOCKOUT_ENABLED', false),
+        'enabled' => env('TYRO_LOGIN_LOCKOUT_ENABLED', true),
 
         // Maximum failed login attempts before lockout
         // Recommended: 3-5 for public apps, 10+ for admin panels
-        'max_attempts' => env('TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS', 3),
+        'max_attempts' => env('TYRO_LOGIN_LOCKOUT_MAX_ATTEMPTS', 5),
 
         // Lockout duration in minutes
         // Recommended: 15-30 for production, 2-5 for development
