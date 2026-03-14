@@ -65,7 +65,8 @@ class VerificationController extends Controller {
      */
     public static function generateVerificationUrl($user, bool $sendEmail = true): string {
         $token = Str::random(64);
-        $expiresAt = now()->addMinutes(config('tyro-login.verification.expire', 60));
+        $expiresInMinutes = (int) config('tyro-login.verification.expire', 60);
+        $expiresAt = now()->addMinutes($expiresInMinutes);
 
         // Store token in cache
         Cache::put(
@@ -88,7 +89,7 @@ class VerificationController extends Controller {
             Log::info('Tyro Login - Email Verification Link Generated', [
                 'user_id' => $user->id,
                 'email' => Str::mask($user->email, '*', 3),
-                'expires_in_minutes' => config('tyro-login.verification.expire', 60),
+                'expires_in_minutes' => $expiresInMinutes,
             ]);
         }
 
@@ -97,7 +98,7 @@ class VerificationController extends Controller {
             Mail::to($user->email)->send(new VerifyEmailMail(
                 verificationUrl: $url,
                 userName: $user->name ?? 'User',
-                expiresInMinutes: config('tyro-login.verification.expire', 60)
+                expiresInMinutes: $expiresInMinutes
             ));
         }
 

@@ -3,6 +3,7 @@
 use HasinHayder\TyroLogin\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 it('shows the login form', function () {
     $response = $this->get('/login');
@@ -224,4 +225,30 @@ it('does not show remaining attempts when show_attempts_left is disabled', funct
     $response->assertSessionHasErrors('email');
     $errors = session('errors')->get('email');
     expect($errors[0])->not->toContain('attempts remaining');
+});
+
+it('can start otp login when otp expiry is configured as a string', function () {
+    Mail::fake();
+
+    config([
+        'tyro-login.otp.enabled' => true,
+        'tyro-login.otp.expire' => '5',
+        'tyro-login.emails.otp.enabled' => false,
+    ]);
+
+    $user = User::forceCreate([
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => Hash::make('password'),
+    ]);
+
+    $response = $this->post('/login', [
+        'email' => 'test@example.com',
+        'password' => 'password',
+    ]);
+
+    $response->assertRedirect(route('tyro-login.otp.verify'));
+    $this->assertGuest();
+    expect(session('tyro-login.otp.user_id'))->toBe($user->id);
+    expect(Cache::get("tyro-login:otp:{$user->id}"))->not->toBeNull();
 });

@@ -38,6 +38,7 @@ class PasswordResetController extends Controller {
      */
     public function sendResetLink(Request $request): RedirectResponse {
         $loginField = config('tyro-login.login_field', 'email');
+        $expiresInMinutes = (int) config('tyro-login.password_reset.expire', 60);
 
         $request->validate([
             'email' => ['required', 'string', 'email'],
@@ -60,7 +61,7 @@ class PasswordResetController extends Controller {
             Mail::to($user->email)->send(new PasswordResetMail(
                 resetUrl: $resetUrl,
                 userName: $user->name ?? 'User',
-                expiresInMinutes: config('tyro-login.password_reset.expire', 60)
+                expiresInMinutes: $expiresInMinutes
             ));
         }
 
@@ -73,7 +74,8 @@ class PasswordResetController extends Controller {
      */
     public function generateResetUrl($user): string {
         $token = Str::random(64);
-        $expiresAt = now()->addMinutes(config('tyro-login.password_reset.expire', 60));
+        $expiresInMinutes = (int) config('tyro-login.password_reset.expire', 60);
+        $expiresAt = now()->addMinutes($expiresInMinutes);
 
         // Store token in cache
         Cache::put(
@@ -96,7 +98,7 @@ class PasswordResetController extends Controller {
             Log::info('Tyro Login - Password Reset Link Generated', [
                 'user_id' => $user->id,
                 'email' => Str::mask($user->email, '*', 3),
-                'expires_in_minutes' => config('tyro-login.password_reset.expire', 60),
+                'expires_in_minutes' => $expiresInMinutes,
             ]);
         }
 

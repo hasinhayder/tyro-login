@@ -473,7 +473,7 @@ class LoginController extends Controller {
      */
     protected function generateAndSendOtp(Request $request, $user): void {
         $length = config('tyro-login.otp.length', 4);
-        $expire = config('tyro-login.otp.expire', 5);
+        $expire = (int) config('tyro-login.otp.expire', 5);
 
         // Generate cryptographically secure OTP
         $min = (int) (10 ** ($length - 1));
@@ -750,7 +750,7 @@ class LoginController extends Controller {
         }
 
         // Generate magic link
-        $expiresInMinutes = config('tyro-login.emails.magic_link.expire', 5);
+        $expiresInMinutes = (int) config('tyro-login.emails.magic_link.expire', 5);
         $hash = Str::random(32);
 
         $data = [

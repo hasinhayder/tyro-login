@@ -284,7 +284,7 @@ return [
     */
     'verification' => [
         // Token expiration time in minutes
-        'expire' => env('TYRO_LOGIN_VERIFICATION_EXPIRE', 60),
+        'expire' => (int) env('TYRO_LOGIN_VERIFICATION_EXPIRE', 60),
     ],
 
     /*
@@ -297,7 +297,7 @@ return [
     */
     'password_reset' => [
         // Token expiration time in minutes
-        'expire' => env('TYRO_LOGIN_PASSWORD_RESET_EXPIRE', 60),
+        'expire' => (int) env('TYRO_LOGIN_PASSWORD_RESET_EXPIRE', 60),
     ],
 
     /*
@@ -351,7 +351,7 @@ return [
         'length' => env('TYRO_LOGIN_OTP_LENGTH', 4),
 
         // OTP expiration time in minutes
-        'expire' => env('TYRO_LOGIN_OTP_EXPIRE', 5),
+        'expire' => (int) env('TYRO_LOGIN_OTP_EXPIRE', 5),
 
         // Maximum OTP resend attempts
         'max_resend' => env('TYRO_LOGIN_OTP_MAX_RESEND', 3),
@@ -461,7 +461,7 @@ return [
         'magic_link' => [
             'enabled' => env('TYRO_LOGIN_EMAIL_MAGIC_LINK', true),
             'subject' => env('TYRO_LOGIN_EMAIL_MAGIC_LINK_SUBJECT', 'Your Magic Login Link'),
-            'expire' => env('TYRO_LOGIN_MAGIC_LINK_EXPIRE', 5), // Minutes
+            'expire' => (int) env('TYRO_LOGIN_MAGIC_LINK_EXPIRE', 5), // Minutes
         ],
     ],
 
