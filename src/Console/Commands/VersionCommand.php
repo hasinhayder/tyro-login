@@ -22,7 +22,7 @@ class VersionCommand extends Command
     public function handle(): int
     {
 
-        $version = '2.3.4'; //fix(tests): all tests are passing now, so updating version to 2.3.4
+        $version = '2.4.0'; //Laravel 13 support
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -42,6 +42,7 @@ class VersionCommand extends Command
     }
 }
 
+//2.4.0 - Laravel 13 support
 //2.3.4 - fix(tests): all tests are passing now, so updating version to 2.3.4
 //2.3.3 - fix(otp): improvement for OTP code generation by implementing proper type casting config values, issue #5
 //2.3.2 - fix(social): automatically create account if the user doesn't exist after social login
