@@ -12,7 +12,7 @@
 <a href="https://github.com/hasinhayder/tyro-login">GitHub</a>
 </p>
 
-**Beautiful, customizable authentication views for Laravel 12** – Tyro Login provides professional, ready-to-use login and registration pages with multiple layout options and seamless integration with the [Tyro](https://github.com/hasinhayder/tyro) package.
+**Beautiful, customizable authentication views for Laravel 12 and 13** – Tyro Login provides professional, ready-to-use login and registration pages with multiple layout options and seamless integration with the [Tyro](https://github.com/hasinhayder/tyro) package.
 
 ## Features
 
