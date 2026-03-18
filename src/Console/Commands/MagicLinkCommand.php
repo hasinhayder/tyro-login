@@ -2,13 +2,12 @@
 
 namespace HasinHayder\TyroLogin\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
-class MagicLinkCommand extends Command
-{
+class MagicLinkCommand extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -31,11 +30,11 @@ class MagicLinkCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
-        if (!config('tyro-login.features.magic_links_enabled', false)) {
+    public function handle() {
+        if (! config('tyro-login.features.magic_links_enabled', false)) {
             $this->error('Magic links are currently disabled in the configuration.');
             $this->info('To enable, set TYRO_LOGIN_ENABLE_MAGIC_LINKS=true in your .env file.');
+
             return;
         }
         if ($this->option('create')) {
@@ -49,26 +48,27 @@ class MagicLinkCommand extends Command
         }
     }
 
-    protected function createMagicLink()
-    {
+    protected function createMagicLink() {
         $userId = $this->ask('Enter User ID');
-        
+
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
-        if (!class_exists($userModel) || !$userModel::find($userId)) {
+        if (! class_exists($userModel) || ! $userModel::find($userId)) {
             $this->error("User with ID {$userId} not found.");
+
             return;
         }
 
         $validityInput = $this->ask('Link validity (e.g., 7d, 1h, 30m) (default: 7d)', '7d');
 
         $validity = $this->parseTime($validityInput);
-        if (!$validity) {
+        if (! $validity) {
             $this->error('Invalid time format.');
+
             return;
         }
 
         $hash = Str::random(32);
-        
+
         $data = [
             'hash' => $hash,
             'user_id' => $userId,
@@ -86,27 +86,26 @@ class MagicLinkCommand extends Command
         $index[] = $hash;
         Cache::forever('tyro_magic_links_index', array_unique($index));
 
-        $url = url('/mlogin?hash=' . $hash);
-        
+        $url = url('/mlogin?hash='.$hash);
+
         $this->info('Magic link created successfully!');
         $this->line("URL: {$url}");
-        $this->line("Expires: " . Carbon::createFromTimestamp($data['expires_at'])->toDateTimeString());
+        $this->line('Expires: '.Carbon::createFromTimestamp($data['expires_at'])->toDateTimeString());
     }
 
-    protected function listMagicLinks()
-    {
+    protected function listMagicLinks() {
         $index = Cache::get('tyro_magic_links_index', []);
         $rows = [];
         $validHashes = [];
 
         foreach ($index as $hash) {
             $data = Cache::get("tyro_magic_link_{$hash}");
-            if (!$data) {
+            if (! $data) {
                 continue; // Expired or removed
             }
-            
+
             $validHashes[] = $hash;
-            
+
             $status = $data['used'] ? 'Used' : 'Unused';
             if ($data['used'] && isset($data['ip'])) {
                 $status .= " ({$data['ip']})";
@@ -117,7 +116,7 @@ class MagicLinkCommand extends Command
                 $data['user_id'],
                 Carbon::createFromTimestamp($data['created_at'])->toDateTimeString(),
                 Carbon::createFromTimestamp($data['expires_at'])->toDateTimeString(),
-                $status
+                $status,
             ];
         }
 
@@ -128,6 +127,7 @@ class MagicLinkCommand extends Command
 
         if (empty($rows)) {
             $this->info('No active magic links found.');
+
             return;
         }
 
@@ -137,25 +137,26 @@ class MagicLinkCommand extends Command
         );
     }
 
-    protected function removeMagicLink($hash = null)
-    {
-        if (!$hash) {
+    protected function removeMagicLink($hash = null) {
+        if (! $hash) {
             $hash = $this->ask('Enter the hash of the magic link to remove');
         }
 
-        if (!$hash) {
+        if (! $hash) {
             $this->error('Hash is required.');
+
             return;
         }
 
         $key = "tyro_magic_link_{$hash}";
-        if (!Cache::has($key)) {
+        if (! Cache::has($key)) {
             $this->error("Magic link with hash {$hash} not found.");
+
             return;
         }
 
         Cache::forget($key);
-        
+
         $index = Cache::get('tyro_magic_links_index', []);
         $index = array_diff($index, [$hash]);
         Cache::forever('tyro_magic_links_index', array_values($index));
@@ -163,9 +164,8 @@ class MagicLinkCommand extends Command
         $this->info("Magic link {$hash} removed.");
     }
 
-    protected function flushMagicLinks()
-    {
-        if (!$this->confirm('Are you sure you want to remove ALL magic links?')) {
+    protected function flushMagicLinks() {
+        if (! $this->confirm('Are you sure you want to remove ALL magic links?')) {
             return;
         }
 
@@ -173,19 +173,18 @@ class MagicLinkCommand extends Command
         foreach ($index as $hash) {
             Cache::forget("tyro_magic_link_{$hash}");
         }
-        
+
         Cache::forget('tyro_magic_links_index');
-        
+
         $this->info('All magic links flushed.');
     }
 
-    protected function parseTime($time)
-    {
+    protected function parseTime($time) {
         // Simple parser for d, h, m
         if (preg_match('/^(\d+)([dhm])$/', $time, $matches)) {
             $value = (int) $matches[1];
             $unit = $matches[2];
-            
+
             return match ($unit) {
                 'd' => $value * 24 * 60,
                 'h' => $value * 60,
@@ -193,6 +192,7 @@ class MagicLinkCommand extends Command
                 default => null,
             };
         }
+
         return null;
     }
 }

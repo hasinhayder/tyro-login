@@ -4,8 +4,7 @@ namespace HasinHayder\TyroLogin\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class ResetTwoFactorCommand extends Command
-{
+class ResetTwoFactorCommand extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -23,8 +22,7 @@ class ResetTwoFactorCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
+    public function handle() {
         $identifier = $this->argument('user');
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
 
@@ -32,14 +30,16 @@ class ResetTwoFactorCommand extends Command
             ->orWhere('id', $identifier)
             ->first();
 
-        if (!$user) {
+        if (! $user) {
             $this->error("User not found with ID or email: {$identifier}");
+
             return 1;
         }
 
-        if (!$user->two_factor_confirmed_at && !$user->two_factor_secret) {
-             $this->info("Two-factor authentication is not enabled for this user.");
-             return 0;
+        if (! $user->two_factor_confirmed_at && ! $user->two_factor_secret) {
+            $this->info('Two-factor authentication is not enabled for this user.');
+
+            return 0;
         }
 
         $user->forceFill([
@@ -49,7 +49,7 @@ class ResetTwoFactorCommand extends Command
         ])->save();
 
         $this->info("Two-factor authentication has been reset for user: {$user->email}");
-        
+
         return 0;
     }
 }

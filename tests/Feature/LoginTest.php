@@ -95,7 +95,7 @@ it('remembers user when remember me is checked', function () {
 
     $response->assertRedirect();
     $this->assertAuthenticated();
-    
+
     // Check that the remember token was set
     $user->refresh();
     expect($user->remember_token)->not->toBeNull();
@@ -179,7 +179,7 @@ it('clears lockout on successful login', function () {
 
     $response->assertRedirect('/');
     $this->assertAuthenticated();
-    
+
     // Attempts should be cleared
     expect(Cache::get('tyro-login:lockout-attempts:127.0.0.1'))->toBeNull();
 });

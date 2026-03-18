@@ -8,8 +8,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PasswordResetMail extends Mailable
-{
+class PasswordResetMail extends Mailable {
     use Queueable, SerializesModels;
 
     /**
@@ -24,8 +23,7 @@ class PasswordResetMail extends Mailable
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
+    public function envelope(): Envelope {
         return new Envelope(
             subject: config('tyro-login.emails.password_reset.subject', 'Reset Your Password'),
         );
@@ -34,8 +32,7 @@ class PasswordResetMail extends Mailable
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
+    public function content(): Content {
         return new Content(
             view: 'tyro-login::emails.password-reset',
             with: [

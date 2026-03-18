@@ -4,15 +4,13 @@ namespace HasinHayder\TyroLogin\Traits;
 
 use HasinHayder\TyroLogin\Casts\EncryptedOrPlaintext;
 
-trait HasTwoFactorAuth
-{
+trait HasTwoFactorAuth {
     /**
      * Initialize the trait.
-     * 
+     *
      * @return void
      */
-    public function initializeHasTwoFactorAuth()
-    {
+    public function initializeHasTwoFactorAuth() {
         $this->mergeCasts([
             'two_factor_secret' => EncryptedOrPlaintext::class,
             'two_factor_recovery_codes' => EncryptedOrPlaintext::class,
@@ -36,8 +34,7 @@ trait HasTwoFactorAuth
      *
      * @return bool
      */
-    public function hasEnabledTwoFactorAuthentication()
-    {
+    public function hasEnabledTwoFactorAuthentication() {
         return ! is_null($this->two_factor_secret) &&
                ! is_null($this->two_factor_confirmed_at);
     }
@@ -47,8 +44,7 @@ trait HasTwoFactorAuth
      *
      * @return array
      */
-    public function recoveryCodes()
-    {
+    public function recoveryCodes() {
         return json_decode($this->two_factor_recovery_codes, true) ?? [];
     }
 }

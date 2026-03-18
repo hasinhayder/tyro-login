@@ -2,9 +2,9 @@
 
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
-use HasinHayder\TyroLogin\Mail\OtpMail;
-use HasinHayder\TyroLogin\Mail\MagicLinkMail;
 use Carbon\Carbon;
+use HasinHayder\TyroLogin\Mail\MagicLinkMail;
+use HasinHayder\TyroLogin\Mail\OtpMail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -50,9 +50,10 @@ class LoginController extends Controller {
      */
     public function showLockout(Request $request): View|RedirectResponse {
         // Check if user is still locked out
-        if (!$this->isLockedOut($request)) {
+        if (! $this->isLockedOut($request)) {
             // Clear the lockout cache and redirect to login
             $this->clearLockout($request);
+
             return redirect()->route('tyro-login.login');
         }
 
@@ -96,7 +97,6 @@ class LoginController extends Controller {
             $rules['captcha_answer'] = ['required', 'numeric'];
         }
 
-
         $credentials = $request->validate($rules);
 
         // Handle 'both' login field - determine if input is email or username
@@ -109,7 +109,7 @@ class LoginController extends Controller {
 
         // Validate captcha if enabled
         if (config('tyro-login.captcha.enabled_login', false)) {
-            if (!$this->validateCaptcha($request, 'login', $credentials['captcha_answer'])) {
+            if (! $this->validateCaptcha($request, 'login', $credentials['captcha_answer'])) {
                 // Regenerate captcha for next attempt
                 $this->generateCaptcha($request, 'login');
 
@@ -135,7 +135,7 @@ class LoginController extends Controller {
             $user = Auth::user();
 
             // Check if email verification is required and email is not verified
-            if (config('tyro-login.registration.require_email_verification', false) && !$user->hasVerifiedEmail()) {
+            if (config('tyro-login.registration.require_email_verification', false) && ! $user->hasVerifiedEmail()) {
                 // Log the user out - they need to verify first
                 Auth::logout();
 
@@ -151,16 +151,16 @@ class LoginController extends Controller {
                 if (filled($user->two_factor_confirmed_at)) {
                     // User has 2FA enabled - lock them out until verified
                     Auth::logout();
-                    
+
                     $request->session()->put('login.id', $user->id);
                     $request->session()->put('login.remember', $remember);
-                    
+
                     return redirect()->route('tyro-login.two-factor.challenge');
                 } else {
                     // User hasn't set up 2FA yet - redirect to setup
                     // Log them out to ensure they can't bypass setup
                     Auth::logout();
-                    
+
                     $request->session()->put('login.id', $user->id);
                     $request->session()->put('login.remember', $remember);
 
@@ -201,6 +201,7 @@ class LoginController extends Controller {
         // Check if we should lock out the user now
         if ($this->shouldLockout($request)) {
             $this->lockoutUser($request);
+
             return redirect()->route('tyro-login.lockout');
         }
 
@@ -210,7 +211,7 @@ class LoginController extends Controller {
         if (config('tyro-login.lockout.enabled', true) && config('tyro-login.lockout.show_attempts_left', false)) {
             $attemptsLeft = $this->getRemainingAttempts($request);
             if ($attemptsLeft > 0) {
-                $errorMessage .= ' ' . trans_choice(
+                $errorMessage .= ' '.trans_choice(
                     '{1} :count attempt remaining.|[2,*] :count attempts remaining.',
                     $attemptsLeft,
                     ['count' => $attemptsLeft]
@@ -231,7 +232,7 @@ class LoginController extends Controller {
      */
     public function showOtpForm(Request $request): View|RedirectResponse {
         // Check if we have a pending OTP verification
-        if (!$request->session()->has('tyro-login.otp.user_id')) {
+        if (! $request->session()->has('tyro-login.otp.user_id')) {
             return redirect()->route('tyro-login.login');
         }
 
@@ -239,8 +240,9 @@ class LoginController extends Controller {
         $userId = $request->session()->get('tyro-login.otp.user_id');
         $user = $userModel::find($userId);
 
-        if (!$user) {
+        if (! $user) {
             $request->session()->forget('tyro-login.otp');
+
             return redirect()->route('tyro-login.login');
         }
 
@@ -281,7 +283,7 @@ class LoginController extends Controller {
      */
     public function verifyOtp(Request $request): RedirectResponse {
         // Check if we have a pending OTP verification
-        if (!$request->session()->has('tyro-login.otp.user_id')) {
+        if (! $request->session()->has('tyro-login.otp.user_id')) {
             return redirect()->route('tyro-login.login');
         }
 
@@ -296,7 +298,7 @@ class LoginController extends Controller {
         $cacheKey = $this->getOtpCacheKey($userId);
         $storedOtp = Cache::get($cacheKey);
 
-        if (!$storedOtp || $storedOtp !== $request->input('otp')) {
+        if (! $storedOtp || $storedOtp !== $request->input('otp')) {
             throw ValidationException::withMessages([
                 'otp' => config('tyro-login.otp.error_message', 'Invalid or expired verification code.'),
             ]);
@@ -306,14 +308,15 @@ class LoginController extends Controller {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $user = $userModel::find($userId);
 
-        if (!$user) {
+        if (! $user) {
             $request->session()->forget('tyro-login.otp');
+
             return redirect()->route('tyro-login.login');
         }
 
         // Clear OTP cache
         Cache::forget($cacheKey);
-        Cache::forget($this->getOtpCacheKey($userId) . ':resend');
+        Cache::forget($this->getOtpCacheKey($userId).':resend');
 
         // Clear session data
         $request->session()->forget('tyro-login.otp');
@@ -329,7 +332,7 @@ class LoginController extends Controller {
      */
     public function resendOtp(Request $request): RedirectResponse {
         // Check if we have a pending OTP verification
-        if (!$request->session()->has('tyro-login.otp.user_id')) {
+        if (! $request->session()->has('tyro-login.otp.user_id')) {
             return redirect()->route('tyro-login.login');
         }
 
@@ -337,8 +340,9 @@ class LoginController extends Controller {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $user = $userModel::find($userId);
 
-        if (!$user) {
+        if (! $user) {
             $request->session()->forget('tyro-login.otp');
+
             return redirect()->route('tyro-login.login');
         }
 
@@ -356,6 +360,7 @@ class LoginController extends Controller {
         // Check max resend attempts
         if ($resendCount >= ($otpConfig['max_resend'] ?? 3)) {
             $request->session()->forget('tyro-login.otp');
+
             return redirect()->route('tyro-login.login')
                 ->withErrors(['email' => $otpConfig['max_resend_error'] ?? 'Maximum resend attempts reached. Please try logging in again.']);
         }
@@ -504,7 +509,7 @@ class LoginController extends Controller {
         }
 
         // Initialize resend tracking if not exists
-        if (!$request->session()->has('tyro-login.otp.resend_count')) {
+        if (! $request->session()->has('tyro-login.otp.resend_count')) {
             $request->session()->put('tyro-login.otp.resend_count', 0);
             $request->session()->put('tyro-login.otp.last_resend', time());
         }
@@ -530,45 +535,46 @@ class LoginController extends Controller {
         $domain = $parts[1];
 
         if (strlen($name) <= 2) {
-            $maskedName = $name[0] . '***';
+            $maskedName = $name[0].'***';
         } else {
-            $maskedName = substr($name, 0, 2) . str_repeat('*', min(strlen($name) - 2, 5));
+            $maskedName = substr($name, 0, 2).str_repeat('*', min(strlen($name) - 2, 5));
         }
 
-        return $maskedName . '@' . $domain;
+        return $maskedName.'@'.$domain;
     }
 
     /**
      * Get the lockout cache key for the request.
      */
     protected function lockoutKey(Request $request): string {
-        return 'tyro-login:lockout:' . $request->ip();
+        return 'tyro-login:lockout:'.$request->ip();
     }
 
     /**
      * Get the lockout attempts cache key for the request.
      */
     protected function lockoutAttemptsKey(Request $request): string {
-        return 'tyro-login:lockout-attempts:' . $request->ip();
+        return 'tyro-login:lockout-attempts:'.$request->ip();
     }
 
     /**
      * Check if the user is currently locked out.
      */
     protected function isLockedOut(Request $request): bool {
-        if (!config('tyro-login.lockout.enabled', true)) {
+        if (! config('tyro-login.lockout.enabled', true)) {
             return false;
         }
 
         $releaseTime = $this->getLockoutReleaseTime($request);
 
-        if (!$releaseTime) {
+        if (! $releaseTime) {
             return false;
         }
 
         // If lockout has expired, clear it
         if (now()->timestamp >= $releaseTime) {
             $this->clearLockout($request);
+
             return false;
         }
 
@@ -586,7 +592,7 @@ class LoginController extends Controller {
      * Increment the lockout attempt counter.
      */
     protected function incrementLockoutAttempts(Request $request): void {
-        if (!config('tyro-login.lockout.enabled', true)) {
+        if (! config('tyro-login.lockout.enabled', true)) {
             return;
         }
 
@@ -611,7 +617,7 @@ class LoginController extends Controller {
      * Check if the user should be locked out based on attempts.
      */
     protected function shouldLockout(Request $request): bool {
-        if (!config('tyro-login.lockout.enabled', true)) {
+        if (! config('tyro-login.lockout.enabled', true)) {
             return false;
         }
 
@@ -653,33 +659,33 @@ class LoginController extends Controller {
      * Handle magic link login.
      */
     public function magicLogin(Request $request): RedirectResponse {
-        if (!config('tyro-login.features.magic_links_enabled', false)) {
+        if (! config('tyro-login.features.magic_links_enabled', false)) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['login' => 'Magic links are currently disabled.']);
         }
         $hash = $request->input('hash');
 
-        if (!$hash) {
+        if (! $hash) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['login' => 'Invalid magic link.']);
         }
 
         $data = Cache::get("tyro_magic_link_{$hash}");
 
-        if (!$data) {
+        if (! $data) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['login' => 'Invalid or expired magic link.']);
         }
 
         if ($data['used']) {
-             return redirect()->route('tyro-login.login')
+            return redirect()->route('tyro-login.login')
                 ->withErrors(['login' => 'This magic link has already been used.']);
         }
 
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $user = $userModel::find($data['user_id']);
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['login' => 'User associated with this magic link not found.']);
         }
@@ -687,15 +693,15 @@ class LoginController extends Controller {
         // Mark as used
         $data['used'] = true;
         $data['ip'] = $request->ip();
-        
+
         $expiresAt = Carbon::createFromTimestamp($data['expires_at']);
         Cache::put("tyro_magic_link_{$hash}", $data, $expiresAt);
 
         // Regenerate session for security and to ensure a clean state
         $request->session()->regenerate();
-        
+
         Auth::login($user);
-        
+
         if (config('tyro-login.debug', false)) {
             Log::info('Tyro Login - Magic Link Login Successful', [
                 'user_id' => $user->id,
@@ -708,9 +714,8 @@ class LoginController extends Controller {
     /**
      * Request a magic link to be sent via email.
      */
-    public function requestMagicLink(Request $request): RedirectResponse
-    {
-        if (!config('tyro-login.features.magic_links_enabled', false)) {
+    public function requestMagicLink(Request $request): RedirectResponse {
+        if (! config('tyro-login.features.magic_links_enabled', false)) {
             abort(404);
         }
 
@@ -745,7 +750,7 @@ class LoginController extends Controller {
         }
 
         // Always show success message even if user doesn't exist (security best practice)
-        if (!$user) {
+        if (! $user) {
             return redirect()->back()->with('success', 'If an account exists with that information, a magic link has been sent to your email.');
         }
 
@@ -770,7 +775,7 @@ class LoginController extends Controller {
         $index[] = $hash;
         Cache::forever('tyro_magic_links_index', array_unique($index));
 
-        $magicLink = url('/mlogin?hash=' . $hash);
+        $magicLink = url('/mlogin?hash='.$hash);
 
         // Log for development
         if (config('tyro-login.debug', false)) {

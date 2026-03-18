@@ -19,12 +19,12 @@ it('can register a new user', function () {
     ]);
 
     $response->assertRedirect(config('tyro-login.redirects.after_register', '/'));
-    
+
     $this->assertDatabaseHas('users', [
         'name' => 'New User',
         'email' => 'newuser@example.com',
     ]);
-    
+
     // Should be logged in after registration (auto_login is true by default)
     $this->assertAuthenticated();
 });
@@ -83,7 +83,7 @@ it('hashes the password on registration', function () {
     ]);
 
     $user = User::where('email', 'newuser@example.com')->first();
-    
+
     expect($user->password)->not->toBe('password123');
     expect(Hash::check('password123', $user->password))->toBeTrue();
 });
@@ -139,7 +139,6 @@ it('validates password requires special characters when configured', function ()
 
     $response->assertSessionHasErrors('password');
 });
-
 
 it('validates against common passwords when configured', function () {
     config(['tyro-login.password.check_common_passwords' => true]);

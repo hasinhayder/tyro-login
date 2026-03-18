@@ -2,13 +2,12 @@
 
 namespace HasinHayder\TyroLogin\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use HasinHayder\TyroLogin\Models\InvitationLink;
 use HasinHayder\TyroLogin\Models\InvitationReferral;
+use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
-class InviteLinkCommand extends Command
-{
+class InviteLinkCommand extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -30,11 +29,10 @@ class InviteLinkCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
+    public function handle() {
         $hasOptions = $this->option('create') || $this->option('remove') || $this->option('flush') || $this->option('list');
-        
-        if (!$hasOptions || $this->option('create')) {
+
+        if (! $hasOptions || $this->option('create')) {
             $this->createInviteLink();
         } elseif ($this->option('remove')) {
             $this->removeInviteLink();
@@ -45,14 +43,14 @@ class InviteLinkCommand extends Command
         }
     }
 
-    protected function createInviteLink()
-    {
+    protected function createInviteLink() {
         $userInput = $this->ask('Enter User ID or Email');
-        
+
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
-        
-        if (!class_exists($userModel)) {
+
+        if (! class_exists($userModel)) {
             $this->error("User model {$userModel} not found.");
+
             return;
         }
 
@@ -64,8 +62,9 @@ class InviteLinkCommand extends Command
             $user = $userModel::where('email', $userInput)->first();
         }
 
-        if (!$user) {
-            $this->error("User not found.");
+        if (! $user) {
+            $this->error('User not found.');
+
             return;
         }
 
@@ -74,18 +73,19 @@ class InviteLinkCommand extends Command
 
         if ($existingLink) {
             $referralCount = $existingLink->referrals()->count();
-            
+
             $this->info('User already has an invitation link.');
             $this->line("URL: {$existingLink->url}");
             $this->line("Hash: {$existingLink->hash}");
             $this->line("Created: {$existingLink->created_at}");
             $this->line("Referrals: {$referralCount}");
+
             return;
         }
 
         // Create new invitation link
         $hash = Str::random(32);
-        
+
         $invitationLink = InvitationLink::create([
             'user_id' => $user->id,
             'hash' => $hash,
@@ -98,14 +98,14 @@ class InviteLinkCommand extends Command
         $this->line("User Email: {$user->email}");
     }
 
-    protected function listInviteLinks()
-    {
+    protected function listInviteLinks() {
         $links = InvitationLink::with('user', 'referrals')
             ->orderBy('created_at', 'desc')
             ->get();
 
         if ($links->isEmpty()) {
             $this->info('No invitation links found.');
+
             return;
         }
 
@@ -120,7 +120,7 @@ class InviteLinkCommand extends Command
                 $link->user_id,
                 $email,
                 $link->created_at,
-                $referralCount
+                $referralCount,
             ];
         }
 
@@ -130,14 +130,14 @@ class InviteLinkCommand extends Command
         );
     }
 
-    protected function removeInviteLink()
-    {
+    protected function removeInviteLink() {
         $userInput = $this->ask('Enter User ID or Email to remove their invitation link');
 
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
-        
-        if (!class_exists($userModel)) {
+
+        if (! class_exists($userModel)) {
             $this->error("User model {$userModel} not found.");
+
             return;
         }
 
@@ -149,15 +149,17 @@ class InviteLinkCommand extends Command
             $user = $userModel::where('email', $userInput)->first();
         }
 
-        if (!$user) {
-            $this->error("User not found.");
+        if (! $user) {
+            $this->error('User not found.');
+
             return;
         }
 
         $link = InvitationLink::where('user_id', $user->id)->first();
 
-        if (!$link) {
-            $this->error("No invitation link found for this user.");
+        if (! $link) {
+            $this->error('No invitation link found for this user.');
+
             return;
         }
 
@@ -166,8 +168,9 @@ class InviteLinkCommand extends Command
 
         if ($referralCount > 0) {
             $this->warn("Warning: This invitation link has {$referralCount} referral signup(s).");
-            if (!$this->confirm('Do you still want to remove this link?')) {
+            if (! $this->confirm('Do you still want to remove this link?')) {
                 $this->info('Operation cancelled.');
+
                 return;
             }
         }
@@ -177,29 +180,30 @@ class InviteLinkCommand extends Command
         $this->info("Invitation link for user {$user->email} (ID: {$user->id}) has been removed.");
     }
 
-    protected function flushInviteLinks()
-    {
+    protected function flushInviteLinks() {
         $totalLinks = InvitationLink::count();
-        
+
         if ($totalLinks === 0) {
             $this->info('No invitation links to flush.');
+
             return;
         }
 
         $totalReferrals = InvitationReferral::count();
-        
+
         $this->warn("You are about to remove {$totalLinks} invitation link(s).");
         if ($totalReferrals > 0) {
             $this->warn("This will also affect {$totalReferrals} referral record(s).");
         }
-        
-        if (!$this->confirm('Are you sure you want to remove ALL invitation links?')) {
+
+        if (! $this->confirm('Are you sure you want to remove ALL invitation links?')) {
             $this->info('Operation cancelled.');
+
             return;
         }
 
         InvitationLink::query()->delete();
-        
+
         $this->info('All invitation links have been flushed.');
     }
 }

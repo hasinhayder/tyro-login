@@ -4,8 +4,7 @@ namespace HasinHayder\TyroLogin\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class StarCommand extends Command
-{
+class StarCommand extends Command {
     /**
      * The name and signature of the console command.
      */
@@ -24,8 +23,7 @@ class StarCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
-    {
+    public function handle(): int {
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');

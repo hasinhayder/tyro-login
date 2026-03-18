@@ -20,7 +20,7 @@ class VerificationController extends Controller {
     public function showVerificationNotice(Request $request): View|RedirectResponse {
         $email = $request->session()->get('tyro-login.verification.email');
 
-        if (!$email) {
+        if (! $email) {
             return redirect()->route('tyro-login.login');
         }
 
@@ -30,9 +30,9 @@ class VerificationController extends Controller {
             'backgroundImage' => config('tyro-login.background_image'),
             'email' => $email,
             'pageContent' => config('tyro-login.pages.verify_email', [
-                        'title' => 'Verify Your Email',
-                        'subtitle' => 'We\'ve sent a verification link to your email address.',
-                    ]),
+                'title' => 'Verify Your Email',
+                'subtitle' => 'We\'ve sent a verification link to your email address.',
+            ]),
         ]);
     }
 
@@ -42,7 +42,7 @@ class VerificationController extends Controller {
     public function showEmailNotVerified(Request $request): View|RedirectResponse {
         $email = $request->session()->get('tyro-login.verification.email');
 
-        if (!$email) {
+        if (! $email) {
             return redirect()->route('tyro-login.login');
         }
 
@@ -52,11 +52,11 @@ class VerificationController extends Controller {
             'backgroundImage' => config('tyro-login.background_image'),
             'email' => $email,
             'pageContent' => config('tyro-login.pages.email_not_verified', [
-                        'title' => 'Email Not Verified',
-                        'subtitle' => 'Please verify your email address to continue.',
-                        'background_title' => 'Email Verification Required',
-                        'background_description' => 'Your email address needs to be verified before you can access your account.',
-                    ]),
+                'title' => 'Email Not Verified',
+                'subtitle' => 'Please verify your email address to continue.',
+                'background_title' => 'Email Verification Required',
+                'background_description' => 'Your email address needs to be verified before you can access your account.',
+            ]),
         ]);
     }
 
@@ -110,7 +110,7 @@ class VerificationController extends Controller {
      */
     public function verify(Request $request, string $token): RedirectResponse {
         // Validate signature
-        if (!$request->hasValidSignature()) {
+        if (! $request->hasValidSignature()) {
             return redirect()->route('tyro-login.login')
                 ->with('error', 'The verification link is invalid or has expired.');
         }
@@ -118,7 +118,7 @@ class VerificationController extends Controller {
         // Get user data from cache
         $data = Cache::get("tyro-login:email-verify:{$token}");
 
-        if (!$data) {
+        if (! $data) {
             return redirect()->route('tyro-login.login')
                 ->with('error', 'The verification link is invalid or has expired.');
         }
@@ -126,13 +126,13 @@ class VerificationController extends Controller {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $user = $userModel::find($data['user_id']);
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('tyro-login.login')
                 ->with('error', 'User not found.');
         }
 
         // Mark email as verified
-        if (!$user->hasVerifiedEmail()) {
+        if (! $user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
         }
 
@@ -153,14 +153,14 @@ class VerificationController extends Controller {
     public function resend(Request $request): RedirectResponse {
         $email = $request->session()->get('tyro-login.verification.email');
 
-        if (!$email) {
+        if (! $email) {
             return redirect()->route('tyro-login.login');
         }
 
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $user = $userModel::where('email', $email)->first();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('tyro-login.login');
         }
 

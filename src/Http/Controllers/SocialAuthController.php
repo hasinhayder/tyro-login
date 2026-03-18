@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
+use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller {
     /**
@@ -35,13 +35,13 @@ class SocialAuthController extends Controller {
      */
     public function redirect(Request $request, string $provider): RedirectResponse {
         // Check if social login is enabled
-        if (!$this->isSocialLoginEnabled()) {
+        if (! $this->isSocialLoginEnabled()) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['social' => 'Social login is not enabled.']);
         }
 
         // Validate provider
-        if (!$this->isProviderEnabled($provider)) {
+        if (! $this->isProviderEnabled($provider)) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['social' => 'This social login provider is not available.']);
         }
@@ -75,13 +75,13 @@ class SocialAuthController extends Controller {
      */
     public function callback(Request $request, string $provider): RedirectResponse {
         // Check if social login is enabled
-        if (!$this->isSocialLoginEnabled()) {
+        if (! $this->isSocialLoginEnabled()) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['social' => 'Social login is not enabled.']);
         }
 
         // Validate provider
-        if (!$this->isProviderEnabled($provider)) {
+        if (! $this->isProviderEnabled($provider)) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['social' => 'This social login provider is not available.']);
         }
@@ -176,13 +176,13 @@ class SocialAuthController extends Controller {
         }
 
         // No user exists - check if auto-registration is enabled
-        if (!$this->shouldCreateMissingUser($action)) {
+        if (! $this->shouldCreateMissingUser($action)) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['social' => config('tyro-login.social.messages.account_not_found', 'No account found with this email. Please register first.')]);
         }
 
         // Check if registration is enabled
-        if (!config('tyro-login.registration.enabled', true)) {
+        if (! config('tyro-login.registration.enabled', true)) {
             return redirect()->route('tyro-login.login')
                 ->withErrors(['social' => 'Registration is currently disabled.']);
         }
@@ -200,7 +200,7 @@ class SocialAuthController extends Controller {
         if (config('tyro-login.emails.welcome.enabled', true)) {
             Mail::to($user->email)->send(new WelcomeMail(
                 userName: $user->name ?? 'User',
-                loginUrl: url(config('tyro-login.routes.prefix', '') . '/login')
+                loginUrl: url(config('tyro-login.routes.prefix', '').'/login')
             ));
         }
 
@@ -217,7 +217,7 @@ class SocialAuthController extends Controller {
     protected function createUser(SocialiteUser $socialUser): mixed {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
 
-        $user = new $userModel();
+        $user = new $userModel;
         $user->forceFill([
             'name' => $socialUser->getName() ?? $socialUser->getNickname() ?? 'User',
             'email' => $socialUser->getEmail(),
@@ -274,7 +274,7 @@ class SocialAuthController extends Controller {
      * Check if a specific provider is enabled.
      */
     protected function isProviderEnabled(string $provider): bool {
-        if (!in_array($provider, $this->supportedProviders)) {
+        if (! in_array($provider, $this->supportedProviders)) {
             return false;
         }
 
@@ -303,17 +303,17 @@ class SocialAuthController extends Controller {
      * Assign the default Tyro role to a user if Tyro is installed.
      */
     protected function assignTyroRole($user): void {
-        if (!config('tyro-login.tyro.assign_default_role', true)) {
+        if (! config('tyro-login.tyro.assign_default_role', true)) {
             return;
         }
 
         // Check if Tyro is installed
-        if (!class_exists('HasinHayder\\Tyro\\Models\\Role')) {
+        if (! class_exists('HasinHayder\\Tyro\\Models\\Role')) {
             return;
         }
 
         // Check if user has the HasTyroRoles trait
-        if (!method_exists($user, 'assignRole')) {
+        if (! method_exists($user, 'assignRole')) {
             return;
         }
 
@@ -337,7 +337,7 @@ class SocialAuthController extends Controller {
      * Social login confirms email ownership through the OAuth provider.
      */
     protected function markEmailAsVerified($user): void {
-        if (!config('tyro-login.social.auto_verify_email', true)) {
+        if (! config('tyro-login.social.auto_verify_email', true)) {
             return;
         }
 
@@ -359,7 +359,7 @@ class SocialAuthController extends Controller {
      * Get enabled providers for display.
      */
     public static function getEnabledProviders(): array {
-        if (!config('tyro-login.social.enabled', false)) {
+        if (! config('tyro-login.social.enabled', false)) {
             return [];
         }
 

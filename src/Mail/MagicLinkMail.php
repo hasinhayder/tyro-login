@@ -8,8 +8,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MagicLinkMail extends Mailable
-{
+class MagicLinkMail extends Mailable {
     use Queueable, SerializesModels;
 
     /**
@@ -24,8 +23,7 @@ class MagicLinkMail extends Mailable
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
+    public function envelope(): Envelope {
         return new Envelope(
             subject: config('tyro-login.emails.magic_link.subject', 'Your Magic Login Link'),
         );
@@ -34,8 +32,7 @@ class MagicLinkMail extends Mailable
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
+    public function content(): Content {
         return new Content(
             view: 'tyro-login::emails.magic-link',
         );
@@ -46,8 +43,7 @@ class MagicLinkMail extends Mailable
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
-    public function attachments(): array
-    {
+    public function attachments(): array {
         return [];
     }
 }

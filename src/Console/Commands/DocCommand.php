@@ -4,8 +4,7 @@ namespace HasinHayder\TyroLogin\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class DocCommand extends Command
-{
+class DocCommand extends Command {
     /**
      * The name and signature of the console command.
      */
@@ -24,8 +23,7 @@ class DocCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
-    {
+    public function handle(): int {
         $this->info('');
         $this->info('  📖 Opening Tyro Login documentation...');
         $this->info('');

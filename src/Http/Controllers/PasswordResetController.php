@@ -27,9 +27,9 @@ class PasswordResetController extends Controller {
             'backgroundImage' => config('tyro-login.background_image'),
             'loginField' => config('tyro-login.login_field', 'email'),
             'pageContent' => config('tyro-login.pages.forgot_password', [
-                        'title' => 'Forgot Password?',
-                        'subtitle' => 'Enter your email and we\'ll send you a reset link.',
-                    ]),
+                'title' => 'Forgot Password?',
+                'subtitle' => 'Enter your email and we\'ll send you a reset link.',
+            ]),
         ]);
     }
 
@@ -47,7 +47,7 @@ class PasswordResetController extends Controller {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $user = $userModel::where('email', $request->email)->first();
 
-        if (!$user) {
+        if (! $user) {
             // Don't reveal that user doesn't exist for security
             return redirect()->route('tyro-login.password.request')
                 ->with('success', 'If an account with that email exists, we\'ve sent a password reset link.');
@@ -110,7 +110,7 @@ class PasswordResetController extends Controller {
      */
     public function showResetForm(Request $request, string $token): View|RedirectResponse {
         // Validate signature
-        if (!$request->hasValidSignature()) {
+        if (! $request->hasValidSignature()) {
             return redirect()->route('tyro-login.password.request')
                 ->with('error', 'The password reset link is invalid or has expired.');
         }
@@ -118,7 +118,7 @@ class PasswordResetController extends Controller {
         // Get user data from cache
         $data = Cache::get("tyro-login:password-reset:{$token}");
 
-        if (!$data) {
+        if (! $data) {
             return redirect()->route('tyro-login.password.request')
                 ->with('error', 'The password reset link is invalid or has expired.');
         }
@@ -130,9 +130,9 @@ class PasswordResetController extends Controller {
             'token' => $token,
             'email' => $data['email'],
             'pageContent' => config('tyro-login.pages.reset_password', [
-                        'title' => 'Reset Password',
-                        'subtitle' => 'Enter your new password below.',
-                    ]),
+                'title' => 'Reset Password',
+                'subtitle' => 'Enter your new password below.',
+            ]),
         ]);
     }
 
@@ -152,7 +152,7 @@ class PasswordResetController extends Controller {
         // Get user data from cache
         $data = Cache::get("tyro-login:password-reset:{$token}");
 
-        if (!$data) {
+        if (! $data) {
             return redirect()->route('tyro-login.password.request')
                 ->with('error', 'The password reset link is invalid or has expired.');
         }
@@ -160,7 +160,7 @@ class PasswordResetController extends Controller {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $user = $userModel::find($data['user_id']);
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('tyro-login.password.request')
                 ->with('error', 'User not found.');
         }

@@ -15,7 +15,7 @@ use Illuminate\Support\ServiceProvider;
 
 class TyroLoginServiceProvider extends ServiceProvider {
     public function register(): void {
-        $this->mergeConfigFrom(__DIR__ . '/../../config/tyro-login.php', 'tyro-login');
+        $this->mergeConfigFrom(__DIR__.'/../../config/tyro-login.php', 'tyro-login');
     }
 
     public function boot(): void {
@@ -33,65 +33,65 @@ class TyroLoginServiceProvider extends ServiceProvider {
             'middleware' => config('tyro-login.routes.middleware', ['web']),
             'as' => 'tyro-login.',
         ], function (): void {
-            $this->loadRoutesFrom(__DIR__ . '/../../routes/web.php');
+            $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
         });
     }
 
     protected function registerViews(): void {
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'tyro-login');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'tyro-login');
     }
 
     protected function registerMigrations(): void {
         // Always load migrations - both 2FA and social login are independent features
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
     }
 
     protected function registerPublishing(): void {
-        if (!$this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             return;
         }
 
         // Publish config
         $this->publishes([
-            __DIR__ . '/../../config/tyro-login.php' => config_path('tyro-login.php'),
+            __DIR__.'/../../config/tyro-login.php' => config_path('tyro-login.php'),
         ], 'tyro-login-config');
 
         // Publish views
         $this->publishes([
-            __DIR__ . '/../../resources/views' => resource_path('views/vendor/tyro-login'),
+            __DIR__.'/../../resources/views' => resource_path('views/vendor/tyro-login'),
         ], 'tyro-login-views');
 
         // Publish email templates only
         $this->publishes([
-            __DIR__ . '/../../resources/views/emails' => resource_path('views/vendor/tyro-login/emails'),
+            __DIR__.'/../../resources/views/emails' => resource_path('views/vendor/tyro-login/emails'),
         ], 'tyro-login-emails');
 
         // Publish styles
         $this->publishes([
-            __DIR__ . '/../../resources/views/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-login/partials/shadcn-theme.blade.php'),
-            __DIR__ . '/../../resources/views/partials/styles.blade.php' => resource_path('views/vendor/tyro-login/partials/styles.blade.php'),
+            __DIR__.'/../../resources/views/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-login/partials/shadcn-theme.blade.php'),
+            __DIR__.'/../../resources/views/partials/styles.blade.php' => resource_path('views/vendor/tyro-login/partials/styles.blade.php'),
         ], 'tyro-login-styles');
 
         // Publish theme only (for quick theme customization)
         $this->publishes([
-            __DIR__ . '/../../resources/views/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-login/partials/shadcn-theme.blade.php'),
+            __DIR__.'/../../resources/views/partials/shadcn-theme.blade.php' => resource_path('views/vendor/tyro-login/partials/shadcn-theme.blade.php'),
         ], 'tyro-login-theme');
 
         // Publish assets
         $this->publishes([
-            __DIR__ . '/../../resources/assets' => public_path('vendor/tyro-login'),
+            __DIR__.'/../../resources/assets' => public_path('vendor/tyro-login'),
         ], 'tyro-login-assets');
 
         // Publish migrations (for social login)
         $this->publishes([
-            __DIR__ . '/../../database/migrations' => database_path('migrations'),
+            __DIR__.'/../../database/migrations' => database_path('migrations'),
         ], 'tyro-login-migrations');
 
         // Publish all
         $this->publishes([
-            __DIR__ . '/../../config/tyro-login.php' => config_path('tyro-login.php'),
-            __DIR__ . '/../../resources/views' => resource_path('views/vendor/tyro-login'),
-            __DIR__ . '/../../resources/assets' => public_path('vendor/tyro-login'),
+            __DIR__.'/../../config/tyro-login.php' => config_path('tyro-login.php'),
+            __DIR__.'/../../resources/views' => resource_path('views/vendor/tyro-login'),
+            __DIR__.'/../../resources/assets' => public_path('vendor/tyro-login'),
         ], 'tyro-login');
     }
 
@@ -105,7 +105,7 @@ class TyroLoginServiceProvider extends ServiceProvider {
     }
 
     protected function registerCommands(): void {
-        if (!$this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             return;
         }
 

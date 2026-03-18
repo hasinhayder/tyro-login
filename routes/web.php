@@ -95,20 +95,20 @@ Route::middleware('guest')->group(function () {
     // 2FA Challenge routes (guest because user is not fully logged in yet)
     Route::get('two-factor/challenge', [TwoFactorController::class, 'showChallenge'])
         ->name('two-factor.challenge');
-        
+
     Route::post('two-factor/verify', [TwoFactorController::class, 'verify'])
         ->name('two-factor.verify');
-        
+
     // 2FA Setup routes (guest because user is not fully logged in yet)
     Route::get('two-factor/setup', [TwoFactorController::class, 'showSetup'])
         ->name('two-factor.setup');
-        
+
     Route::post('two-factor/confirm', [TwoFactorController::class, 'confirm'])
         ->name('two-factor.confirm');
-        
+
     Route::post('two-factor/skip', [TwoFactorController::class, 'skip'])
         ->name('two-factor.skip');
-        
+
     Route::get('two-factor/recovery-codes', [TwoFactorController::class, 'showRecoveryCodes'])
         ->name('two-factor.recovery-codes');
 });

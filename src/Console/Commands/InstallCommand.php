@@ -125,7 +125,7 @@ class InstallCommand extends Command {
         $this->info('Setting up Social Login...');
 
         // Check if Laravel Socialite is installed
-        if (!$this->isSocialiteInstalled()) {
+        if (! $this->isSocialiteInstalled()) {
             $this->warn('   Laravel Socialite is not installed.');
 
             if ($this->confirm('   Would you like to install Laravel Socialite now?', true)) {
@@ -137,11 +137,13 @@ class InstallCommand extends Command {
                     $this->info('   ✓ Laravel Socialite installed successfully');
                 } else {
                     $this->error('   ✗ Failed to install Laravel Socialite. Please run: composer require laravel/socialite');
+
                     return;
                 }
             } else {
                 $this->warn('   Skipping Socialite installation. Social login requires laravel/socialite.');
                 $this->warn('   Run: composer require laravel/socialite');
+
                 return;
             }
         } else {
@@ -193,7 +195,7 @@ class InstallCommand extends Command {
         $composer = $this->findComposer();
 
         $process = \Symfony\Component\Process\Process::fromShellCommandline(
-            $composer . ' require ' . $package,
+            $composer.' require '.$package,
             base_path()
         );
 
@@ -213,7 +215,7 @@ class InstallCommand extends Command {
         $composerPath = base_path('composer.phar');
 
         if (file_exists($composerPath)) {
-            return '"' . PHP_BINARY . '" ' . $composerPath;
+            return '"'.PHP_BINARY.'" '.$composerPath;
         }
 
         return 'composer';
@@ -225,7 +227,7 @@ class InstallCommand extends Command {
     protected function addEnvExamples(): void {
         $envPath = base_path('.env');
 
-        if (!File::exists($envPath)) {
+        if (! File::exists($envPath)) {
             return;
         }
 
@@ -286,7 +288,7 @@ ENV;
     protected function prepareUserModel(): void {
         $path = app_path('Models/User.php');
 
-        if (!File::exists($path)) {
+        if (! File::exists($path)) {
             return;
         }
 
@@ -294,7 +296,7 @@ ENV;
         $original = $contents;
 
         // Add Import
-        if (!Str::contains($contents, 'use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;')) {
+        if (! Str::contains($contents, 'use HasinHayder\TyroLogin\Traits\HasTwoFactorAuth;')) {
             if (Str::contains($contents, 'use HasinHayder\Tyro\Concerns\HasTyroRoles;')) {
                 $contents = str_replace(
                     'use HasinHayder\Tyro\Concerns\HasTyroRoles;',
@@ -305,14 +307,14 @@ ENV;
         }
 
         // Add Trait Usage
-        if (!Str::contains($contents, 'use HasTwoFactorAuth;')) {
+        if (! Str::contains($contents, 'use HasTwoFactorAuth;')) {
             if (Str::contains($contents, 'use HasTyroRoles;')) {
                 $contents = str_replace(
                     'use HasTyroRoles;',
                     "use HasTyroRoles;\n    use HasTwoFactorAuth;",
                     $contents
                 );
-            } else if (Str::contains($contents, 'use HasApiTokens, HasTyroRoles;')) { //use HasApiTokens, HasTyroRoles;
+            } elseif (Str::contains($contents, 'use HasApiTokens, HasTyroRoles;')) { // use HasApiTokens, HasTyroRoles;
                 $contents = str_replace(
                     'use HasApiTokens, HasTyroRoles;',
                     'use HasApiTokens, HasTyroRoles, HasTwoFactorAuth;',
@@ -320,7 +322,6 @@ ENV;
                 );
             }
         }
-
 
         if ($contents !== $original) {
             File::put($path, $contents);
@@ -334,7 +335,7 @@ ENV;
     protected function updateWelcomePage(): void {
         $path = resource_path('views/welcome.blade.php');
 
-        if (!File::exists($path)) {
+        if (! File::exists($path)) {
             return;
         }
 

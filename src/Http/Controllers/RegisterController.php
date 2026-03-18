@@ -2,8 +2,8 @@
 
 namespace HasinHayder\TyroLogin\Http\Controllers;
 
-use HasinHayder\TyroLogin\Mail\WelcomeMail;
 use HasinHayder\TyroLogin\Helpers\InvitationHelper;
+use HasinHayder\TyroLogin\Mail\WelcomeMail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,14 +15,12 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
-class RegisterController extends Controller
-{
+class RegisterController extends Controller {
     /**
      * Show the registration form.
      */
-    public function showRegistrationForm(Request $request): View|RedirectResponse
-    {
-        if (!config('tyro-login.registration.enabled', true)) {
+    public function showRegistrationForm(Request $request): View|RedirectResponse {
+        if (! config('tyro-login.registration.enabled', true)) {
             return redirect()->route('tyro-login.login');
         }
 
@@ -45,15 +43,14 @@ class RegisterController extends Controller
     /**
      * Handle a registration request.
      */
-    public function register(Request $request): RedirectResponse
-    {
-        if (!config('tyro-login.registration.enabled', true)) {
+    public function register(Request $request): RedirectResponse {
+        if (! config('tyro-login.registration.enabled', true)) {
             abort(403, 'Registration is disabled.');
         }
 
         // Get validation rules (includes captcha if enabled)
         $rules = $this->getValidationRules();
-        
+
         // Add captcha validation if enabled
         if (config('tyro-login.captcha.enabled_register', false)) {
             $rules['captcha_answer'] = ['required', 'numeric'];
@@ -63,10 +60,10 @@ class RegisterController extends Controller
 
         // Validate captcha if enabled
         if (config('tyro-login.captcha.enabled_register', false)) {
-            if (!$this->validateCaptcha($request, $validated['captcha_answer'])) {
+            if (! $this->validateCaptcha($request, $validated['captcha_answer'])) {
                 // Regenerate captcha for next attempt
                 $this->generateCaptcha($request);
-                
+
                 throw ValidationException::withMessages([
                     'captcha_answer' => config('tyro-login.captcha.error_message', 'Incorrect answer. Please try again.'),
                 ]);
@@ -124,7 +121,7 @@ class RegisterController extends Controller
         if (config('tyro-login.emails.welcome.enabled', true)) {
             Mail::to($user->email)->send(new WelcomeMail(
                 userName: $user->name ?? 'User',
-                loginUrl: url(config('tyro-login.routes.prefix', '') . '/login')
+                loginUrl: url(config('tyro-login.routes.prefix', '').'/login')
             ));
         }
 
@@ -135,11 +132,11 @@ class RegisterController extends Controller
                 // Default remember to false for registration flow or make it configurable/assumed true?
                 // Let's assume false for security on new device, or true if auto_login implies it.
                 // Standard auto-login usually implies session persistence.
-                $request->session()->put('login.remember', true); 
+                $request->session()->put('login.remember', true);
 
                 return redirect()->route('tyro-login.two-factor.setup');
             }
-            
+
             Auth::login($user);
         }
 
@@ -149,57 +146,56 @@ class RegisterController extends Controller
     /**
      * Get the validation rules for registration.
      */
-    protected function getValidationRules(): array
-    {
+    protected function getValidationRules(): array {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $usersTable = (new $userModel)->getTable();
         $minLength = config('tyro-login.password.min_length', 8);
         $maxLength = config('tyro-login.password.max_length');
-        
+
         // Start with basic password rule
         $passwordRule = Password::min($minLength);
-        
+
         // Add maximum length if specified
         if ($maxLength) {
             $passwordRule->max($maxLength);
         }
-        
+
         // Add complexity requirements
         $complexity = config('tyro-login.password.complexity', []);
-        
-        $requireUppercase = !empty($complexity['require_uppercase']);
-        $requireLowercase = !empty($complexity['require_lowercase']);
-        
+
+        $requireUppercase = ! empty($complexity['require_uppercase']);
+        $requireLowercase = ! empty($complexity['require_lowercase']);
+
         if ($requireUppercase || $requireLowercase) {
             $passwordRule->mixedCase();
         }
-        
+
         if ($complexity['require_numbers'] ?? false) {
             $passwordRule->numbers();
         }
-        
+
         if ($complexity['require_special_chars'] ?? false) {
             $passwordRule->symbols();
         }
-        
+
         // Add custom validation rules
         $passwordRules = ['required', 'string', $passwordRule];
-        
+
         // Add rule to check common passwords if enabled
         if (config('tyro-login.password.check_common_passwords', false)) {
             $passwordRules[] = function ($attribute, $value, $fail) {
                 $commonPasswords = [
                     'password', '123456', '123456789', '12345678', '12345', '1234567',
                     '1234567890', '1234', 'qwerty', 'abc123', 'password123', 'admin',
-                    'letmein', 'welcome', 'monkey', '1234567890', 'password1'
+                    'letmein', 'welcome', 'monkey', '1234567890', 'password1',
                 ];
-                
+
                 if (in_array(strtolower($value), $commonPasswords)) {
                     $fail('This password is too common. Please choose a more secure password.');
                 }
             };
         }
-        
+
         // Add rule to disallow user information if enabled
         if (config('tyro-login.password.disallow_user_info', false)) {
             $passwordRules[] = function ($attribute, $value, $fail) {
@@ -211,7 +207,7 @@ class RegisterController extends Controller
 
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . $usersTable],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.$usersTable],
             'password' => $passwordRules,
         ];
 
@@ -225,9 +221,8 @@ class RegisterController extends Controller
     /**
      * Generate a math captcha.
      */
-    protected function generateCaptcha(Request $request): array
-    {
-        if (!config('tyro-login.captcha.enabled_register', false)) {
+    protected function generateCaptcha(Request $request): array {
+        if (! config('tyro-login.captcha.enabled_register', false)) {
             return [];
         }
 
@@ -236,10 +231,10 @@ class RegisterController extends Controller
 
         $num1 = rand($min, $max);
         $num2 = rand($min, $max);
-        
+
         // Randomly choose addition or subtraction
         $isAddition = (bool) rand(0, 1);
-        
+
         if ($isAddition) {
             $question = "$num1 + $num2 = ?";
             $answer = $num1 + $num2;
@@ -264,10 +259,9 @@ class RegisterController extends Controller
     /**
      * Validate the captcha answer.
      */
-    protected function validateCaptcha(Request $request, $answer): bool
-    {
+    protected function validateCaptcha(Request $request, $answer): bool {
         $expected = $request->session()->get('tyro-login.captcha.register');
-        
+
         if ($expected === null) {
             return false;
         }
@@ -281,19 +275,18 @@ class RegisterController extends Controller
     /**
      * Assign the default Tyro role to a user if Tyro is installed.
      */
-    protected function assignTyroRole($user): void
-    {
-        if (!config('tyro-login.tyro.assign_default_role', true)) {
+    protected function assignTyroRole($user): void {
+        if (! config('tyro-login.tyro.assign_default_role', true)) {
             return;
         }
 
         // Check if Tyro is installed
-        if (!class_exists('HasinHayder\\Tyro\\Models\\Role')) {
+        if (! class_exists('HasinHayder\\Tyro\\Models\\Role')) {
             return;
         }
 
         // Check if user has the HasTyroRoles trait
-        if (!method_exists($user, 'assignRole')) {
+        if (! method_exists($user, 'assignRole')) {
             return;
         }
 
@@ -316,25 +309,24 @@ class RegisterController extends Controller
     /**
      * Validate that password doesn't contain user information.
      */
-    protected function validatePasswordNotContainingUserInfo(Request $request, array $validated): void
-    {
+    protected function validatePasswordNotContainingUserInfo(Request $request, array $validated): void {
         $password = strtolower($validated['password']);
         $name = strtolower($validated['name']);
         $email = strtolower($validated['email']);
-        
+
         // Extract email username (part before @)
         $emailUsername = explode('@', $email)[0];
-        
+
         // Extract name parts (split by spaces)
         $nameParts = preg_split('/[\s\-_]+/', $name);
-        
+
         $errors = [];
-        
+
         // Check if password contains the full email username
         if (strlen($emailUsername) >= 3 && str_contains($password, $emailUsername)) {
             $errors[] = 'password cannot contain your email username';
         }
-        
+
         // Check if password contains name parts
         foreach ($nameParts as $namePart) {
             if (strlen($namePart) >= 3 && str_contains($password, $namePart)) {
@@ -342,11 +334,11 @@ class RegisterController extends Controller
                 break;
             }
         }
-        
+
         // If any errors found, throw validation exception
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             throw ValidationException::withMessages([
-                'password' => 'For security reasons, your ' . implode(' and ', $errors) . '.',
+                'password' => 'For security reasons, your '.implode(' and ', $errors).'.',
             ]);
         }
     }

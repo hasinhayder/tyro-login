@@ -6,17 +6,12 @@ use HasinHayder\TyroLogin\Models\InvitationLink;
 use HasinHayder\TyroLogin\Models\InvitationReferral;
 use Illuminate\Support\Facades\Log;
 
-class InvitationHelper
-{
+class InvitationHelper {
     /**
      * Validate an invitation hash.
-     *
-     * @param string|null $hash
-     * @return InvitationLink|null
      */
-    public static function validateInvitationHash(?string $hash): ?InvitationLink
-    {
-        if (!$hash) {
+    public static function validateInvitationHash(?string $hash): ?InvitationLink {
+        if (! $hash) {
             return null;
         }
 
@@ -26,29 +21,26 @@ class InvitationHelper
     /**
      * Track a referral signup.
      * This should be called after a user successfully registers.
-     *
-     * @param string|null $invitationHash
-     * @param int $newUserId
-     * @return InvitationReferral|null
      */
-    public static function trackReferral(?string $invitationHash, int $newUserId): ?InvitationReferral
-    {
+    public static function trackReferral(?string $invitationHash, int $newUserId): ?InvitationReferral {
         // If no hash provided, nothing to track
-        if (!$invitationHash) {
+        if (! $invitationHash) {
             Log::info('[Tyro-Login] No invitation hash provided for user registration', [
                 'user_id' => $newUserId,
             ]);
+
             return null;
         }
 
         $invitationLink = self::validateInvitationHash($invitationHash);
 
         // For invalid/non-existing invitation links, log and return null
-        if (!$invitationLink) {
+        if (! $invitationLink) {
             Log::warning('[Tyro-Login] Invalid invitation hash used during registration', [
                 'hash' => $invitationHash,
                 'user_id' => $newUserId,
             ]);
+
             return null;
         }
 
@@ -58,6 +50,7 @@ class InvitationHelper
                 'user_id' => $newUserId,
                 'invitation_hash' => $invitationHash,
             ]);
+
             return null;
         }
 
@@ -68,6 +61,7 @@ class InvitationHelper
                 'user_id' => $newUserId,
                 'existing_referral_id' => $existingReferral->id,
             ]);
+
             return $existingReferral;
         }
 
@@ -90,26 +84,18 @@ class InvitationHelper
 
     /**
      * Get invitation link for a user.
-     *
-     * @param int $userId
-     * @return InvitationLink|null
      */
-    public static function getInvitationLinkForUser(int $userId): ?InvitationLink
-    {
+    public static function getInvitationLinkForUser(int $userId): ?InvitationLink {
         return InvitationLink::where('user_id', $userId)->first();
     }
 
     /**
      * Get referral count for a user's invitation link.
-     *
-     * @param int $userId
-     * @return int
      */
-    public static function getReferralCount(int $userId): int
-    {
+    public static function getReferralCount(int $userId): int {
         $invitationLink = self::getInvitationLinkForUser($userId);
 
-        if (!$invitationLink) {
+        if (! $invitationLink) {
             return 0;
         }
 
@@ -119,19 +105,17 @@ class InvitationHelper
     /**
      * Get all users referred by a specific user.
      *
-     * @param int $userId
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public static function getReferredUsers(int $userId)
-    {
+    public static function getReferredUsers(int $userId) {
         $invitationLink = self::getInvitationLinkForUser($userId);
 
-        if (!$invitationLink) {
+        if (! $invitationLink) {
             return collect([]);
         }
 
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
-        
+
         $referredUserIds = $invitationLink->referrals()->pluck('referred_user_id');
 
         return $userModel::whereIn('id', $referredUserIds)->get();

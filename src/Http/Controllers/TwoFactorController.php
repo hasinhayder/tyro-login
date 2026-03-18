@@ -13,24 +13,22 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use PragmaRX\Google2FA\Google2FA;
 
-class TwoFactorController extends Controller
-{
+class TwoFactorController extends Controller {
     /**
      * Show the 2FA setup wizard.
      */
-    public function showSetup(Request $request): View|RedirectResponse
-    {
+    public function showSetup(Request $request): View|RedirectResponse {
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             $userId = $request->session()->get('login.id');
-            if (!$userId) {
+            if (! $userId) {
                 return redirect()->route('tyro-login.login');
             }
             $userModel = config('tyro-login.user_model', 'App\\Models\\User');
             $user = $userModel::find($userId);
-            
-            if (!$user) {
+
+            if (! $user) {
                 return redirect()->route('tyro-login.login');
             }
         }
@@ -39,12 +37,12 @@ class TwoFactorController extends Controller
             return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
         }
 
-        $google2fa = new Google2FA();
-        
+        $google2fa = new Google2FA;
+
         // Get secret key (either existing or new)
         $secretKey = $this->getTwoFactorSecret($user);
 
-        if (!$secretKey) {
+        if (! $secretKey) {
             $secretKey = $google2fa->generateSecretKey();
             $this->saveTwoFactorSecret($user, $secretKey);
         }
@@ -54,15 +52,14 @@ class TwoFactorController extends Controller
             $user->email,
             $secretKey
         );
-        
+
         // Generate QR Code image
         $renderer = new \BaconQrCode\Renderer\ImageRenderer(
             new \BaconQrCode\Renderer\RendererStyle\RendererStyle(200),
-            new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+            new \BaconQrCode\Renderer\Image\SvgImageBackEnd
         );
         $writer = new \BaconQrCode\Writer($renderer);
         $qrCodeSvg = $writer->writeString($qrCodeUrl);
-
 
         return view('tyro-login::two-factor-setup', [
             'layout' => config('tyro-login.layout', 'centered'),
@@ -78,38 +75,37 @@ class TwoFactorController extends Controller
     /**
      * Confirm 2FA setup.
      */
-    public function confirm(Request $request): RedirectResponse
-    {
+    public function confirm(Request $request): RedirectResponse {
         $request->validate([
             'code' => 'required|string',
         ]);
 
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             $userId = $request->session()->get('login.id');
-            if (!$userId) {
+            if (! $userId) {
                 return redirect()->route('tyro-login.login');
             }
             $userModel = config('tyro-login.user_model', 'App\\Models\\User');
             $user = $userModel::find($userId);
-            
-            if (!$user) {
+
+            if (! $user) {
                 return redirect()->route('tyro-login.login');
             }
         }
-        
-        $google2fa = new Google2FA();
-        
+
+        $google2fa = new Google2FA;
+
         $secretKey = $this->getTwoFactorSecret($user);
-        
-        if (!$secretKey) {
+
+        if (! $secretKey) {
             return back()->withErrors(['code' => 'Invalid secret key state. Please try setup again.']);
         }
 
         $valid = $google2fa->verifyKey($secretKey, $request->code);
 
-        if (!$valid) {
+        if (! $valid) {
             throw ValidationException::withMessages([
                 'code' => ['The provided two factor authentication code was invalid.'],
             ]);
@@ -117,18 +113,18 @@ class TwoFactorController extends Controller
 
         // Generate recovery codes
         $recoveryCodes = Collection::times(8, function () {
-            return \Illuminate\Support\Str::random(10) . '-' . \Illuminate\Support\Str::random(10);
+            return \Illuminate\Support\Str::random(10).'-'.\Illuminate\Support\Str::random(10);
         })->all();
 
         // Save recovery codes
         $this->saveRecoveryCodes($user, $recoveryCodes);
-        
+
         $user->forceFill([
             'two_factor_confirmed_at' => now(),
         ])->save();
 
         // Finalize Login if not already logged in
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             Auth::login($user, $request->session()->get('login.remember', false));
             $request->session()->forget(['login.id', 'login.remember']);
             $request->session()->regenerate();
@@ -137,24 +133,23 @@ class TwoFactorController extends Controller
         // Redirect to show recovery codes and allow user to proceed
         return redirect()->route('tyro-login.two-factor.recovery-codes');
     }
-    
+
     /**
      * Skip 2FA setup.
      */
-    public function skip(Request $request): RedirectResponse
-    {
-        if (!config('tyro-login.two_factor.allow_skip', false)) {
+    public function skip(Request $request): RedirectResponse {
+        if (! config('tyro-login.two_factor.allow_skip', false)) {
             abort(403, 'Two factor authentication setup is required.');
         }
 
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             $userId = $request->session()->get('login.id');
             if ($userId) {
                 $userModel = config('tyro-login.user_model', 'App\\Models\\User');
                 $user = $userModel::find($userId);
-                
+
                 if ($user) {
                     Auth::login($user, $request->session()->get('login.remember', false));
                     $request->session()->forget(['login.id', 'login.remember']);
@@ -169,8 +164,7 @@ class TwoFactorController extends Controller
     /**
      * Show recovery codes.
      */
-    public function showRecoveryCodes(Request $request): View
-    {
+    public function showRecoveryCodes(Request $request): View {
         $user = Auth::user();
         $recoveryCodes = $this->getRecoveryCodes($user);
 
@@ -185,9 +179,8 @@ class TwoFactorController extends Controller
     /**
      * Show the 2FA challenge.
      */
-    public function showChallenge(Request $request): View|RedirectResponse
-    {
-        if (!$request->session()->has('login.id')) {
+    public function showChallenge(Request $request): View|RedirectResponse {
+        if (! $request->session()->has('login.id')) {
             return redirect()->route('tyro-login.login');
         }
 
@@ -203,16 +196,15 @@ class TwoFactorController extends Controller
     /**
      * Verify the 2FA challenge.
      */
-    public function verify(Request $request): RedirectResponse
-    {
-        if (!$request->session()->has('login.id')) {
+    public function verify(Request $request): RedirectResponse {
+        if (! $request->session()->has('login.id')) {
             return redirect()->route('tyro-login.login');
         }
 
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
         $user = $userModel::find($request->session()->get('login.id'));
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('tyro-login.login');
         }
 
@@ -221,49 +213,49 @@ class TwoFactorController extends Controller
             'recovery_code' => 'nullable|string',
         ]);
 
-        if (!$request->code && !$request->recovery_code) {
-             throw ValidationException::withMessages([
+        if (! $request->code && ! $request->recovery_code) {
+            throw ValidationException::withMessages([
                 'code' => ['Please enter your authentication code.'],
             ]);
         }
-        
+
         if ($request->recovery_code) {
             $recoveryCodes = $this->getRecoveryCodes($user);
-            
+
             $valid = false;
-            foreach($recoveryCodes as $key => $code) {
+            foreach ($recoveryCodes as $key => $code) {
                 if ($code === $request->recovery_code) {
                     $valid = true;
                     unset($recoveryCodes[$key]);
                     break;
                 }
             }
-            
-            if (!$valid) {
-                 throw ValidationException::withMessages([
+
+            if (! $valid) {
+                throw ValidationException::withMessages([
                     'recovery_code' => ['The provided recovery code was invalid.'],
                 ]);
             }
-            
+
             $this->saveRecoveryCodes($user, array_values($recoveryCodes));
-            
+
         } else {
             $secretKey = $this->getTwoFactorSecret($user);
-            
-            if (!$secretKey) {
+
+            if (! $secretKey) {
                 return redirect()->route('tyro-login.login')->withErrors(['email' => 'Two factor authentication has been invalidated. Please contact support.']);
             }
-            
-            $google2fa = new Google2FA();
+
+            $google2fa = new Google2FA;
             $valid = $google2fa->verifyKey($secretKey, $request->code);
-            
-             if (!$valid) {
+
+            if (! $valid) {
                 throw ValidationException::withMessages([
                     'code' => ['The provided two factor authentication code was invalid.'],
                 ]);
             }
         }
-        
+
         Auth::login($user, $request->session()->get('login.remember', false));
         $request->session()->forget(['login.id', 'login.remember']);
         $request->session()->regenerate();
@@ -274,8 +266,7 @@ class TwoFactorController extends Controller
     /**
      * Get two factor secret.
      */
-    protected function getTwoFactorSecret($user): ?string
-    {
+    protected function getTwoFactorSecret($user): ?string {
         // If cast is present, it returns plaintext
         if ($this->hasCasts($user, 'two_factor_secret')) {
             return $user->two_factor_secret;
@@ -288,7 +279,7 @@ class TwoFactorController extends Controller
             // Fallback for legacy encrypted non-string, or plaintext
             try {
                 return decrypt($user->two_factor_secret);
-            } catch(\Exception $e2) {
+            } catch (\Exception $e2) {
                 return $user->two_factor_secret;
             }
         }
@@ -297,11 +288,11 @@ class TwoFactorController extends Controller
     /**
      * Save two factor secret.
      */
-    protected function saveTwoFactorSecret($user, string $secret): void
-    {
+    protected function saveTwoFactorSecret($user, string $secret): void {
         if ($this->hasCasts($user, 'two_factor_secret')) {
-             $user->forceFill(['two_factor_secret' => $secret])->save();
-             return;
+            $user->forceFill(['two_factor_secret' => $secret])->save();
+
+            return;
         }
 
         $user->forceFill(['two_factor_secret' => Crypt::encryptString($secret)])->save();
@@ -310,27 +301,28 @@ class TwoFactorController extends Controller
     /**
      * Get recovery codes.
      */
-    protected function getRecoveryCodes($user): array
-    {
+    protected function getRecoveryCodes($user): array {
         if ($this->hasCasts($user, 'two_factor_recovery_codes')) {
             if (is_array($user->two_factor_recovery_codes)) {
-                 return $user->two_factor_recovery_codes;
+                return $user->two_factor_recovery_codes;
             }
+
             return json_decode($user->two_factor_recovery_codes, true) ?? [];
         }
 
-        if (!$user->two_factor_recovery_codes) {
+        if (! $user->two_factor_recovery_codes) {
             return [];
         }
 
         try {
             $decrypted = Crypt::decryptString($user->two_factor_recovery_codes);
+
             return json_decode($decrypted, true) ?? [];
         } catch (\Exception $e) {
             // Fallback
-             try {
+            try {
                 return json_decode(decrypt($user->two_factor_recovery_codes), true) ?? [];
-            } catch(\Exception $e2) {
+            } catch (\Exception $e2) {
                 return [];
             }
         }
@@ -339,12 +331,12 @@ class TwoFactorController extends Controller
     /**
      * Save recovery codes.
      */
-    protected function saveRecoveryCodes($user, array $codes): void
-    {
+    protected function saveRecoveryCodes($user, array $codes): void {
         $json = json_encode($codes);
 
         if ($this->hasCasts($user, 'two_factor_recovery_codes')) {
             $user->forceFill(['two_factor_recovery_codes' => $json])->save();
+
             return;
         }
 
@@ -354,14 +346,14 @@ class TwoFactorController extends Controller
     /**
      * Check if user model has cast for attribute.
      */
-    protected function hasCasts($user, string $key): bool
-    {
+    protected function hasCasts($user, string $key): bool {
         $casts = $user->getCasts();
-        if (!array_key_exists($key, $casts)) {
+        if (! array_key_exists($key, $casts)) {
             return false;
         }
-        
+
         $castType = $casts[$key];
+
         // Check if it matches our EncryptedOrPlaintext cast
         return str_contains($castType, 'EncryptedOrPlaintext');
     }

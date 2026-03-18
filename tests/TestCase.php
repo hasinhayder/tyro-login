@@ -7,24 +7,20 @@ use HasinHayder\TyroLogin\Tests\Fixtures\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as Orchestra;
 
-abstract class TestCase extends Orchestra
-{
+abstract class TestCase extends Orchestra {
     use RefreshDatabase;
 
-    protected function defineDatabaseMigrations(): void
-    {
-        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+    protected function defineDatabaseMigrations(): void {
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
     }
 
-    protected function getPackageProviders($app): array
-    {
+    protected function getPackageProviders($app): array {
         return [
             TyroLoginServiceProvider::class,
         ];
     }
 
-    protected function getEnvironmentSetUp($app): void
-    {
+    protected function getEnvironmentSetUp($app): void {
         // Setup default database for testing
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', [
@@ -34,7 +30,7 @@ abstract class TestCase extends Orchestra
         ]);
 
         // Set app key
-        $app['config']->set('app.key', 'base64:' . base64_encode(random_bytes(32)));
+        $app['config']->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
 
         // Configure auth to use our test User model
         $app['config']->set('auth.providers.users.model', User::class);

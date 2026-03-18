@@ -10,7 +10,7 @@ return [
     |
     | When enabled, sensitive information is logged to help with development:
     | - OTP codes and verification tokens
-    | - Password reset links  
+    | - Password reset links
     | - Email verification URLs
     | - User authentication attempts
     |
@@ -45,7 +45,7 @@ return [
     |    Perfect for: Marketing sites, showcasing product imagery
     |
     | 'split-right'
-    |    Two-column layout: form left, background image right  
+    |    Two-column layout: form left, background image right
     |    Perfect for: Content-heavy sites, storytelling layouts
     |
     | 'fullscreen'
@@ -569,7 +569,7 @@ return [
     |
     | Automatically locks out users after too many failed login attempts.
     | This prevents automated bots and attackers from guessing passwords.
-    | 
+    |
     | Technical Details:
     | - Uses Laravel Cache (Redis, Memcached, or file-based)
     | - No database modifications required

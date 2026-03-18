@@ -50,6 +50,7 @@ class SocialAccount extends Model {
      */
     public function user(): BelongsTo {
         $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+
         return $this->belongsTo($userModel);
     }
 

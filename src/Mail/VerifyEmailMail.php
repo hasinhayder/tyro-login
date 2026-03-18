@@ -8,8 +8,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class VerifyEmailMail extends Mailable
-{
+class VerifyEmailMail extends Mailable {
     use Queueable, SerializesModels;
 
     /**
@@ -24,8 +23,7 @@ class VerifyEmailMail extends Mailable
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
+    public function envelope(): Envelope {
         return new Envelope(
             subject: config('tyro-login.emails.verify_email.subject', 'Verify Your Email Address'),
         );
@@ -34,8 +32,7 @@ class VerifyEmailMail extends Mailable
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
+    public function content(): Content {
         return new Content(
             view: 'tyro-login::emails.verify-email',
             with: [

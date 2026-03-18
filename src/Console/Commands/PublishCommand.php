@@ -4,8 +4,7 @@ namespace HasinHayder\TyroLogin\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class PublishCommand extends Command
-{
+class PublishCommand extends Command {
     /**
      * The name and signature of the console command.
      */
@@ -24,13 +23,12 @@ class PublishCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
-    {
+    public function handle(): int {
         $publishConfig = $this->option('config');
         $publishViews = $this->option('views');
         $publishEmails = $this->option('emails');
         $publishAssets = $this->option('assets');
-        $publishAll = !$publishConfig && !$publishViews && !$publishEmails && !$publishAssets;
+        $publishAll = ! $publishConfig && ! $publishViews && ! $publishEmails && ! $publishAssets;
 
         $this->info('');
 
