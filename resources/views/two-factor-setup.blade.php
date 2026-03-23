@@ -109,8 +109,9 @@
     }
     .skip-link:hover { color: var(--foreground); }
     .skip-separator {
-        font-size: 0.875rem;
+        font-size: 0.7rem;
         color: var(--muted-foreground);
+        opacity: 0.5;
     }
     
     .otp-input-container {
