@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.4.0'; // Laravel 13 support
+        $version = '2.4.1'; // Added 2FA ignore option to allow users to skip 2FA setup if they choose, with a cookie-based mechanism to remember their choice for a configurable number of days. This provides more flexibility for users who may not want to set up 2FA immediately while still encouraging them to do so in the future.
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.4.1 - Added 2FA ignore option to allow users to skip 2FA setup if they choose, with a cookie-based mechanism to remember their choice for a configurable number of days. This provides more flexibility for users who may not want to set up 2FA immediately while still encouraging them to do so in the future.
 // 2.4.0 - Laravel 13 support
 // 2.3.4 - fix(tests): all tests are passing now, so updating version to 2.3.4
 // 2.3.3 - fix(otp): improvement for OTP code generation by implementing proper type casting config values, issue #5
