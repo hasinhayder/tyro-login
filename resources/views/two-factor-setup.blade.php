@@ -50,7 +50,7 @@
                 </button>
             </form>
 
-            @if(config('tyro-login.two_factor.allow_skip', false))
+            @if(config('tyro-login.two_factor.allow_skip', false) && empty($forcedSetup))
             <div class="skip-actions mt-4">
                 <form method="POST" action="{{ route('tyro-login.two-factor.skip') }}" class="skip-inline-form">
                     @csrf

@@ -37,8 +37,10 @@ class TwoFactorController extends Controller {
             return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
         }
 
-        // If allow_skip is enabled and the user has an ignore cookie, skip setup
-        if (config('tyro-login.two_factor.allow_skip', false)) {
+        $forcedSetup = $this->userHasForcedRole($user);
+
+        // If allow_skip is enabled, the user has an ignore cookie, and their role is not forced, skip setup
+        if (! $forcedSetup && config('tyro-login.two_factor.allow_skip', false)) {
             $cookieName = 'tyro_2fa_ignore_' . $user->id;
             if ($request->cookie($cookieName)) {
                 if (! Auth::check()) {
@@ -83,6 +85,7 @@ class TwoFactorController extends Controller {
             'secretKey' => $secretKey,
             'title' => config('tyro-login.two_factor.setup_title'),
             'subtitle' => config('tyro-login.two_factor.setup_subtitle'),
+            'forcedSetup' => $forcedSetup,
         ]);
     }
 
@@ -163,13 +166,17 @@ class TwoFactorController extends Controller {
             if ($userId) {
                 $userModel = config('tyro-login.user_model', 'App\\Models\\User');
                 $user = $userModel::find($userId);
-
-                if ($user) {
-                    Auth::login($user, $request->session()->get('login.remember', false));
-                    $request->session()->forget(['login.id', 'login.remember']);
-                    $request->session()->regenerate();
-                }
             }
+        }
+
+        if ($user && $this->userHasForcedRole($user)) {
+            abort(403, 'Two factor authentication setup is required for your role.');
+        }
+
+        if ($user && ! Auth::check()) {
+            Auth::login($user, $request->session()->get('login.remember', false));
+            $request->session()->forget(['login.id', 'login.remember']);
+            $request->session()->regenerate();
         }
 
         return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
@@ -190,17 +197,21 @@ class TwoFactorController extends Controller {
             if ($userId) {
                 $userModel = config('tyro-login.user_model', 'App\\Models\\User');
                 $user = $userModel::find($userId);
-
-                if ($user) {
-                    Auth::login($user, $request->session()->get('login.remember', false));
-                    $request->session()->forget(['login.id', 'login.remember']);
-                    $request->session()->regenerate();
-                }
             }
         }
 
         if (! $user) {
             return redirect()->route('tyro-login.login');
+        }
+
+        if ($this->userHasForcedRole($user)) {
+            abort(403, 'Two factor authentication setup is required for your role.');
+        }
+
+        if (! Auth::check()) {
+            Auth::login($user, $request->session()->get('login.remember', false));
+            $request->session()->forget(['login.id', 'login.remember']);
+            $request->session()->regenerate();
         }
 
         $cookieName = 'tyro_2fa_ignore_' . $user->id;
@@ -391,6 +402,41 @@ class TwoFactorController extends Controller {
         }
 
         $user->forceFill(['two_factor_recovery_codes' => Crypt::encryptString($json)])->save();
+    }
+
+    /**
+     * Determine whether the user belongs to a role that requires 2FA setup (cannot skip).
+     */
+    protected function userHasForcedRole($user): bool {
+        $forcedRoles = config('tyro-login.two_factor.forced_roles', '');
+
+        if (empty($forcedRoles)) {
+            return false;
+        }
+
+        $roles = array_filter(array_map('trim', explode(',', $forcedRoles)));
+
+        if (empty($roles)) {
+            return false;
+        }
+
+        // Support Spatie / Bouncer style hasRole()
+        if (method_exists($user, 'hasRole')) {
+            foreach ($roles as $role) {
+                if ($user->hasRole($role)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // Fallback: simple scalar 'role' attribute
+        if (isset($user->role)) {
+            return in_array($user->role, $roles);
+        }
+
+        return false;
     }
 
     /**

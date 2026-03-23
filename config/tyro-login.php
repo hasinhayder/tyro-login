@@ -430,6 +430,9 @@ return [
 
         // Number of days the "skip and ignore" cookie lasts
         'ignore_cookie_days' => env('TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS', 30),
+
+        // Comma-separated roles that must set up 2FA and cannot skip (e.g. "admin,superadmin")
+        'forced_roles' => env('TYRO_LOGIN_2FA_FORCED_ROLES', ''),
     ],
 
     /*

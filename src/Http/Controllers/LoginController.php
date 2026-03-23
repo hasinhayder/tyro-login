@@ -159,10 +159,30 @@ class LoginController extends Controller {
                 } else {
                     // User hasn't set up 2FA yet - redirect to setup
                     // Check if the user has previously chosen to ignore the 2FA setup nag
+                    // (only applies when allow_skip is true and the user's role is not forced)
                     if (config('tyro-login.two_factor.allow_skip', false)) {
-                        $ignoreCookieName = 'tyro_2fa_ignore_' . $user->id;
-                        if ($request->cookie($ignoreCookieName)) {
-                            return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+                        $forcedRoles = config('tyro-login.two_factor.forced_roles', '');
+                        $roles = $forcedRoles ? array_filter(array_map('trim', explode(',', $forcedRoles))) : [];
+                        $isForced = false;
+
+                        if (! empty($roles)) {
+                            if (method_exists($user, 'hasRole')) {
+                                foreach ($roles as $role) {
+                                    if ($user->hasRole($role)) {
+                                        $isForced = true;
+                                        break;
+                                    }
+                                }
+                            } elseif (isset($user->role)) {
+                                $isForced = in_array($user->role, $roles);
+                            }
+                        }
+
+                        if (! $isForced) {
+                            $ignoreCookieName = 'tyro_2fa_ignore_' . $user->id;
+                            if ($request->cookie($ignoreCookieName)) {
+                                return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+                            }
                         }
                     }
 
