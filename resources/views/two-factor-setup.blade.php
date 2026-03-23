@@ -52,17 +52,14 @@
 
             @if(config('tyro-login.two_factor.allow_skip', false))
             <div class="skip-actions mt-4">
-                <form method="POST" action="{{ route('tyro-login.two-factor.skip') }}" class="skip-form">
+                <form method="POST" action="{{ route('tyro-login.two-factor.skip') }}" class="skip-inline-form">
                     @csrf
-                    <button type="submit" class="btn btn-ghost w-full">
-                        Skip this time
-                    </button>
+                    <button type="submit" class="skip-link">Skip this time</button>
                 </form>
-                <form method="POST" action="{{ route('tyro-login.two-factor.ignore') }}" class="skip-form mt-2">
+                <span class="skip-separator">|</span>
+                <form method="POST" action="{{ route('tyro-login.two-factor.ignore') }}" class="skip-inline-form">
                     @csrf
-                    <button type="submit" class="btn btn-ghost w-full">
-                        Skip and ignore
-                    </button>
+                    <button type="submit" class="skip-link">Skip and ignore</button>
                 </form>
             </div>
             @endif
@@ -93,8 +90,28 @@
     .rounded { border-radius: 0.375rem; }
     .w-full { width: 100%; }
     
-    .skip-actions { display: flex; flex-direction: column; }
-    .skip-form { width: 100%; }
+    .skip-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    .skip-inline-form { display: inline; }
+    .skip-link {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+        text-decoration: none;
+        text-underline-offset: 3px;
+    }
+    .skip-link:hover { color: var(--foreground); }
+    .skip-separator {
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+    }
     
     .otp-input-container {
         display: flex;
