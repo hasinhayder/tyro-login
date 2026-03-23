@@ -109,6 +109,9 @@ Route::middleware('guest')->group(function () {
     Route::post('two-factor/skip', [TwoFactorController::class, 'skip'])
         ->name('two-factor.skip');
 
+    Route::post('two-factor/ignore', [TwoFactorController::class, 'ignore'])
+        ->name('two-factor.ignore');
+
     Route::get('two-factor/recovery-codes', [TwoFactorController::class, 'showRecoveryCodes'])
         ->name('two-factor.recovery-codes');
 });

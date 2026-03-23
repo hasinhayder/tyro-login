@@ -37,6 +37,20 @@ class TwoFactorController extends Controller {
             return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
         }
 
+        // If allow_skip is enabled and the user has an ignore cookie, skip setup
+        if (config('tyro-login.two_factor.allow_skip', false)) {
+            $cookieName = 'tyro_2fa_ignore_' . $user->id;
+            if ($request->cookie($cookieName)) {
+                if (! Auth::check()) {
+                    Auth::login($user, $request->session()->get('login.remember', false));
+                    $request->session()->forget(['login.id', 'login.remember']);
+                    $request->session()->regenerate();
+                }
+
+                return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+            }
+        }
+
         $google2fa = new Google2FA;
 
         // Get secret key (either existing or new)
@@ -159,6 +173,42 @@ class TwoFactorController extends Controller {
         }
 
         return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+    }
+
+    /**
+     * Skip 2FA setup and set an ignore cookie so the user is not prompted again.
+     */
+    public function ignore(Request $request): RedirectResponse {
+        if (! config('tyro-login.two_factor.allow_skip', false)) {
+            abort(403, 'Two factor authentication setup is required.');
+        }
+
+        $user = Auth::user();
+
+        if (! $user) {
+            $userId = $request->session()->get('login.id');
+            if ($userId) {
+                $userModel = config('tyro-login.user_model', 'App\\Models\\User');
+                $user = $userModel::find($userId);
+
+                if ($user) {
+                    Auth::login($user, $request->session()->get('login.remember', false));
+                    $request->session()->forget(['login.id', 'login.remember']);
+                    $request->session()->regenerate();
+                }
+            }
+        }
+
+        if (! $user) {
+            return redirect()->route('tyro-login.login');
+        }
+
+        $cookieName = 'tyro_2fa_ignore_' . $user->id;
+        $days = (int) config('tyro-login.two_factor.ignore_cookie_days', 30);
+        $minutes = $days * 24 * 60;
+
+        return redirect()->intended(config('tyro-login.redirects.after_login', '/'))
+            ->withCookie(cookie($cookieName, '1', $minutes));
     }
 
     /**

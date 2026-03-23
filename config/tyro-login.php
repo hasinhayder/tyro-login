@@ -427,6 +427,9 @@ return [
 
         // Allow user to skip 2FA setup
         'allow_skip' => env('TYRO_LOGIN_2FA_ALLOW_SKIP', false),
+
+        // Number of days the "skip and ignore" cookie lasts
+        'ignore_cookie_days' => env('TYRO_LOGIN_2FA_IGNORE_COOKIE_DAYS', 30),
     ],
 
     /*

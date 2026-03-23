@@ -158,6 +158,14 @@ class LoginController extends Controller {
                     return redirect()->route('tyro-login.two-factor.challenge');
                 } else {
                     // User hasn't set up 2FA yet - redirect to setup
+                    // Check if the user has previously chosen to ignore the 2FA setup nag
+                    if (config('tyro-login.two_factor.allow_skip', false)) {
+                        $ignoreCookieName = 'tyro_2fa_ignore_' . $user->id;
+                        if ($request->cookie($ignoreCookieName)) {
+                            return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+                        }
+                    }
+
                     // Log them out to ensure they can't bypass setup
                     Auth::logout();
 

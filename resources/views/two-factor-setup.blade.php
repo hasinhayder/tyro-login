@@ -51,12 +51,20 @@
             </form>
 
             @if(config('tyro-login.two_factor.allow_skip', false))
-            <form method="POST" action="{{ route('tyro-login.two-factor.skip') }}" class="mt-4">
-                @csrf
-                <button type="submit" class="btn btn-ghost w-full">
-                    Skip for now
-                </button>
-            </form>
+            <div class="skip-actions mt-4">
+                <form method="POST" action="{{ route('tyro-login.two-factor.skip') }}" class="skip-form">
+                    @csrf
+                    <button type="submit" class="btn btn-ghost w-full">
+                        Skip this time
+                    </button>
+                </form>
+                <form method="POST" action="{{ route('tyro-login.two-factor.ignore') }}" class="skip-form mt-2">
+                    @csrf
+                    <button type="submit" class="btn btn-ghost w-full">
+                        Skip and ignore
+                    </button>
+                </form>
+            </div>
             @endif
         </div>
     </div>
@@ -84,6 +92,9 @@
     .p-2 { padding: 0.5rem; }
     .rounded { border-radius: 0.375rem; }
     .w-full { width: 100%; }
+    
+    .skip-actions { display: flex; flex-direction: column; }
+    .skip-form { width: 100%; }
     
     .otp-input-container {
         display: flex;
