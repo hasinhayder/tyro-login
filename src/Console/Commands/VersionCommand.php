@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.4.1'; // Added 2FA ignore option to allow users to skip 2FA setup if they choose, with a cookie-based mechanism to remember their choice for a configurable number of days. This provides more flexibility for users who may not want to set up 2FA immediately while still encouraging them to do so in the future.
+        $version = '2.4.2'; // Now you can force roles for 2FA setup
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.4.2 - Added option to force specific user roles to set up 2FA, allowing administrators to require 2FA for certain roles while giving others the choice to skip it. This enhances security for high-risk accounts while maintaining flexibility for users with lower risk profiles.
 // 2.4.1 - Added 2FA ignore option to allow users to skip 2FA setup if they choose, with a cookie-based mechanism to remember their choice for a configurable number of days. This provides more flexibility for users who may not want to set up 2FA immediately while still encouraging them to do so in the future.
 // 2.4.0 - Laravel 13 support
 // 2.3.4 - fix(tests): all tests are passing now, so updating version to 2.3.4
