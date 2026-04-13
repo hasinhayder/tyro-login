@@ -736,6 +736,48 @@ class LoginController extends Controller {
             ]);
         }
 
+        if (config('tyro-login.two_factor.enabled', false)) {
+            if (filled($user->two_factor_confirmed_at)) {
+                Auth::logout();
+                $request->session()->put('login.id', $user->id);
+                $request->session()->put('login.remember', false);
+
+                return redirect()->route('tyro-login.two-factor.challenge');
+            } else {
+                if (config('tyro-login.two_factor.allow_skip', false)) {
+                    $forcedRoles = config('tyro-login.two_factor.forced_roles', '');
+                    $roles = $forcedRoles ? array_filter(array_map('trim', explode(',', $forcedRoles))) : [];
+                    $isForced = false;
+
+                    if (! empty($roles)) {
+                        if (method_exists($user, 'hasRole')) {
+                            foreach ($roles as $role) {
+                                if ($user->hasRole($role)) {
+                                    $isForced = true;
+                                    break;
+                                }
+                            }
+                        } elseif (isset($user->role)) {
+                            $isForced = in_array($user->role, $roles);
+                        }
+                    }
+
+                    if (! $isForced) {
+                        $ignoreCookieName = 'tyro_2fa_ignore_'.$user->id;
+                        if ($request->cookie($ignoreCookieName)) {
+                            return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+                        }
+                    }
+                }
+
+                Auth::logout();
+                $request->session()->put('login.id', $user->id);
+                $request->session()->put('login.remember', false);
+
+                return redirect()->route('tyro-login.two-factor.setup');
+            }
+        }
+
         return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
     }
 

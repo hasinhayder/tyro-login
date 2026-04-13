@@ -149,7 +149,7 @@ class SocialAuthController extends Controller {
             Auth::login($socialAccount->user);
             $request->session()->regenerate();
 
-            return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+            return $this->handlePostLoginRedirect($request, $socialAccount->user);
         }
 
         // Check if user exists with this email
@@ -167,7 +167,7 @@ class SocialAuthController extends Controller {
                 Auth::login($user);
                 $request->session()->regenerate();
 
-                return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
+                return $this->handlePostLoginRedirect($request, $user);
             }
 
             // User exists but linking is disabled
@@ -208,7 +208,58 @@ class SocialAuthController extends Controller {
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->intended(config('tyro-login.redirects.after_register', '/'));
+        return $this->handlePostLoginRedirect($request, $user, config('tyro-login.redirects.after_register', '/'));
+    }
+
+    /**
+     * Handle post-login redirect with 2FA checks.
+     */
+    protected function handlePostLoginRedirect(Request $request, $user, string $fallbackRedirect = null): RedirectResponse {
+        $fallbackRedirect = $fallbackRedirect ?? config('tyro-login.redirects.after_login', '/');
+
+        if (config('tyro-login.two_factor.enabled', false)) {
+            if (filled($user->two_factor_confirmed_at)) {
+                Auth::logout();
+                $request->session()->put('login.id', $user->id);
+                $request->session()->put('login.remember', false);
+
+                return redirect()->route('tyro-login.two-factor.challenge');
+            } else {
+                if (config('tyro-login.two_factor.allow_skip', false)) {
+                    $forcedRoles = config('tyro-login.two_factor.forced_roles', '');
+                    $roles = $forcedRoles ? array_filter(array_map('trim', explode(',', $forcedRoles))) : [];
+                    $isForced = false;
+
+                    if (! empty($roles)) {
+                        if (method_exists($user, 'hasRole')) {
+                            foreach ($roles as $role) {
+                                if ($user->hasRole($role)) {
+                                    $isForced = true;
+                                    break;
+                                }
+                            }
+                        } elseif (isset($user->role)) {
+                            $isForced = in_array($user->role, $roles);
+                        }
+                    }
+
+                    if (! $isForced) {
+                        $ignoreCookieName = 'tyro_2fa_ignore_'.$user->id;
+                        if ($request->cookie($ignoreCookieName)) {
+                            return redirect()->intended($fallbackRedirect);
+                        }
+                    }
+                }
+
+                Auth::logout();
+                $request->session()->put('login.id', $user->id);
+                $request->session()->put('login.remember', false);
+
+                return redirect()->route('tyro-login.two-factor.setup');
+            }
+        }
+
+        return redirect()->intended($fallbackRedirect);
     }
 
     /**
