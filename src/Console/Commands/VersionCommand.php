@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.4.3'; // Fixed 2FA checks for social login and magic link login
+        $version = '2.5.0'; // Added tyro-login:update-config and tyro-login:update-style commands
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.5.0 - Added tyro-login:update-config and tyro-login:update-style commands
 // 2.4.3 - fix(2fa): 2FA checks now properly apply to social login and magic link login flows
 // 2.4.2 - Added option to force specific user roles to set up 2FA, allowing administrators to require 2FA for certain roles while giving others the choice to skip it. This enhances security for high-risk accounts while maintaining flexibility for users with lower risk profiles.
 // 2.4.1 - Added 2FA ignore option to allow users to skip 2FA setup if they choose, with a cookie-based mechanism to remember their choice for a configurable number of days. This provides more flexibility for users who may not want to set up 2FA immediately while still encouraging them to do so in the future.

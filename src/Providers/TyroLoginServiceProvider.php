@@ -8,6 +8,8 @@ use HasinHayder\TyroLogin\Console\Commands\PublishCommand;
 use HasinHayder\TyroLogin\Console\Commands\PublishStyleCommand;
 use HasinHayder\TyroLogin\Console\Commands\StarCommand;
 use HasinHayder\TyroLogin\Console\Commands\UnverifyUserCommand;
+use HasinHayder\TyroLogin\Console\Commands\UpdateConfigCommand;
+use HasinHayder\TyroLogin\Console\Commands\UpdateStylesCommand;
 use HasinHayder\TyroLogin\Console\Commands\VerifyUserCommand;
 use HasinHayder\TyroLogin\Console\Commands\VersionCommand;
 use Illuminate\Support\Facades\Route;
@@ -114,6 +116,8 @@ class TyroLoginServiceProvider extends ServiceProvider {
             PublishCommand::class,
             PublishStyleCommand::class,
             VersionCommand::class,
+            UpdateConfigCommand::class,
+            UpdateStylesCommand::class,
             DocCommand::class,
             StarCommand::class,
             VerifyUserCommand::class,
