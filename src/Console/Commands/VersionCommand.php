@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.5.0'; // Added tyro-login:update-config and tyro-login:update-style commands
+        $version = '2.6.0'; // Added dark-mode logo support for auth pages
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.6.0 - Added dark-mode logo support for auth pages
 // 2.5.0 - Added tyro-login:update-config and tyro-login:update-style commands
 // 2.4.3 - fix(2fa): 2FA checks now properly apply to social login and magic link login flows
 // 2.4.2 - Added option to force specific user roles to set up 2FA, allowing administrators to require 2FA for certain roles while giving others the choice to skip it. This enhances security for high-risk accounts while maintaining flexibility for users with lower risk profiles.

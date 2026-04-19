@@ -16,7 +16,10 @@
             <!-- Logo -->
             <div class="logo-container">
                 @if($branding['logo'] ?? false)
-                <img src="{{ $branding['logo'] }}" alt="{{ $branding['app_name'] ?? config('app.name') }}">
+                <img src="{{ $branding['logo'] }}" alt="{{ $branding['app_name'] ?? config('app.name') }}" class="logo-light">
+                @if($branding['logo_dark'] ?? false)
+                <img src="{{ $branding['logo_dark'] }}" alt="{{ $branding['app_name'] ?? config('app.name') }}" class="logo-dark">
+                @endif
                 @else
                 <div class="app-logo">
                     <svg viewBox="0 0 50 52" fill="none" xmlns="http://www.w3.org/2000/svg">

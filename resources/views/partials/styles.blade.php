@@ -129,6 +129,18 @@
         width: auto;
     }
 
+    .logo-container .logo-dark {
+        display: none;
+    }
+
+    html.dark .logo-container .logo-light {
+        display: none;
+    }
+
+    html.dark .logo-container .logo-dark {
+        display: inline-block;
+    }
+
     .logo-container .app-logo {
         display: inline-block;
     }

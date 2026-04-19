@@ -27,7 +27,7 @@ return [
     | Package Version
     |--------------------------------------------------------------------------
     */
-    'version' => '2.5.0',
+    'version' => '2.5.1',
 
     /*
     |--------------------------------------------------------------------------
@@ -95,6 +95,10 @@ return [
         // Set to null to use text-based logo with app name
         // Example: 'https://yourapp.com/logo.svg' or '/images/logo.png'
         'logo' => env('TYRO_LOGIN_LOGO', null),
+
+        // Dark mode logo URL (falls back to the light logo when not set)
+        // Example: 'https://yourapp.com/logo-dark.svg' or '/images/logo-dark.png'
+        'logo_dark' => env('TYRO_LOGIN_LOGO_DARK', null),
 
         // Logo height for proper display scaling
         // Accepts any valid CSS height value (px, rem, etc.)
