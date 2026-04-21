@@ -134,6 +134,15 @@ class LoginController extends Controller {
 
             $user = Auth::user();
 
+            // Check if user is suspended
+            if ($this->isUserSuspended($user)) {
+                Auth::logout();
+
+                throw ValidationException::withMessages([
+                    'email' => config('tyro-login.suspension.message', 'Your account has been suspended. Please contact support for more information.'),
+                ]);
+            }
+
             // Check if email verification is required and email is not verified
             if (config('tyro-login.registration.require_email_verification', false) && ! $user->hasVerifiedEmail()) {
                 // Log the user out - they need to verify first
@@ -730,6 +739,14 @@ class LoginController extends Controller {
 
         Auth::login($user);
 
+        // Check if user is suspended
+        if ($this->isUserSuspended($user)) {
+            Auth::logout();
+
+            return redirect()->route('tyro-login.login')
+                ->withErrors(['login' => config('tyro-login.suspension.message', 'Your account has been suspended. Please contact support for more information.')]);
+        }
+
         if (config('tyro-login.debug', false)) {
             Log::info('Tyro Login - Magic Link Login Successful', [
                 'user_id' => $user->id,
@@ -869,5 +886,21 @@ class LoginController extends Controller {
         }
 
         return redirect()->back()->with('success', 'A magic link has been sent to your email. Please check your inbox.');
+    }
+
+    /**
+     * Check if a user is suspended.
+     * 
+     * Supports both the isSuspended() method and direct suspended_at attribute check
+     * for compatibility with different user models.
+     */
+    protected function isUserSuspended($user): bool {
+        // Check if the user has the isSuspended method (tyro-integrated users)
+        if (method_exists($user, 'isSuspended')) {
+            return $user->isSuspended();
+        }
+
+        // Fall back to checking the suspended_at attribute directly
+        return (bool) ($user->suspended_at ?? false);
     }
 }
