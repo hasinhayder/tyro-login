@@ -67,6 +67,8 @@
                 form.addEventListener('submit', function (e) {
                     const submitBtn = form.querySelector('button[type="submit"]');
                     if (submitBtn && !submitBtn.classList.contains('loading')) {
+                        submitBtn.dataset.originalText = submitBtn.textContent;
+                        submitBtn.textContent = 'Working...';
                         submitBtn.classList.add('loading');
                         submitBtn.disabled = true;
                     }

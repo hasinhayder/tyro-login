@@ -580,18 +580,21 @@
     /* Loading State */
     .btn.loading {
         position: relative;
-        color: transparent;
+        opacity: 0.8;
+        cursor: wait;
     }
 
     .btn.loading::after {
         content: '';
-        position: absolute;
-        width: 1.25rem;
-        height: 1.25rem;
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
         border: 2px solid transparent;
         border-top-color: currentColor;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
+        margin-left: 0.5rem;
+        vertical-align: middle;
     }
 
     html.dark .btn.loading::after {
