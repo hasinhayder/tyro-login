@@ -32,12 +32,22 @@
             <!-- Header -->
             <div class="form-header">
                 <h2>Log in to your account</h2>
-                @if(($loginField ?? 'email') === 'both')
-                <p>Enter your email or username and password below to log in</p>
-                @elseif(($loginField ?? 'email') === 'username')
-                <p>Enter your username and password below to log in</p>
+                @if($features['disable_password'] ?? false)
+                    @if(($loginField ?? 'email') === 'username')
+                    <p>Enter your username below to log in</p>
+                    @elseif(($loginField ?? 'email') === 'both')
+                    <p>Enter your email or username below to log in</p>
+                    @else
+                    <p>Enter your email below to log in</p>
+                    @endif
                 @else
-                <p>Enter your email and password below to log in</p>
+                    @if(($loginField ?? 'email') === 'both')
+                    <p>Enter your email or username and password below to log in</p>
+                    @elseif(($loginField ?? 'email') === 'username')
+                    <p>Enter your username and password below to log in</p>
+                    @else
+                    <p>Enter your email and password below to log in</p>
+                    @endif
                 @endif
             </div>
 
