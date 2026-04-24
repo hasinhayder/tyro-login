@@ -145,22 +145,36 @@
             </form>
 
             <script>
-                document.getElementById('magic-login-btn').addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    @if(($loginField ?? 'email') === 'both')
-                        var loginValue = document.getElementById('login')?.value || '';
-                        document.getElementById('magic-login').value = loginValue;
-                    @elseif(($loginField ?? 'email') === 'username')
-                        var usernameValue = document.getElementById('username')?.value || '';
-                        document.getElementById('magic-username').value = usernameValue;
-                    @else
-                        var emailValue = document.getElementById('email')?.value || '';
-                        document.getElementById('magic-email').value = emailValue;
-                    @endif
-                    
-                    document.getElementById('magic-link-form').submit();
-                });
+                (function() {
+                    var magicBtn = document.getElementById('magic-login-btn');
+                    var magicForm = document.getElementById('magic-link-form');
+
+                    magicBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        @if(($loginField ?? 'email') === 'both')
+                            var loginValue = document.getElementById('login')?.value || '';
+                            document.getElementById('magic-login').value = loginValue;
+                        @elseif(($loginField ?? 'email') === 'username')
+                            var usernameValue = document.getElementById('username')?.value || '';
+                            document.getElementById('magic-username').value = usernameValue;
+                        @else
+                            var emailValue = document.getElementById('email')?.value || '';
+                            document.getElementById('magic-email').value = emailValue;
+                        @endif
+
+                        magicBtn.disabled = true;
+                        magicBtn.classList.add('loading');
+                        magicBtn.innerHTML = '<svg style="width:1.25rem;height:1.25rem;display:inline-block;vertical-align:middle;margin-right:0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>Working...';
+
+                        magicForm.submit();
+                    });
+
+                    magicForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        magicBtn.click();
+                    });
+                })();
             </script>
             @endif
             <!-- Register Link -->
