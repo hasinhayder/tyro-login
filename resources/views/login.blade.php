@@ -47,6 +47,16 @@
                 {{ session('success') }}
             </div>
             @endif
+
+            @if($errors->any())
+            <div class="alert alert-error" style="padding: 0.875rem 1rem; margin-bottom: 1.5rem; background-color: #fef2f2; border: 1px solid #fca5a5; border-radius: 0.5rem; color: #991b1b; font-size: 0.9375rem;">
+                {{ $errors->first() }}
+            </div>
+            <style>
+                html.dark .alert-error { background-color: #450a0a !important; border-color: #7f1d1d !important; color: #fca5a5 !important; }
+            </style>
+            @endif
+
             <!-- Login Form -->
             <form method="POST" action="{{ route('tyro-login.login.submit') }}">
                 @csrf

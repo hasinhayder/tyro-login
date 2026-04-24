@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.7.0'; // OTP auto-submit, button loading UX fix, passwordless login mode
+        $version = '2.7.1'; // Show error banner on login for expired magic links
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.7.1 - Show error banner on login for expired magic links
 // 2.7.0 - OTP auto-submit, button loading UX fix, passwordless login mode
 // 2.6.1 - Suspended user login bug fixed
 // 2.6.0 - Added dark-mode logo support for auth pages
