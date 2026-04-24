@@ -78,6 +78,7 @@
                 </div>
                 @endif
 
+                @if(!($features['disable_password'] ?? false))
                 <!-- Password Field -->
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
@@ -102,6 +103,7 @@
                     <a href="{{ route('tyro-login.password.request') }}" class="form-link">Forgot password?</a>
                     @endif
                 </div>
+                @endif
 
                 <!-- Captcha -->
                 @if($captchaEnabled ?? false)
@@ -117,20 +119,24 @@
                 </div>
                 @endif
 
+                @if(!($features['disable_password'] ?? false))
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary">
                     Log in
                 </button>
+                @endif
             </form>
 
             <!-- Magic Login Button -->
             @if(config('tyro-login.features.magic_links_enabled', false))
+            @if(!($features['disable_password'] ?? false))
             <div class="form-divider" style="margin: 1.5rem 0; text-align: center; position: relative;">
-                <span style="background-color: white; padding: 0 1rem; position: relative; z-index: 1; color: #9ca3af; font-size: 0.875rem;">or</span>
+                <span style="background-color: var(--background); padding: 0 1rem; position: relative; z-index: 1; color: #9ca3af; font-size: 0.875rem;">or</span>
                 <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background-color: #e5e7eb;"></div>
             </div>
+            @endif
 
-            <form method="POST" action="{{ route('tyro-login.magic-link.request') }}" id="magic-link-form">
+            <form method="POST" action="{{ route('tyro-login.magic-link.request') }}" id="magic-link-form" @if(!($features['disable_password'] ?? false)) style="margin-top: 0;" @else style="margin-top: 0.5rem;" @endif>
                 @csrf
                 <input type="hidden" name="email" id="magic-email" value="">
                 <input type="hidden" name="username" id="magic-username" value="">

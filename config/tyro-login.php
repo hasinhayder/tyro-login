@@ -27,7 +27,7 @@ return [
     | Package Version
     |--------------------------------------------------------------------------
     */
-    'version' => '2.5.1',
+    // 'version' => '2.7.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -188,6 +188,11 @@ return [
         // Enable magic link feature
         // Environment: TYRO_LOGIN_ENABLE_MAGIC_LINKS=true
         'magic_links_enabled' => env('TYRO_LOGIN_ENABLE_MAGIC_LINKS', false),
+
+        // Disable password-based login entirely
+        // Hides password field, remember me, forgot password link, and "or" separator
+        // Useful when only passkey or magic link login is desired
+        'disable_password' => env('TYRO_LOGIN_DISABLE_PASSWORD', false),
     ],
 
     /*
