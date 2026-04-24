@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.6.1'; // Suspended user login bug fixed
+        $version = '2.7.0'; // OTP auto-submit, button loading UX fix, passwordless login mode
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.7.0 - OTP auto-submit, button loading UX fix, passwordless login mode
 // 2.6.1 - Suspended user login bug fixed
 // 2.6.0 - Added dark-mode logo support for auth pages
 // 2.5.0 - Added tyro-login:update-config and tyro-login:update-style commands
