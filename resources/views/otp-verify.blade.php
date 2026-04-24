@@ -237,6 +237,10 @@
 
                 updateHiddenInput();
                 updateFilledState();
+
+                if (hiddenInput.value.length === digits.length) {
+                    this.closest('form').requestSubmit();
+                }
             });
 
             digit.addEventListener('keydown', function (e) {

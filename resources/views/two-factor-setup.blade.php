@@ -169,6 +169,9 @@
                     digits[index + 1].focus();
                 }
                 updateHiddenInput();
+                if (hiddenInput.value.length === digits.length) {
+                    this.closest('form').requestSubmit();
+                }
             });
 
             digit.addEventListener('keydown', function (e) {
@@ -189,6 +192,9 @@
                 });
                 
                 updateHiddenInput();
+                if (hiddenInput.value.length === digits.length) {
+                    this.closest('form').requestSubmit();
+                }
             });
         });
     });
