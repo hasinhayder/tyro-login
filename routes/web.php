@@ -122,4 +122,17 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
     Route::get('two-factor/recovery-codes', [TwoFactorController::class, 'showRecoveryCodes'])
         ->name('two-factor.recovery-codes');
+
+    // 2FA Setup routes (duplicated for authenticated users)
+    Route::get('two-factor/setup', [TwoFactorController::class, 'showSetup'])
+        ->name('two-factor.setup');
+
+    Route::post('two-factor/confirm', [TwoFactorController::class, 'confirm'])
+        ->name('two-factor.confirm');
+
+    Route::post('two-factor/skip', [TwoFactorController::class, 'skip'])
+        ->name('two-factor.skip');
+
+    Route::post('two-factor/ignore', [TwoFactorController::class, 'ignore'])
+        ->name('two-factor.ignore');
 });
