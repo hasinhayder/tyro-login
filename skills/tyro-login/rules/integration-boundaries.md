@@ -33,18 +33,29 @@ public function assignTyroRole(User $user): void
 // Soft check — gracefully skips when Tyro package is not installed
 public function assignTyroRole($user): void
 {
-    if (! config('tyro-login.tyro.enabled', false)) {
+    if (! config('tyro-login.tyro.assign_default_role', true)) {
         return;
     }
 
-    if (class_exists('HasinHayder\Tyro\Models\Role') && method_exists($user, 'assignRole')) {
-        $role = config('tyro-login.tyro.role_model')::where(
-            'slug', config('tyro-login.tyro.role_slug', 'user')
-        )->first();
+    if (! class_exists('HasinHayder\\Tyro\\Models\\Role')) {
+        return;
+    }
+
+    if (! method_exists($user, 'assignRole')) {
+        return;
+    }
+
+    $roleSlug = config('tyro-login.tyro.default_role_slug', 'user');
+
+    try {
+        $roleModel = 'HasinHayder\\Tyro\\Models\\Role';
+        $role = $roleModel::where('slug', $roleSlug)->first();
 
         if ($role) {
             $user->assignRole($role);
         }
+    } catch (\Exception $e) {
+        report($e);
     }
 }
 ```
@@ -52,14 +63,11 @@ public function assignTyroRole($user): void
 ### Notes
 
 - Always check `class_exists()` for the package's main class before any integration code.
-- The integration must also be gated behind a config toggle (`tyro-login.tyro.enabled`).
-- Log a warning when the package is enabled but not installed:
-
-```php
-if (config('tyro-login.tyro.enabled') && ! class_exists('HasinHayder\Tyro\Models\Role')) {
-    Log::warning('Tyro package integration is enabled but the package is not installed.');
-}
-```
+- Triple check: config toggle (`tyro-login.tyro.assign_default_role`), class existence, method existence.
+- Config keys: `tyro-login.tyro.assign_default_role` and `tyro-login.tyro.default_role_slug`.
+- Wrap in try/catch — database errors (missing tables) should not break registration.
+- Use `report($e)` to report without rethrowing.
+- This method exists in both `RegisterController` and `SocialAuthController` — consider extracting to a trait in a future version.
 
 ---
 

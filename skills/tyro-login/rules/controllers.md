@@ -75,7 +75,14 @@ public function showLoginForm()
     }
 
     return view('tyro-login::login', [
-        'layouts' => $this->getLayouts(),
+        'layout' => config('tyro-login.layout', 'centered'),
+        'branding' => config('tyro-login.branding'),
+        'backgroundImage' => config('tyro-login.background_image'),
+        'features' => config('tyro-login.features'),
+        'registrationEnabled' => config('tyro-login.registration.enabled', true),
+        'pageContent' => config('tyro-login.pages.login'),
+        'captchaEnabled' => config('tyro-login.captcha.enabled_login', false),
+        'loginField' => config('tyro-login.login_field', 'email'),
     ]);
 }
 ```
@@ -85,6 +92,7 @@ public function showLoginForm()
 - Check config at the top of every controller method.
 - Redirect to an appropriate alternative route, not a generic 404.
 - Use `config('tyro-login.features.*')` for feature toggles.
+- Pass all necessary config values to the view as individual variables — this makes the view contract explicit.
 
 ---
 
@@ -111,20 +119,24 @@ public function login(Request $request)
 
 ```php
 // Session-based state — persists across the multi-step flow
-public function login(Request $request)
-{
-    // ... validate credentials ...
-    session()->put('tyro-login.login.id', $user->id);
-    session()->put('tyro-login.login.remember', $request->filled('remember'));
-    return redirect()->route('tyro-login.otp.form');
-}
+// OTP flow uses tyro-login.otp.* namespace:
+$request->session()->put('tyro-login.otp.user_id', $user->id);
+$request->session()->put('tyro-login.otp.remember', $remember);
+
+// 2FA/Setup flow uses login.* namespace (shared across controllers):
+$request->session()->put('login.id', $user->id);
+$request->session()->put('login.remember', $remember);
 ```
 
 ### Notes
 
-- Use `tyro-login.login.*` session keys to namespace session data.
+- Two session namespaces exist in the codebase:
+  - `tyro-login.otp.*` — used for the OTP flow (user_id, remember, resend_count, last_resend).
+  - `login.*` — used for the 2FA challenge/setup flow (id, remember).
+- The `login.*` namespace is shared across `LoginController`, `TwoFactorController`, `SocialAuthController`, and `RegisterController` for the 2FA flow.
 - Store only the minimum necessary state (user ID, remember preference).
 - Clear session state on flow completion or cancellation.
+- The user is logged out (`Auth::logout()`) before storing partial state to prevent incomplete authentication.
 
 ---
 

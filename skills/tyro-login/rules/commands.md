@@ -1,7 +1,7 @@
 # Commands
 
 **Tier:** 2 — Implementation
-**Applies to:** All 13 Artisan commands in `src/Console/Commands/`
+**Applies to:** All 14 Artisan commands in `src/Console/Commands/`
 **Cross-references:** [config-and-env.md](config-and-env.md) (config reads in commands), [models-and-casts.md](models-and-casts.md) (user model resolution), [integration-boundaries.md](integration-boundaries.md) (feature-gated commands)
 
 Rules for Artisan command signatures, user lookup, interactive prompts, output conventions, and feature gating.
@@ -32,7 +32,7 @@ protected $signature = 'tyro-login:verify-user {identifier}';
 
 - Signature pattern: `tyro-login:{verb}-{noun}` (e.g., `tyro-login:reset-2fa`, `tyro-login:setup-2fa`).
 - The `tyro-login:` prefix is part of the public API — do not change it without a major version bump.
-- All 13 commands follow this pattern.
+- All 14 commands follow this pattern.
 
 ---
 
@@ -207,3 +207,104 @@ public function handle(): void
 - Check the feature toggle early in `handle()`, before any processing.
 - Provide a clear message explaining how to enable the feature.
 - This applies to: `MagicLinkCommand`, `InviteLinkCommand`, `ResetTwoFactorCommand`, `VerifyUserCommand`, `UnverifyUserCommand`.
+
+---
+
+## Setup AI Skill Command — Atomic Install with Backup
+
+### Why It Matters
+
+The `tyro-login:setup-ai-skill` command copies the skill directory from the package into the consumer's project for their chosen AI agent. A failed or partial copy could leave the target directory in a broken state. The atomic install strategy (stage → backup → swap) ensures that a failure at any point can be rolled back without data loss.
+
+### Incorrect
+
+```php
+// Direct copy — partial failure leaves broken state
+$filesystem->copyDirectory($sourcePath, $targetPath);
+$this->info('Installed.');
+```
+
+### Correct
+
+```php
+// Stage → backup → swap — atomic with rollback
+protected function installTo(string $targetPath, string $sourcePath, string $label): bool
+{
+    $filesystem = new Filesystem;
+
+    $staging = $targetPath.'.__installing__';
+    $backup = $targetPath.'.__backup__';
+
+    // Stage new contents in a temp directory
+    $filesystem->copyDirectory($sourcePath, $staging);
+
+    // Back up existing target via atomic rename
+    @rename($targetPath, $backup);
+
+    // Move staged install into place
+    if (! @rename($staging, $targetPath)) {
+        // Rollback — restore from backup
+        @rename($backup, $targetPath);
+        $filesystem->deleteDirectory($staging);
+        return false;
+    }
+
+    // Success — discard backup
+    $filesystem->deleteDirectory($backup);
+    return true;
+}
+```
+
+### Notes
+
+- Always use a staging directory — never copy directly into the target.
+- Use `rename()` for atomic directory swaps on the same filesystem.
+- Clean up stale staging/backup directories from previous failed runs.
+- On failure, restore the backup before returning `false`.
+
+---
+
+## Multi-Agent Installation with Universal Directory
+
+### Why It Matters
+
+The command supports 6 AI agents (Kilo, Claude, GitHub Copilot, Codex, Gemini, Laravel Boost) plus an "all" option. It installs to the selected agent-specific directory AND always installs to the universal `.agents/skills/tyro-login` directory for agents.md convention compatibility.
+
+### Incorrect
+
+```php
+// Only installs to one directory — other agents can't discover the skill
+$filesystem->copyDirectory($sourcePath, '.claude/skills/tyro-login');
+```
+
+### Correct
+
+```php
+// Agent-specific + universal — any agent can discover the skill
+protected array $agentTargets = [
+    'kilo' => '.kilo/skills/tyro-login',
+    'claude' => '.claude/skills/tyro-login',
+    'github copilot' => '.github/skills/tyro-login',
+    'codex' => '.codex/skills/tyro-login',
+    'gemini' => '.gemini/skills/tyro-login',
+    'laravel boost' => '.ai/skills/tyro-login',
+];
+
+public const UNIVERSAL_SKILL_DIR = '.agents/skills/tyro-login';
+
+// Phase 1: install to each selected agent's directory
+foreach ($selectedAgents as $agent) {
+    $this->installTo(base_path($this->agentTargets[$agent]), $sourcePath, ...);
+}
+
+// Phase 2: always install to universal directory
+$this->installTo(base_path(self::UNIVERSAL_SKILL_DIR), $sourcePath, ...);
+```
+
+### Notes
+
+- The agent map is a constant on the command class — stable, not config-driven.
+- The "all" option installs to every agent-specific directory.
+- The universal directory is always installed regardless of which agent is selected.
+- Agent names in the choice prompt must match the array keys exactly.
+- Use `$this->choice()` for the interactive agent selection prompt.

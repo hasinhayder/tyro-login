@@ -69,7 +69,7 @@ public function login(Request $request): RedirectResponse|View
 {
     if (Auth::attempt($credentials, $request->filled('remember'))) {
         $request->session()->regenerate();
-        return redirect()->intended(route('tyro-login.dashboard'));
+        return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
     }
 }
 
@@ -78,14 +78,23 @@ public function logout(Request $request): RedirectResponse
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
-    return redirect()->route('tyro-login.login');
+    return redirect(config('tyro-login.redirects.after_logout', '/login'));
 }
+
+// OTP flow — regenerate before storing partial state
+Auth::logout();
+$request->session()->regenerate();
+$request->session()->put('tyro-login.otp.user_id', $userId);
+
+// Magic link flow — regenerate on link redemption
+$request->session()->regenerate();
+Auth::login($user);
 ```
 
 ### Notes
 
-- Regenerate on: login, logout, OTP verification, 2FA step-up authentication.
-- Call `session()->regenerate()` after authentication, not before.
+- Regenerate on: login success, logout, OTP flow start, magic link redemption, 2FA setup completion.
+- For multi-step flows (OTP, 2FA), regenerate the session when transitioning to the partial-auth state.
 - For logout, call `session()->invalidate()` which both clears and regenerates.
 - Always call `regenerateToken()` to rotate the CSRF token on logout.
 
@@ -232,38 +241,79 @@ public function login(Request $request): RedirectResponse|View
 ### Correct
 
 ```php
-// Cache-based lockout — configurable attempts and duration
+// Cache-based lockout — configurable attempts and duration, release-time tracking
+protected function lockoutKey(Request $request): string
+{
+    return 'tyro-login:lockout:'.$request->ip();
+}
+
+protected function lockoutAttemptsKey(Request $request): string
+{
+    return 'tyro-login:lockout-attempts:'.$request->ip();
+}
+
 protected function isLockedOut(Request $request): bool
 {
-    return Cache::has('tyro-login.lockout:' . $request->ip());
+    if (! config('tyro-login.lockout.enabled', true)) {
+        return false;
+    }
+
+    $releaseTime = Cache::get($this->lockoutKey($request));
+
+    if (! $releaseTime) {
+        return false;
+    }
+
+    if (now()->timestamp >= $releaseTime) {
+        $this->clearLockout($request);
+        return false;
+    }
+
+    return true;
 }
 
-protected function shouldLockout(Request $request): bool
+protected function incrementLockoutAttempts(Request $request): void
 {
-    $key = 'tyro-login.attempts:' . $request->ip();
-    $attempts = (int) Cache::get($key, 0);
-    return $attempts >= (int) config('tyro-login.lockout.max_attempts', 5);
+    if (! config('tyro-login.lockout.enabled', true)) {
+        return;
+    }
+
+    $key = $this->lockoutAttemptsKey($request);
+    $attempts = Cache::get($key, 0);
+    $maxAttempts = config('tyro-login.lockout.max_attempts', 5);
+
+    if ($attempts >= $maxAttempts) {
+        $attempts = 0;
+    }
+
+    $attempts++;
+    $durationMinutes = (int) config('tyro-login.lockout.duration_minutes', 15);
+    Cache::put($key, $attempts, now()->addMinutes($durationMinutes + 5));
 }
 
-protected function incrementAttempts(Request $request): void
+protected function lockoutUser(Request $request): void
 {
-    $key = 'tyro-login.attempts:' . $request->ip();
-    Cache::add($key, 0, now()->addMinutes(config('tyro-login.lockout.duration', 60)));
-    Cache::increment($key);
+    $durationMinutes = (int) config('tyro-login.lockout.duration_minutes', 15);
+    $releaseTime = now()->addMinutes($durationMinutes)->timestamp;
+    Cache::put($this->lockoutKey($request), $releaseTime, now()->addMinutes($durationMinutes));
 }
 
-protected function clearAttempts(Request $request): void
+protected function clearLockout(Request $request): void
 {
-    Cache::forget('tyro-login.attempts:' . $request->ip());
+    Cache::forget($this->lockoutKey($request));
+    Cache::forget($this->lockoutAttemptsKey($request));
 }
 ```
 
 ### Notes
 
 - Key lockout by IP address — user-based keying leaks whether an email exists in the system.
+- Cache keys use `tyro-login:` prefix with colons: `tyro-login:lockout:{ip}` and `tyro-login:lockout-attempts:{ip}`.
+- The lockout stores a release timestamp (not a boolean) — enables showing remaining time to the user.
 - Config is driven by `tyro-login.lockout.*` settings.
 - Show remaining attempts only when `show_attempts_left` config is enabled.
 - Clear lockout on successful authentication.
+- The lockout can be globally disabled via `tyro-login.lockout.enabled`.
 
 ---
 

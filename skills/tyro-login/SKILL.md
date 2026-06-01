@@ -1,6 +1,6 @@
 ---
 name: tyro-login
-version: 2.8.0
+version: 2.8.1
 domain: authentication
 mindset: framework-maintainer
 description: Laravel authentication infrastructure package providing guards, providers, sessions, tokens, verification, and security for the Tyro ecosystem.
@@ -186,6 +186,7 @@ Eight immutable principles that govern every decision in this package:
 | `tyro-login:reset-2fa` | Reset two-factor authentication |
 | `tyro-login:magic-links` | Manage magic links (create, list, remove, flush) |
 | `tyro-login:invite-links` | Manage invitation links (create, list, remove, flush) |
+| `tyro-login:setup-ai-skill` | Install the Tyro Login AI skill for a chosen agent (Claude, Copilot, Codex, Gemini, Kilo, Laravel Boost, or all) with universal agents.md support |
 
 ### Environment Variable Index
 
@@ -213,14 +214,26 @@ Eight immutable principles that govern every decision in this package:
 |---|---|---|
 | 0 | [rules/framework-mindset.md](rules/framework-mindset.md) | Framework-maintainer philosophy — the foundational decision-making framework for every rule below |
 | 0 | [rules/security.md](rules/security.md) | Session protection, credential handling, rate limiting, CSRF, encryption, lockout |
+| 0 | [rules/two-factor.md](rules/two-factor.md) | TOTP setup, verification, recovery codes, 2FA challenge flow, dual-cast-aware methods |
 | 1 | [rules/service-provider.md](rules/service-provider.md) | Package lifecycle — register, boot, publishing, auto-discovery |
 | 1 | [rules/routes.md](rules/routes.md) | Route definitions, middleware groups, naming conventions |
 | 1 | [rules/models-and-casts.md](rules/models-and-casts.md) | Data layer — Eloquent models, relationships, EncryptedOrPlaintext cast, HasTwoFactorAuth trait |
+| 1 | [rules/social-login.md](rules/social-login.md) | OAuth provider redirect, callback, social user linking, auto-registration, email verification |
+| 1 | [rules/suspension.md](rules/suspension.md) | User suspension checks on login, social auth, and magic link flows |
 | 2 | [rules/config-and-env.md](rules/config-and-env.md) | Config file structure, env var protocol, type casting, documentation |
-| 2 | [rules/controllers.md](rules/controllers.md) | Controller patterns, validation, responses, multi-step auth flows |
+| 2 | [rules/controllers.md](rules/controllers.md) | Controller patterns, validation, responses, multi-step auth flows, view data convention |
 | 2 | [rules/mailables.md](rules/mailables.md) | Mailable classes, email templates, queueing, toggleable emails |
+| 2 | [rules/email-templates.md](rules/email-templates.md) | Email Blade template structure, design conventions, email preview |
 | 2 | [rules/commands.md](rules/commands.md) | Artisan command patterns, user lookup, interactive prompts |
 | 2 | [rules/views-and-themes.md](rules/views-and-themes.md) | View structure, layout system, shadcn theme, view publishing |
+| 2 | [rules/otp.md](rules/otp.md) | One-time password generation, delivery, verification, and resend limits |
+| 2 | [rules/magic-login.md](rules/magic-login.md) | Magic link token generation, delivery, redemption, and expiration |
+| 2 | [rules/captcha.md](rules/captcha.md) | Math captcha generation, session storage, per-form configuration, validation |
+| 2 | [rules/invitation.md](rules/invitation.md) | Invitation links, referral tracking, self-referral prevention, InvitationHelper |
+| 2 | [rules/password-policy.md](rules/password-policy.md) | Password complexity, common passwords, user-info disallowal, confirmation |
+| 2 | [rules/registration.md](rules/registration.md) | Registration flow, auto-login, role assignment, post-registration branching |
+| 2 | [rules/verification.md](rules/verification.md) | Email verification tokens, signed URLs, cache storage, resend logic |
+| 2 | [rules/password-reset.md](rules/password-reset.md) | Password reset tokens, signed URLs, cache storage, user enumeration prevention |
 | 3 | [rules/integration-boundaries.md](rules/integration-boundaries.md) | Soft dependencies, Tyro integration, Socialite, backward compatibility, deprecation |
 
 ---

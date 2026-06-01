@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.8.0'; // Added AI Skill Feature for Tyro Login package maintainers
+        $version = '2.8.1'; // Refined AI skill rules — added 6 new rule files, aligned all rules with codebase patterns
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.8.1 - Refined AI skill rules — added 6 new rule files (captcha, invitation, password-policy, registration, verification, password-reset), aligned all rules with actual codebase patterns
 // 2.8.0 - Added AI Skill Feature for Tyro Login package maintainers
 // 2.7.1 - Fix 2FA setup routes duplication for Tyro-Dashboard workflow
 // 2.7.1 - Show error banner on login for expired magic links, Passwordless mode subtitle fix
