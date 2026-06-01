@@ -6,6 +6,7 @@ use HasinHayder\TyroLogin\Console\Commands\DocCommand;
 use HasinHayder\TyroLogin\Console\Commands\InstallCommand;
 use HasinHayder\TyroLogin\Console\Commands\PublishCommand;
 use HasinHayder\TyroLogin\Console\Commands\PublishStyleCommand;
+use HasinHayder\TyroLogin\Console\Commands\SetupAiSkillCommand;
 use HasinHayder\TyroLogin\Console\Commands\StarCommand;
 use HasinHayder\TyroLogin\Console\Commands\UnverifyUserCommand;
 use HasinHayder\TyroLogin\Console\Commands\UpdateConfigCommand;
@@ -113,6 +114,7 @@ class TyroLoginServiceProvider extends ServiceProvider {
 
         $this->commands([
             InstallCommand::class,
+            SetupAiSkillCommand::class,
             PublishCommand::class,
             PublishStyleCommand::class,
             VersionCommand::class,
