@@ -16,7 +16,7 @@
 
 ## Features
 
--   **Multiple Layouts** - 5 beautiful layouts: centered, split-left, split-right, fullscreen, and card
+-   **Multiple Layouts** - 6 beautiful layouts: centered, split-left, split-right, fullscreen, card, and youtube-video
 -   **Beautiful Design** - Modern, professional UI out of the box
 -   **Social Login** - OAuth authentication with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack
 -   **Enhanced Security** - Industry-standard security features
@@ -79,11 +79,20 @@ After installation, you can customize the package by editing `config/tyro-login.
 ### Layout Options
 
 ```php
-// Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card'
+// Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card', 'youtube-video'
 'layout' => env('TYRO_LOGIN_LAYOUT', 'centered'),
 
 // Background image for split and fullscreen layouts
 'background_image' => env('TYRO_LOGIN_BACKGROUND_IMAGE', 'https://...'),
+
+// YouTube video background settings (for 'youtube-video' layout)
+'youtube_video' => [
+    'url' => env('TYRO_LOGIN_YOUTUBE_URL', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+    'blur' => env('TYRO_LOGIN_VIDEO_BLUR', '4px'),
+    'overlay_color' => env('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', '#000000'),
+    'overlay_opacity' => env('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', 0.5),
+    'sound' => env('TYRO_LOGIN_VIDEO_SOUND', false),
+],
 ```
 
 ### Branding
@@ -698,6 +707,32 @@ Floating card design with subtle radial gradient background patterns and smooth 
 ```env
 TYRO_LOGIN_LAYOUT=card
 ```
+
+### 6. YouTube Video Background Layout
+
+Full-screen YouTube video background with a glassmorphism form overlay. The form sits in the center while the video plays behind it.
+
+```env
+TYRO_LOGIN_LAYOUT=youtube-video
+# YouTube video URL or video ID
+TYRO_LOGIN_YOUTUBE_URL=https://www.youtube.com/watch?v=dQw4w9WgXcQ
+# Blur effect on the video (0px to 20px)
+TYRO_LOGIN_VIDEO_BLUR=4px
+# Overlay color (any CSS color value)
+TYRO_LOGIN_VIDEO_OVERLAY_COLOR=#000000
+# Overlay opacity (0.0 to 1.0)
+TYRO_LOGIN_VIDEO_OVERLAY_OPACITY=0.5
+# Enable video sound (true/false)
+TYRO_LOGIN_VIDEO_SOUND=false
+```
+
+**Features:**
+
+-   Muted video by default (set `TYRO_LOGIN_VIDEO_SOUND=true` to enable sound)
+-   Configurable blur effect on the video background
+-   Customizable overlay color and opacity
+-   Video automatically loops and plays inline
+-   Form maintains glassmorphism effect and remains fully functional
 
 **All layouts support:**
 
