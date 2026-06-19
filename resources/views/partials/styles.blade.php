@@ -630,6 +630,8 @@
         border: none;
         display: block;
         pointer-events: none;
+        opacity: 0;
+        transition: opacity 1.5s ease-in;
     }
 
     /* Overlay on top of video */

@@ -24,7 +24,8 @@
         title="Background"
         allow="autoplay; encrypted-media"
         allowfullscreen
-        frameborder="0"></iframe>
+        frameborder="0"
+        onload="var f=this;setTimeout(function(){f.style.opacity=1},800)"></iframe>
     @endif
     <div class="tyro-video-overlay" style="background: {{ $overlayColor }}; opacity: {{ $overlayOpacity }}; backdrop-filter: blur({{ $blur }}); -webkit-backdrop-filter: blur({{ $blur }});"></div>
 </div>
