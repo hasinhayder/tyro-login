@@ -619,22 +619,17 @@
         background-color: #000;
     }
 
-    #tyro-youtube-player {
-        position: absolute !important;
-        top: -100px !important;
-        left: -100px !important;
-        width: calc(100vw + 200px) !important;
-        height: calc(100vh + 200px) !important;
-    }
-
-    #tyro-youtube-player iframe {
-        width: 100% !important;
-        height: 100% !important;
+    #tyro-video-background iframe {
+        position: absolute;
+        top: -100px;
+        left: -100px;
+        width: calc(100vw + 200px);
+        height: calc(100vh + 200px);
         max-width: none !important;
         max-height: none !important;
-        border: none !important;
-        display: block !important;
-        pointer-events: none !important;
+        border: none;
+        display: block;
+        pointer-events: none;
     }
 
     /* Overlay on top of video */
