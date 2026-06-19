@@ -4,10 +4,11 @@
     $overlayColor = $videoBackground['overlay_color'] ?? '#111827';
     $overlayOpacity = $videoBackground['overlay_opacity'] ?? 0.1;
     $videoUrl = $videoBackground['url'] ?? '';
+    $playSound = $videoBackground['sound'] ?? false;
 @endphp
 
 <div id="tyro-video-background">
-    <div id="tyro-youtube-player" data-video-url="{{ $videoUrl }}"></div>
+    <div id="tyro-youtube-player" data-video-url="{{ $videoUrl }}" data-sound="{{ $playSound ? '1' : '0' }}"></div>
     <div class="tyro-video-overlay" style="background-color: {{ $overlayColor }}; opacity: {{ $overlayOpacity }}; backdrop-filter: blur({{ $blur }}); -webkit-backdrop-filter: blur({{ $blur }});"></div>
 </div>
 
@@ -15,7 +16,9 @@
     (function() {
         'use strict';
 
-        var videoUrl = document.getElementById('tyro-youtube-player').getAttribute('data-video-url');
+        var playerEl = document.getElementById('tyro-youtube-player');
+        var videoUrl = playerEl.getAttribute('data-video-url');
+        var playSound = playerEl.getAttribute('data-sound') === '1';
 
         /**
          * Extract YouTube video ID from various URL formats.
@@ -98,7 +101,7 @@
                 videoId: videoId,
                 playerVars: {
                     autoplay: 1,
-                    mute: 1,
+                    mute: playSound ? 0 : 1,
                     loop: 1,
                     playlist: videoId,
                     controls: 0,
@@ -112,7 +115,11 @@
                 events: {
                     onReady: function(event) {
                         playerReady = true;
-                        event.target.mute();
+                        if (playSound) {
+                            event.target.unMute();
+                        } else {
+                            event.target.mute();
+                        }
                         event.target.playVideo();
                         resizePlayer();
                     },

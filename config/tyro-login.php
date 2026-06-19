@@ -100,6 +100,9 @@ return [
 
         // Overlay opacity (0 to 1, applied on top of the color)
         'overlay_opacity' => env('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', 0.1),
+
+        // Whether to play video with sound (true = sound on, false = muted)
+        'sound' => env('TYRO_LOGIN_VIDEO_SOUND', false),
     ],
 
     /*

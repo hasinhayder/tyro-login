@@ -598,6 +598,7 @@
         border-radius: 1rem;
         padding: 2.5rem;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 460px;
     }
 
     html.dark .auth-container.youtube-video .form-card {
