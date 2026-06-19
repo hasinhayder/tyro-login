@@ -29,3 +29,4 @@ Thumbs.db
 # Package lock (use composer.json for version constraints)
 composer.lock
 FIX_LOGIN_ROUTE_ERROR.md
+.kilo
