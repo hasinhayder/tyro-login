@@ -89,8 +89,8 @@ After installation, you can customize the package by editing `config/tyro-login.
 'youtube_video' => [
     'url' => env('TYRO_LOGIN_YOUTUBE_URL', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
     'blur' => env('TYRO_LOGIN_VIDEO_BLUR', '4px'),
-    'overlay_color' => env('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', '#000000'),
-    'overlay_opacity' => env('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', 0.5),
+    'overlay_color' => env('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', '#111827'),
+    'overlay_opacity' => env('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', 0.1),
     'sound' => env('TYRO_LOGIN_VIDEO_SOUND', false),
 ],
 ```
@@ -714,15 +714,15 @@ Full-screen YouTube video background with a glassmorphism form overlay. The form
 
 ```env
 TYRO_LOGIN_LAYOUT=youtube-video
-# YouTube video URL or video ID
+# YouTube video URL or video ID (default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')
 TYRO_LOGIN_YOUTUBE_URL=https://www.youtube.com/watch?v=dQw4w9WgXcQ
-# Blur effect on the video (0px to 20px)
+# Blur effect on the video background (default: '4px')
 TYRO_LOGIN_VIDEO_BLUR=4px
-# Overlay color (any CSS color value)
-TYRO_LOGIN_VIDEO_OVERLAY_COLOR=#000000
-# Overlay opacity (0.0 to 1.0)
-TYRO_LOGIN_VIDEO_OVERLAY_OPACITY=0.5
-# Enable video sound (true/false)
+# Overlay color (any CSS color value) (default: '#111827')
+TYRO_LOGIN_VIDEO_OVERLAY_COLOR=#111827
+# Overlay opacity (0.0 to 1.0) (default: 0.1)
+TYRO_LOGIN_VIDEO_OVERLAY_OPACITY=0.1
+# Enable video sound (true/false) (default: false)
 TYRO_LOGIN_VIDEO_SOUND=false
 ```
 

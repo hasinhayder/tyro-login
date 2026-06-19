@@ -9,7 +9,7 @@
 
 <div id="tyro-video-background">
     <div id="tyro-youtube-player" data-video-url="{{ $videoUrl }}" data-sound="{{ $playSound ? '1' : '0' }}"></div>
-    <div class="tyro-video-overlay" style="background-color: {{ $overlayColor }}; opacity: {{ $overlayOpacity }}; backdrop-filter: blur({{ $blur }}); -webkit-backdrop-filter: blur({{ $blur }});"></div>
+    <div class="tyro-video-overlay" style="background: {{ $overlayColor }}; opacity: {{ $overlayOpacity }}; backdrop-filter: blur({{ $blur }});"></div>
 </div>
 
 <script>
@@ -26,16 +26,13 @@
         function extractYouTubeId(url) {
             if (!url) return null;
 
-            // Handle direct video ID (11 character string)
+            // Handle direct video ID (11 characters)
             if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
                 return url;
             }
 
             var patterns = [
                 /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/watch\?.*v=)([a-zA-Z0-9_-]{11})/,
-                /^https?:\/\/(?:www\.)?youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
-                /^https?:\/\/youtu\.be\/([a-zA-Z0-9_-]{11})/,
-                /^https?:\/\/(?:www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
             ];
 
             for (var i = 0; i < patterns.length; i++) {
@@ -62,36 +59,6 @@
         // YouTube IFrame API state
         var player = null;
         var playerReady = false;
-
-        /**
-         * Resize the iframe to cover the viewport (like background-size: cover).
-         */
-        function resizePlayer() {
-            var playerEl = document.getElementById('tyro-youtube-player');
-            if (!playerEl) return;
-
-            var windowWidth = window.innerWidth;
-            var windowHeight = window.innerHeight;
-            var aspectRatio = 16 / 9;
-
-            var videoWidth = windowWidth;
-            var videoHeight = windowWidth / aspectRatio;
-
-            if (videoHeight < windowHeight) {
-                videoHeight = windowHeight;
-                videoWidth = windowHeight * aspectRatio;
-            }
-
-            var leftOffset = (windowWidth - videoWidth) / 2;
-            var topOffset = (windowHeight - videoHeight) / 2;
-
-            playerEl.style.cssText = 'position: absolute !important; width: ' + videoWidth + 'px !important; height: ' + videoHeight + 'px !important; left: ' + leftOffset + 'px !important; top: ' + topOffset + 'px !important;';
-
-            var iframe = playerEl.querySelector('iframe');
-            if (iframe) {
-                iframe.style.cssText = 'width: ' + videoWidth + 'px !important; height: ' + videoHeight + 'px !important; border: none !important; display: block !important; pointer-events: none !important;';
-            }
-        }
 
         /**
          * Create the YouTube player once the API is ready.
@@ -121,7 +88,6 @@
                             event.target.mute();
                         }
                         event.target.playVideo();
-                        resizePlayer();
                     },
                     onStateChange: function(event) {
                         // If video ends, replay it (loop)
@@ -138,13 +104,6 @@
         tag.src = 'https://www.youtube.com/iframe_api';
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        // Resize player on window resize
-        window.addEventListener('resize', function() {
-            if (playerReady) {
-                resizePlayer();
-            }
-        });
 
         // Fallback: If the API doesn't load within 10 seconds, show dark background
         var fallbackTimer = setTimeout(function() {

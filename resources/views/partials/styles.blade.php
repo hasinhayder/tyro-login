@@ -616,12 +616,15 @@
         z-index: 0;
         overflow: hidden;
         pointer-events: none;
+        background-color: #000;
     }
 
     #tyro-youtube-player {
         position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
+        top: -100px !important;
+        left: -100px !important;
+        width: calc(100vw + 200px) !important;
+        height: calc(100vh + 200px) !important;
     }
 
     #tyro-youtube-player iframe {
