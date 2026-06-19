@@ -1,7 +1,7 @@
 @extends('tyro-login::layouts.auth')
 
 @section('content')
-<div class="auth-container {{ $layout }}" @if($layout==='fullscreen' ) style="background-image: url('{{ $backgroundImage }}');" @endif>
+<div class="auth-container {{ $layout }}" @if($layout==='fullscreen' ) style="background-image: url('{{ $backgroundImage }}');" @endif @if($layout==='youtube-video') id="tyro-youtube-container" @endif>
     @if(in_array($layout, ['split-left', 'split-right']))
     <div class="background-panel" style="background-image: url('{{ $backgroundImage }}');">
         <div class="background-panel-content">
@@ -218,6 +218,10 @@
         </div>
     </div>
 </div>
+
+@if($layout==='youtube-video')
+    @include('tyro-login::partials.youtube-video')
+@endif
 
 <style>
     .captcha-group {

@@ -25,6 +25,7 @@ class PasswordResetController extends Controller {
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
+            'videoBackground' => config('tyro-login.video_background'),
             'loginField' => config('tyro-login.login_field', 'email'),
             'pageContent' => config('tyro-login.pages.forgot_password', [
                 'title' => 'Forgot Password?',
@@ -127,6 +128,7 @@ class PasswordResetController extends Controller {
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
+            'videoBackground' => config('tyro-login.video_background'),
             'token' => $token,
             'email' => $data['email'],
             'pageContent' => config('tyro-login.pages.reset_password', [

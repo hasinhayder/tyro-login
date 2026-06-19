@@ -81,6 +81,7 @@ class TwoFactorController extends Controller {
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
+            'videoBackground' => config('tyro-login.video_background'),
             'qrCodeSvg' => $qrCodeSvg,
             'secretKey' => $secretKey,
             'title' => config('tyro-login.two_factor.setup_title'),
@@ -233,6 +234,7 @@ class TwoFactorController extends Controller {
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
+            'videoBackground' => config('tyro-login.video_background'),
             'recoveryCodes' => $recoveryCodes,
         ]);
     }
@@ -249,6 +251,7 @@ class TwoFactorController extends Controller {
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
+            'videoBackground' => config('tyro-login.video_background'),
             'title' => config('tyro-login.two_factor.challenge_title'),
             'subtitle' => config('tyro-login.two_factor.challenge_subtitle'),
         ]);

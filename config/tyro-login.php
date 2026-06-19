@@ -56,6 +56,10 @@ return [
     |    Floating card design with subtle background patterns
     |    Perfect for: Modern web apps, enterprise dashboards
     |
+    | 'youtube-video'
+    |    Centered form with a full-screen YouTube video background
+    |    Perfect for: Creative portfolios, video-centric brands, modern showcases
+    |
     | Environment: TYRO_LOGIN_LAYOUT=centered
     |
     */
@@ -71,6 +75,32 @@ return [
     |
     */
     'background_image' => env('TYRO_LOGIN_BACKGROUND_IMAGE', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | YouTube Video Background
+    |--------------------------------------------------------------------------
+    |
+    | Used when 'layout' is set to 'youtube-video'.
+    | The video plays muted in the background with configurable blur and overlay.
+    |
+    | Environment: TYRO_LOGIN_VIDEO_URL, TYRO_LOGIN_VIDEO_BLUR,
+    |              TYRO_LOGIN_VIDEO_OVERLAY_COLOR, TYRO_LOGIN_VIDEO_OVERLAY_OPACITY
+    |
+    */
+    'video_background' => [
+        // YouTube video URL or ID (e.g. 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+        'url' => env('TYRO_LOGIN_VIDEO_URL', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+
+        // CSS blur amount (e.g. '0px', '4px', '8px')
+        'blur' => env('TYRO_LOGIN_VIDEO_BLUR', '4px'),
+
+        // Overlay color (any valid CSS color)
+        'overlay_color' => env('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', 'rgba(17, 24, 39, 0.85)'),
+
+        // Overlay opacity (0 to 1, applied on top of the color)
+        'overlay_opacity' => env('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', 0.85),
+    ],
 
     /*
     |--------------------------------------------------------------------------

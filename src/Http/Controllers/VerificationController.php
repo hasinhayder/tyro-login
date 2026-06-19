@@ -28,6 +28,7 @@ class VerificationController extends Controller {
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
+            'videoBackground' => config('tyro-login.video_background'),
             'email' => $email,
             'pageContent' => config('tyro-login.pages.verify_email', [
                 'title' => 'Verify Your Email',
@@ -50,6 +51,7 @@ class VerificationController extends Controller {
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
+            'videoBackground' => config('tyro-login.video_background'),
             'email' => $email,
             'pageContent' => config('tyro-login.pages.email_not_verified', [
                 'title' => 'Email Not Verified',

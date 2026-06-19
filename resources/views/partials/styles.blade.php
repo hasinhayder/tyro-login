@@ -577,6 +577,69 @@
             0 30px 35px -7px rgba(0, 0, 0, 0.5);
     }
 
+    /* YouTube Video Background Layout */
+    .auth-container.youtube-video {
+        padding: 0;
+        position: relative;
+        overflow: hidden;
+        background-color: #000;
+    }
+
+    .auth-container.youtube-video .form-panel {
+        position: relative;
+        z-index: 10;
+    }
+
+    .auth-container.youtube-video .form-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 1rem;
+        padding: 2.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    html.dark .auth-container.youtube-video .form-card {
+        background: rgba(26, 26, 26, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Video background container */
+    #tyro-video-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    #tyro-youtube-player {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100vw;
+        height: 56.25vw;
+        min-height: 100vh;
+        min-width: 177.78vh;
+    }
+
+    /* Overlay on top of video */
+    .tyro-video-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+        .auth-container.youtube-video .form-card {
+            padding: 1.5rem;
+        }
+    }
+
     /* Loading State */
     .btn.loading {
         position: relative;

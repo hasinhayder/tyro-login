@@ -31,6 +31,7 @@ class RegisterController extends Controller {
             'layout' => config('tyro-login.layout', 'centered'),
             'branding' => config('tyro-login.branding'),
             'backgroundImage' => config('tyro-login.background_image'),
+            'videoBackground' => config('tyro-login.video_background'),
             'requirePasswordConfirmation' => config('tyro-login.password.require_confirmation', true),
             'pageContent' => config('tyro-login.pages.register'),
             'captchaEnabled' => config('tyro-login.captcha.enabled_register', false),
