@@ -1,8 +1,8 @@
 {{-- YouTube video background for 'youtube-video' layout --}}
 @php
-    $blur = $videoBackground['blur'] ?? '4px';
-    $overlayColor = $videoBackground['overlay_color'] ?? 'rgba(17, 24, 39, 0.85)';
-    $overlayOpacity = $videoBackground['overlay_opacity'] ?? 0.85;
+    $blur = $videoBackground['blur'] ?? '0px';
+    $overlayColor = $videoBackground['overlay_color'] ?? '#111827';
+    $overlayOpacity = $videoBackground['overlay_opacity'] ?? 0.1;
     $videoUrl = $videoBackground['url'] ?? '';
 @endphp
 
@@ -79,10 +79,15 @@
                 videoWidth = windowHeight * aspectRatio;
             }
 
-            playerEl.style.width = videoWidth + 'px';
-            playerEl.style.height = videoHeight + 'px';
-            playerEl.style.left = ((windowWidth - videoWidth) / 2) + 'px';
-            playerEl.style.top = ((windowHeight - videoHeight) / 2) + 'px';
+            var leftOffset = (windowWidth - videoWidth) / 2;
+            var topOffset = (windowHeight - videoHeight) / 2;
+
+            playerEl.style.cssText = 'position: absolute !important; width: ' + videoWidth + 'px !important; height: ' + videoHeight + 'px !important; left: ' + leftOffset + 'px !important; top: ' + topOffset + 'px !important;';
+
+            var iframe = playerEl.querySelector('iframe');
+            if (iframe) {
+                iframe.style.cssText = 'width: ' + videoWidth + 'px !important; height: ' + videoHeight + 'px !important; border: none !important; display: block !important; pointer-events: none !important;';
+            }
         }
 
         /**

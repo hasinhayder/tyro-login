@@ -614,17 +614,23 @@
         height: 100vh;
         z-index: 0;
         overflow: hidden;
+        pointer-events: none;
     }
 
     #tyro-youtube-player {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100vw;
-        height: 56.25vw;
-        min-height: 100vh;
-        min-width: 177.78vh;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+    }
+
+    #tyro-youtube-player iframe {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        border: none !important;
+        display: block !important;
+        pointer-events: none !important;
     }
 
     /* Overlay on top of video */
@@ -632,6 +638,7 @@
         position: absolute;
         inset: 0;
         z-index: 1;
+        pointer-events: none;
     }
 
     @media (max-width: 768px) {

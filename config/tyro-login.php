@@ -93,13 +93,13 @@ return [
         'url' => env('TYRO_LOGIN_VIDEO_URL', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
 
         // CSS blur amount (e.g. '0px', '4px', '8px')
-        'blur' => env('TYRO_LOGIN_VIDEO_BLUR', '4px'),
+        'blur' => env('TYRO_LOGIN_VIDEO_BLUR', '0px'),
 
         // Overlay color (any valid CSS color)
-        'overlay_color' => env('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', 'rgba(17, 24, 39, 0.85)'),
+        'overlay_color' => env('TYRO_LOGIN_VIDEO_OVERLAY_COLOR', '#111827'),
 
         // Overlay opacity (0 to 1, applied on top of the color)
-        'overlay_opacity' => env('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', 0.85),
+        'overlay_opacity' => env('TYRO_LOGIN_VIDEO_OVERLAY_OPACITY', 0.1),
     ],
 
     /*
