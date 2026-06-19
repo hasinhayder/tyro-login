@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.9.0'; // Added YouTube video background layout
+        $version = '2.9.1'; // PHP 8.4 compatibility: explicit nullable type for handlePostLoginRedirect
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.9.1 - fix(php8.4): use explicit nullable type for SocialAuthController::handlePostLoginRedirect fallback parameter
 // 2.9.0 - Added YouTube video background layout for authentication pages with configurable blur, overlay color, opacity, and audio settings
 // 2.8.1 - Refined AI skill rules — added 6 new rule files (captcha, invitation, password-policy, registration, verification, password-reset), aligned all rules with actual codebase patterns
 // 2.8.0 - Added AI Skill Feature for Tyro Login package maintainers

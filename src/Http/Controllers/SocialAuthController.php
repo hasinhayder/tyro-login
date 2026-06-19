@@ -214,7 +214,7 @@ class SocialAuthController extends Controller {
     /**
      * Handle post-login redirect with 2FA checks.
      */
-    protected function handlePostLoginRedirect(Request $request, $user, string $fallbackRedirect = null): RedirectResponse {
+    protected function handlePostLoginRedirect(Request $request, $user, ?string $fallbackRedirect = null): RedirectResponse {
         $fallbackRedirect = $fallbackRedirect ?? config('tyro-login.redirects.after_login', '/');
 
         if (config('tyro-login.two_factor.enabled', false)) {
