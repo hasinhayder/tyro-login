@@ -84,6 +84,14 @@ return [
     | Used when 'layout' is set to 'youtube-video'.
     | The video plays muted in the background with configurable blur and overlay.
     |
+    | Note: the background is embedded via youtube-nocookie.com (privacy-enhanced
+    | mode) so no tracking cookies are set until playback begins. As a trade-off,
+    | the video will not appear in a viewer's YouTube watch history.
+    |
+    | 'sound' => true requests audio, but browsers may block autoplay-with-audio until
+    | the user has interacted with the page, so muted playback (the default) is the
+    | only reliably working option for a background video in that case.
+    |
     | Environment: TYRO_LOGIN_VIDEO_URL, TYRO_LOGIN_VIDEO_BLUR,
     |              TYRO_LOGIN_VIDEO_OVERLAY_COLOR, TYRO_LOGIN_VIDEO_OVERLAY_OPACITY
     |

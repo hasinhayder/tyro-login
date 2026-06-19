@@ -20,7 +20,7 @@
 <div id="tyro-video-background">
     @if($videoId)
     <iframe
-        src="https://www.youtube-nocookie.com/embed/{{ $videoId }}?autoplay=1&mute={{ $playSound ? '0' : '1' }}&loop=1&playlist={{ $videoId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&iv_load_policy=3"
+        src="https://www.youtube-nocookie.com/embed/{{ $videoId }}?autoplay=1&mute={{ $playSound ? '0' : '1' }}&loop=1&playlist={{ $videoId }}&controls=0&rel=0&playsinline=1&disablekb=1&iv_load_policy=3"
         title="Background"
         allow="autoplay; encrypted-media"
         allowfullscreen
