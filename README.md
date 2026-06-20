@@ -102,6 +102,7 @@ After installation, you can customize the package by editing `config/tyro-login.
     'app_name' => env('TYRO_LOGIN_APP_NAME', 'Laravel'),
     'logo' => env('TYRO_LOGIN_LOGO', null), // URL to your logo
     'logo_height' => env('TYRO_LOGIN_LOGO_HEIGHT', '48px'),
+    'logo_border_radius' => env('TYRO_LOGIN_LOGO_BORDER_RADIUS', '0'), // e.g., '50%' for circle, '8px' for rounded corners
 ],
 ```
 

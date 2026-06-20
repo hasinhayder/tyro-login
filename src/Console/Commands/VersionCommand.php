@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.9.2'; // YouTube video background: removed deprecated embed params, documented nocookie/sound caveats
+        $version = '2.10.0'; // Added Animated Birds, Aurora Waves, Particle Network layouts, and global logo border radius option
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.10.0 - Added Animated Birds, Aurora Waves, Particle Network layouts, and global logo border radius option
 // 2.9.2 - YouTube video background: removed deprecated embed params (showinfo/modestbranding), documented youtube-nocookie privacy tradeoff and sound/autoplay limitation
 // 2.9.1 - fix(php8.4): use explicit nullable type for SocialAuthController::handlePostLoginRedirect fallback parameter
 // 2.9.0 - Added YouTube video background layout for authentication pages with configurable blur, overlay color, opacity, and audio settings

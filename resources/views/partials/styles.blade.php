@@ -127,6 +127,14 @@
     .logo-container img {
         height: {{ $branding['logo_height'] ?? '48px' }};
         width: auto;
+        @if(($branding['logo_border_radius'] ?? '0') !== '0')
+        border-radius: {{ $branding['logo_border_radius'] }};
+        object-fit: cover;
+        @if(str_contains($branding['logo_border_radius'], '50') || str_contains($branding['logo_border_radius'], '9999'))
+        width: {{ $branding['logo_height'] ?? '48px' }};
+        aspect-ratio: 1/1;
+        @endif
+        @endif
     }
 
     .logo-container .logo-dark {

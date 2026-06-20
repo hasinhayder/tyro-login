@@ -1,6 +1,6 @@
 ---
 name: tyro-login
-version: 2.8.1
+version: 2.10.0
 domain: authentication
 mindset: framework-maintainer
 description: Laravel authentication infrastructure package providing guards, providers, sessions, tokens, verification, and security for the Tyro ecosystem.

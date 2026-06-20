@@ -229,6 +229,10 @@ return [
         // Accepts any valid CSS height value (px, rem, etc.)
         // Common values: '32px', '48px', '3rem'
         'logo_height' => env('TYRO_LOGIN_LOGO_HEIGHT', '48px'),
+
+        // Logo border radius for rounded logos (e.g. '50%' for full circle, '8px' for rounded corners)
+        // Default is '0' to maintain backward compatibility
+        'logo_border_radius' => env('TYRO_LOGIN_LOGO_BORDER_RADIUS', '0'),
     ],
 
     /*

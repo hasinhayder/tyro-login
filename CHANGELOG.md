@@ -2,6 +2,16 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [2.10.0] - 2026-06-21
+
+### Added
+
+-   **Premium Layouts** - Added three stunning, premium layouts for auth pages:
+    -   `animated-birds`: Translucent glassmorphism form card over a self-contained, interactive canvas flock of birds.
+    -   `aurora-waves`: Ambient floating aurora-like ribbon animations on a dark canvas.
+    -   `particle-network`: High-tech connected node constellation network with interactive mouse tracking.
+-   **Branding Adjustments** - Added a global `logo_border_radius` option to the config to allow setting custom border radius (e.g. `'50%'` for fully circular logos) without breaking backward compatibility.
+
 ## [2.0.0] - 2025-12-07
 
 ### Added
