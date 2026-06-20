@@ -657,7 +657,7 @@
     }
 
     html.dark .auth-container.animated-birds {
-        background-color: {{ config('tyro-login.animated_birds.color', '#f7f2ec') }};
+        background-color: #0c0f16;
     }
 
     .auth-container.animated-birds .form-panel {
@@ -666,7 +666,7 @@
     }
 
     .auth-container.animated-birds .form-card {
-        background: color-mix(in srgb, {{ config('tyro-login.animated_birds.color', '#f7f2ec') }} 22%, rgba(255, 255, 255, 0.5));
+        background: color-mix(in srgb, {{ config('tyro-login.animated_birds.color', '#f7f2ec') }} 12%, rgba(255, 255, 255, 0.3));
         backdrop-filter: blur(16px) saturate(180%);
         -webkit-backdrop-filter: blur(16px) saturate(180%);
         border: 1px solid rgba(255, 255, 255, 0.3);
@@ -677,9 +677,29 @@
     }
 
     html.dark .auth-container.animated-birds .form-card {
-        background: color-mix(in srgb, {{ config('tyro-login.animated_birds.color', '#f7f2ec') }} 30%, rgba(15, 17, 21, 0.55));
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.4), 0 8px 24px -8px rgba(0, 0, 0, 0.3);
+        background: rgba(15, 17, 21, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.45), 0 8px 24px -8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Force high-contrast text on dark background in dark mode */
+    html.dark .auth-container.animated-birds .form-card .form-header h2,
+    html.dark .auth-container.animated-birds .form-card .form-label,
+    html.dark .auth-container.animated-birds .form-card .checkbox-label,
+    html.dark .auth-container.animated-birds .form-card .form-footer p {
+        color: #f8fafc;
+    }
+
+    html.dark .auth-container.animated-birds .form-card .form-header p {
+        color: rgba(248, 250, 252, 0.7);
+    }
+
+    html.dark .auth-container.animated-birds .form-card .form-link {
+        color: #e2e8f0;
+    }
+
+    html.dark .auth-container.animated-birds .form-card .logo-container .app-logo svg {
+        color: #f8fafc;
     }
 
     /* Frosted inputs that sit nicely on the glass card */
@@ -696,7 +716,7 @@
     html.dark .auth-container.animated-birds .captcha-question {
         background-color: rgba(255, 255, 255, 0.08);
         border-color: rgba(255, 255, 255, 0.15);
-        color: #f7f2ec;
+        color: #f8fafc;
     }
 
     .auth-container.animated-birds .form-input::placeholder {
@@ -704,7 +724,7 @@
     }
 
     html.dark .auth-container.animated-birds .form-input::placeholder {
-        color: rgba(247, 242, 236, 0.5);
+        color: rgba(248, 250, 252, 0.45);
     }
 
     /* Bird canvas: fixed full-screen background */
@@ -727,7 +747,6 @@
 
     /* ========================================
        Aurora / Particle animated layouts
-       (shared glassmorphism treatment, color-driven like birds)
        ======================================== */
     .auth-container.aurora-waves,
     .auth-container.particle-network {
@@ -737,7 +756,8 @@
     }
 
     .auth-container.aurora-waves { background-color: {{ config('tyro-login.aurora_waves.color', '#0b1020') }}; }
-    .auth-container.particle-network { background-color: {{ config('tyro-login.particle_network.color', '#0f172a') }}; }
+    .auth-container.particle-network { background-color: #f8fafc; }
+    html.dark .auth-container.particle-network { background-color: {{ config('tyro-login.particle_network.color', '#0f172a') }}; }
 
     .auth-container.aurora-waves .form-panel,
     .auth-container.particle-network .form-panel {
@@ -746,14 +766,7 @@
     }
 
     .auth-container.aurora-waves .form-card {
-        background: color-mix(in srgb, {{ config('tyro-login.aurora_waves.color', '#0b1020') }} 30%, rgba(255, 255, 255, 0.55));
-    }
-    .auth-container.particle-network .form-card {
-        background: color-mix(in srgb, {{ config('tyro-login.particle_network.color', '#0f172a') }} 30%, rgba(255, 255, 255, 0.55));
-    }
-
-    .auth-container.aurora-waves .form-card,
-    .auth-container.particle-network .form-card {
+        background: color-mix(in srgb, {{ config('tyro-login.aurora_waves.color', '#0b1020') }} 15%, rgba(255, 255, 255, 0.28));
         backdrop-filter: blur(16px) saturate(180%);
         -webkit-backdrop-filter: blur(16px) saturate(180%);
         border: 1px solid rgba(255, 255, 255, 0.18);
@@ -764,50 +777,85 @@
         color: #f8fafc;
     }
 
-    html.dark .auth-container.aurora-waves .form-card,
-    html.dark .auth-container.particle-network .form-card {
-        background: color-mix(in srgb, var(--tyro-anim-color, #0f172a) 35%, rgba(15, 17, 21, 0.6));
+    .auth-container.particle-network .form-card {
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.08), 0 8px 24px -8px rgba(0, 0, 0, 0.04);
+        border-radius: 2rem;
+        padding: 2.5rem;
+        max-width: 460px;
+    }
+
+    html.dark .auth-container.aurora-waves .form-card {
+        background: color-mix(in srgb, {{ config('tyro-login.aurora_waves.color', '#0b1020') }} 18%, rgba(15, 17, 21, 0.3));
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Force light-readable text since these layouts default to dark backgrounds */
+    html.dark .auth-container.particle-network .form-card {
+        background: color-mix(in srgb, {{ config('tyro-login.particle_network.color', '#0f172a') }} 18%, rgba(15, 17, 21, 0.3));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.45), 0 8px 24px -8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Force light-readable text for Aurora Waves always, and for Particle Network only in Dark Mode */
     .auth-container.aurora-waves .form-card .form-header h2,
     .auth-container.aurora-waves .form-card .form-label,
     .auth-container.aurora-waves .form-card .checkbox-label,
     .auth-container.aurora-waves .form-card .form-footer p,
-    .auth-container.particle-network .form-card .form-header h2,
-    .auth-container.particle-network .form-card .form-label,
-    .auth-container.particle-network .form-card .checkbox-label,
-    .auth-container.particle-network .form-card .form-footer p {
+    html.dark .auth-container.particle-network .form-card .form-header h2,
+    html.dark .auth-container.particle-network .form-card .form-label,
+    html.dark .auth-container.particle-network .form-card .checkbox-label,
+    html.dark .auth-container.particle-network .form-card .form-footer p {
         color: #f8fafc;
     }
 
     .auth-container.aurora-waves .form-card .form-header p,
-    .auth-container.particle-network .form-card .form-header p {
+    html.dark .auth-container.particle-network .form-card .form-header p {
         color: rgba(248, 250, 252, 0.7);
     }
 
+    /* Frosted input styles */
     .auth-container.aurora-waves .form-card .form-input,
-    .auth-container.particle-network .form-card .form-input,
     .auth-container.aurora-waves .form-card .captcha-question,
-    .auth-container.particle-network .form-card .captcha-question {
+    html.dark .auth-container.particle-network .form-card .form-input,
+    html.dark .auth-container.particle-network .form-card .captcha-question {
         background-color: rgba(255, 255, 255, 0.08);
         border-color: rgba(255, 255, 255, 0.18);
         color: #f8fafc;
     }
 
+    .auth-container.particle-network .form-card .form-input,
+    .auth-container.particle-network .form-card .captcha-question {
+        background-color: rgba(255, 255, 255, 0.65);
+        border-color: rgba(0, 0, 0, 0.12);
+        color: var(--foreground);
+    }
+
+    html.dark .auth-container.particle-network .form-card .form-input,
+    html.dark .auth-container.particle-network .form-card .captcha-question {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #f8fafc;
+    }
+
     .auth-container.aurora-waves .form-card .form-input::placeholder,
-    .auth-container.particle-network .form-card .form-input::placeholder {
+    html.dark .auth-container.particle-network .form-card .form-input::placeholder {
         color: rgba(248, 250, 252, 0.45);
     }
 
+    .auth-container.particle-network .form-card .form-input::placeholder {
+        color: var(--muted-foreground);
+    }
+
     .auth-container.aurora-waves .form-card .form-link,
-    .auth-container.particle-network .form-card .form-link {
+    html.dark .auth-container.particle-network .form-card .form-link {
         color: #e2e8f0;
     }
 
     .auth-container.aurora-waves .form-card .logo-container .app-logo svg,
-    .auth-container.particle-network .form-card .logo-container .app-logo svg {
+    html.dark .auth-container.particle-network .form-card .logo-container .app-logo svg {
         color: #f8fafc;
     }
 

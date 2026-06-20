@@ -36,10 +36,10 @@
         };
 
         var COLORS_DARK = {
-            skyTop: SKY_COLOR,
-            skyBottom: SKY_COLOR,
-            birdBase: '#e8e2d8',
-            birdLight: '#b9b2a6',
+            skyTop: '#0c0f16',
+            skyBottom: '#181c26',
+            birdBase: '#e2e8f0',
+            birdLight: '#94a3b8',
         };
 
         // ─── Bird class ──────────────────────────────────────
@@ -133,7 +133,7 @@
             ctx.shadowOffsetY = s * 0.08;
             ctx.fill();
 
-            ctx.strokeStyle = 'rgba(45, 42, 39, 0.08)';
+            ctx.strokeStyle = isDark() ? 'rgba(255, 255, 255, 0.08)' : 'rgba(45, 42, 39, 0.08)';
             ctx.lineWidth = 0.4;
             ctx.stroke();
 
@@ -156,8 +156,13 @@
             ctx.fillRect(0, 0, w, h);
 
             var haze = ctx.createRadialGradient(w * 0.5, h * 0.85, 0, w * 0.5, h * 0.85, h * 0.5);
-            haze.addColorStop(0, 'rgba(235, 224, 214, 0.15)');
-            haze.addColorStop(1, 'rgba(247, 242, 236, 0)');
+            if (isDark()) {
+                haze.addColorStop(0, 'rgba(30, 41, 59, 0.25)');
+                haze.addColorStop(1, 'rgba(12, 15, 22, 0)');
+            } else {
+                haze.addColorStop(0, 'rgba(235, 224, 214, 0.15)');
+                haze.addColorStop(1, 'rgba(247, 242, 236, 0)');
+            }
             ctx.fillStyle = haze;
             ctx.fillRect(0, 0, w, h);
         }
@@ -179,7 +184,7 @@
             }
 
             // very faint overlay for depth
-            ctx.fillStyle = 'rgba(247, 242, 236, 0.03)';
+            ctx.fillStyle = isDark() ? 'rgba(15, 23, 42, 0.03)' : 'rgba(247, 242, 236, 0.03)';
             ctx.fillRect(0, 0, W, H);
 
             requestAnimationFrame(animate);

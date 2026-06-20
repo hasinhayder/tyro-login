@@ -51,14 +51,29 @@
             return { r: 15, g: 23, b: 42 };
         }
 
-        var base = parseColor(canvas.getAttribute('data-color'));
+        function isDark() {
+            return document.documentElement.classList.contains('dark');
+        }
+
+        var baseDark = parseColor(canvas.getAttribute('data-color')) || { r: 15, g: 23, b: 42 };
+        var baseLight = { r: 248, g: 250, b: 252 };
         var DENSITY = parseInt(canvas.getAttribute('data-density'), 10) || 80;
         var LINK_DIST = parseInt(canvas.getAttribute('data-link'), 10) || 130;
         var INTERACTIVE = canvas.getAttribute('data-interactive') === '1';
 
-        // Decide node color: bright relative to base luminance
-        function luminance(c) { return 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b; }
-        var nodeTone = luminance(base) > 140 ? '0,0,0' : '255,255,255';
+        function getColors() {
+            if (isDark()) {
+                return {
+                    bg: baseDark,
+                    nodeTone: '255,255,255'
+                };
+            } else {
+                return {
+                    bg: baseLight,
+                    nodeTone: '15,23,42'
+                };
+            }
+        }
 
         var particles = [];
         var mouse = { x: -9999, y: -9999, active: false };
@@ -89,12 +104,17 @@
         }
 
         function drawBackground() {
-            ctx.fillStyle = 'rgb(' + base.r + ',' + base.g + ',' + base.b + ')';
+            var colors = getColors();
+            ctx.fillStyle = 'rgb(' + colors.bg.r + ',' + colors.bg.g + ',' + colors.bg.b + ')';
             ctx.fillRect(0, 0, W, H);
         }
 
         function animate() {
             if (canvas.width !== W * DPR || canvas.height !== H * DPR) { resize(); }
+            
+            var colors = getColors();
+            var nodeTone = colors.nodeTone;
+            
             drawBackground();
 
             for (var i = 0; i < particles.length; i++) {
