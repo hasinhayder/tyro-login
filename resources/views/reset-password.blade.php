@@ -90,6 +90,10 @@
     @include('tyro-login::partials.youtube-video')
 @endif
 
+@if($layout==='animated-birds')
+    @include('tyro-login::partials.animated-birds')
+@endif
+
 <style>
     .email-notice {
         text-align: center;

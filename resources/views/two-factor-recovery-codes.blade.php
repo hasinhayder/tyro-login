@@ -49,6 +49,10 @@
     @include('tyro-login::partials.youtube-video')
 @endif
 
+@if($layout==='animated-birds')
+    @include('tyro-login::partials.animated-birds')
+@endif
+
 <style>
     .recovery-codes-container {
         display: grid;

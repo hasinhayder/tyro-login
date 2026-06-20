@@ -16,7 +16,7 @@
 
 ## Features
 
--   **Multiple Layouts** - 6 beautiful layouts: centered, split-left, split-right, fullscreen, card, and youtube-video
+-   **Multiple Layouts** - 7 beautiful layouts: centered, split-left, split-right, fullscreen, card, youtube-video, and animated-birds
 -   **Beautiful Design** - Modern, professional UI out of the box
 -   **Social Login** - OAuth authentication with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack
 -   **Enhanced Security** - Industry-standard security features
@@ -79,7 +79,7 @@ After installation, you can customize the package by editing `config/tyro-login.
 ### Layout Options
 
 ```php
-// Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card', 'youtube-video'
+// Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card', 'youtube-video', 'animated-birds'
 'layout' => env('TYRO_LOGIN_LAYOUT', 'centered'),
 
 // Background image for split and fullscreen layouts
@@ -732,6 +732,23 @@ TYRO_LOGIN_VIDEO_SOUND=false
 -   Configurable blur effect on the video background
 -   Customizable overlay color and opacity
 -   Video automatically loops and plays inline
+-   Form maintains glassmorphism effect and remains fully functional
+
+### Animated Birds Layout
+
+A full-screen animated flock of birds flies across the background while the login form stays centered in a glassmorphism card. The animation is pure canvas/JavaScript (no external dependencies, no network requests) and adapts its palette to the active light/dark theme.
+
+```env
+TYRO_LOGIN_LAYOUT=animated-birds
+# Single color drives both the sky background and the frosted form tint (default: '#f7f2ec')
+TYRO_LOGIN_BIRDS_COLOR=#f7f2ec
+```
+
+**Features:**
+
+-   Self-contained canvas animation (no images, no video, no third-party requests)
+-   Theme-aware: warm sky in light mode, dusk tones in dark mode
+-   Lightweight and GPU-friendly
 -   Form maintains glassmorphism effect and remains fully functional
 
 **All layouts support:**

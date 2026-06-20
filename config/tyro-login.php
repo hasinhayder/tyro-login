@@ -60,6 +60,10 @@ return [
     |    Centered form with a full-screen YouTube video background
     |    Perfect for: Creative portfolios, video-centric brands, modern showcases
     |
+    | 'animated-birds'
+    |    Centered form with a full-screen animated flock of birds background
+    |    Perfect for: Creative brands, nature-inspired apps, ambient landing pages
+    |
     | Environment: TYRO_LOGIN_LAYOUT=centered
     |
     */
@@ -111,6 +115,25 @@ return [
 
         // Whether to play video with sound (true = sound on, false = muted)
         'sound' => env('TYRO_LOGIN_VIDEO_SOUND', false),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Animated Birds Background
+    |--------------------------------------------------------------------------
+    |
+    | Used when 'layout' is set to 'animated-birds'.
+    |
+    | A single color drives the whole scene: it becomes the sky/background
+    | for the canvas animation and the tint of the frosted glass form card.
+    |
+    | Any valid CSS color works (hex, rgb, hsl, named).
+    |
+    | Environment: TYRO_LOGIN_BIRDS_COLOR
+    |
+    */
+    'animated_birds' => [
+        'color' => env('TYRO_LOGIN_BIRDS_COLOR', '#f7f2ec'),
     ],
 
     /*

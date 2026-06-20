@@ -68,6 +68,10 @@
     @include('tyro-login::partials.youtube-video')
 @endif
 
+@if($layout==='animated-birds')
+    @include('tyro-login::partials.animated-birds')
+@endif
+
 <style>
     .lockout-message {
         background-color: color-mix(in srgb, var(--destructive), transparent 90%);

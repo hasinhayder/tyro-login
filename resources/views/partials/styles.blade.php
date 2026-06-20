@@ -648,6 +648,83 @@
         }
     }
 
+    /* Animated Birds Background Layout */
+    .auth-container.animated-birds {
+        padding: 0;
+        position: relative;
+        overflow: hidden;
+        background-color: {{ config('tyro-login.animated_birds.color', '#f7f2ec') }};
+    }
+
+    html.dark .auth-container.animated-birds {
+        background-color: {{ config('tyro-login.animated_birds.color', '#f7f2ec') }};
+    }
+
+    .auth-container.animated-birds .form-panel {
+        position: relative;
+        z-index: 10;
+    }
+
+    .auth-container.animated-birds .form-card {
+        background: color-mix(in srgb, {{ config('tyro-login.animated_birds.color', '#f7f2ec') }} 22%, rgba(255, 255, 255, 0.5));
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.12), 0 8px 24px -8px rgba(0, 0, 0, 0.06);
+        border-radius: 2rem;
+        padding: 2.5rem;
+        max-width: 460px;
+    }
+
+    html.dark .auth-container.animated-birds .form-card {
+        background: color-mix(in srgb, {{ config('tyro-login.animated_birds.color', '#f7f2ec') }} 30%, rgba(15, 17, 21, 0.55));
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.4), 0 8px 24px -8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Frosted inputs that sit nicely on the glass card */
+    .auth-container.animated-birds .form-input,
+    .auth-container.animated-birds .captcha-question {
+        background-color: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        border-color: rgba(255, 255, 255, 0.35);
+        color: #1e1b18;
+    }
+
+    html.dark .auth-container.animated-birds .form-input,
+    html.dark .auth-container.animated-birds .captcha-question {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #f7f2ec;
+    }
+
+    .auth-container.animated-birds .form-input::placeholder {
+        color: rgba(30, 27, 24, 0.55);
+    }
+
+    html.dark .auth-container.animated-birds .form-input::placeholder {
+        color: rgba(247, 242, 236, 0.5);
+    }
+
+    /* Bird canvas: fixed full-screen background */
+    #tyro-bird-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        display: block;
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+        .auth-container.animated-birds .form-card {
+            padding: 1.5rem;
+        }
+    }
+
     /* Loading State */
     .btn.loading {
         position: relative;
