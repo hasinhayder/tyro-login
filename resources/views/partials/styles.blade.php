@@ -725,6 +725,112 @@
         }
     }
 
+    /* ========================================
+       Aurora / Particle animated layouts
+       (shared glassmorphism treatment, color-driven like birds)
+       ======================================== */
+    .auth-container.aurora-waves,
+    .auth-container.particle-network {
+        padding: 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-container.aurora-waves { background-color: {{ config('tyro-login.aurora_waves.color', '#0b1020') }}; }
+    .auth-container.particle-network { background-color: {{ config('tyro-login.particle_network.color', '#0f172a') }}; }
+
+    .auth-container.aurora-waves .form-panel,
+    .auth-container.particle-network .form-panel {
+        position: relative;
+        z-index: 10;
+    }
+
+    .auth-container.aurora-waves .form-card {
+        background: color-mix(in srgb, {{ config('tyro-login.aurora_waves.color', '#0b1020') }} 30%, rgba(255, 255, 255, 0.55));
+    }
+    .auth-container.particle-network .form-card {
+        background: color-mix(in srgb, {{ config('tyro-login.particle_network.color', '#0f172a') }} 30%, rgba(255, 255, 255, 0.55));
+    }
+
+    .auth-container.aurora-waves .form-card,
+    .auth-container.particle-network .form-card {
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.45), 0 8px 24px -8px rgba(0, 0, 0, 0.3);
+        border-radius: 2rem;
+        padding: 2.5rem;
+        max-width: 460px;
+        color: #f8fafc;
+    }
+
+    html.dark .auth-container.aurora-waves .form-card,
+    html.dark .auth-container.particle-network .form-card {
+        background: color-mix(in srgb, var(--tyro-anim-color, #0f172a) 35%, rgba(15, 17, 21, 0.6));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Force light-readable text since these layouts default to dark backgrounds */
+    .auth-container.aurora-waves .form-card .form-header h2,
+    .auth-container.aurora-waves .form-card .form-label,
+    .auth-container.aurora-waves .form-card .checkbox-label,
+    .auth-container.aurora-waves .form-card .form-footer p,
+    .auth-container.particle-network .form-card .form-header h2,
+    .auth-container.particle-network .form-card .form-label,
+    .auth-container.particle-network .form-card .checkbox-label,
+    .auth-container.particle-network .form-card .form-footer p {
+        color: #f8fafc;
+    }
+
+    .auth-container.aurora-waves .form-card .form-header p,
+    .auth-container.particle-network .form-card .form-header p {
+        color: rgba(248, 250, 252, 0.7);
+    }
+
+    .auth-container.aurora-waves .form-card .form-input,
+    .auth-container.particle-network .form-card .form-input,
+    .auth-container.aurora-waves .form-card .captcha-question,
+    .auth-container.particle-network .form-card .captcha-question {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.18);
+        color: #f8fafc;
+    }
+
+    .auth-container.aurora-waves .form-card .form-input::placeholder,
+    .auth-container.particle-network .form-card .form-input::placeholder {
+        color: rgba(248, 250, 252, 0.45);
+    }
+
+    .auth-container.aurora-waves .form-card .form-link,
+    .auth-container.particle-network .form-card .form-link {
+        color: #e2e8f0;
+    }
+
+    .auth-container.aurora-waves .form-card .logo-container .app-logo svg,
+    .auth-container.particle-network .form-card .logo-container .app-logo svg {
+        color: #f8fafc;
+    }
+
+    /* Animated canvas backgrounds: fixed full-screen */
+    #tyro-aurora-canvas,
+    #tyro-particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        display: block;
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+        .auth-container.aurora-waves .form-card,
+        .auth-container.particle-network .form-card {
+            padding: 1.5rem;
+        }
+    }
+
     /* Loading State */
     .btn.loading {
         position: relative;

@@ -64,6 +64,14 @@ return [
     |    Centered form with a full-screen animated flock of birds background
     |    Perfect for: Creative brands, nature-inspired apps, ambient landing pages
     |
+    | 'aurora-waves'
+    |    Centered form with flowing aurora-like gradient ribbons in the background
+    |    Perfect for: Premium brands, creative agencies, atmospheric product pages
+    |
+    | 'particle-network'
+    |    Centered form with a connected particle constellation background
+    |    Perfect for: SaaS, developer tools, tech products
+    |
     | Environment: TYRO_LOGIN_LAYOUT=centered
     |
     */
@@ -134,6 +142,59 @@ return [
     */
     'animated_birds' => [
         'color' => env('TYRO_LOGIN_BIRDS_COLOR', '#f7f2ec'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Aurora Waves Background
+    |--------------------------------------------------------------------------
+    |
+    | Used when 'layout' is set to 'aurora-waves'.
+    |
+    | Soft, flowing gradient ribbons drifting across a dark sky. The primary
+    | color drives both the background and the frosted form glass tint.
+    |
+    | Environment: TYRO_LOGIN_AURORA_COLOR, TYRO_LOGIN_AURORA_SPEED,
+    |              TYRO_LOGIN_AURORA_INTENSITY
+    |
+    */
+    'aurora_waves' => [
+        // Base color (dark recommended). Any valid CSS color.
+        'color' => env('TYRO_LOGIN_AURORA_COLOR', '#0b1020'),
+
+        // Animation speed multiplier (0.5 = slow, 2 = fast)
+        'speed' => env('TYRO_LOGIN_AURORA_SPEED', 1),
+
+        // Ribbon opacity/intensity (0 = faint, 1 = vivid)
+        'intensity' => env('TYRO_LOGIN_AURORA_INTENSITY', 0.5),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Particle Network Background
+    |--------------------------------------------------------------------------
+    |
+    | Used when 'layout' is set to 'particle-network'.
+    |
+    | Floating nodes connected by faint lines (classic "connected tech" look),
+    | with optional mouse interaction. The primary color drives the background.
+    |
+    | Environment: TYRO_LOGIN_PARTICLE_COLOR, TYRO_LOGIN_PARTICLE_DENSITY,
+    |              TYRO_LOGIN_PARTICLE_LINK_DISTANCE, TYRO_LOGIN_PARTICLE_INTERACTIVE
+    |
+    */
+    'particle_network' => [
+        // Base color (dark recommended). Any valid CSS color.
+        'color' => env('TYRO_LOGIN_PARTICLE_COLOR', '#0f172a'),
+
+        // Particle density (approx count on a 1280x720 viewport; scales with area)
+        'density' => env('TYRO_LOGIN_PARTICLE_DENSITY', 80),
+
+        // Max distance (px) at which two nodes are linked by a line
+        'link_distance' => env('TYRO_LOGIN_PARTICLE_LINK_DISTANCE', 130),
+
+        // Whether nodes react to the mouse cursor (repel + link)
+        'interactive' => env('TYRO_LOGIN_PARTICLE_INTERACTIVE', true),
     ],
 
     /*

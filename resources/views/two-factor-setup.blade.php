@@ -67,13 +67,7 @@
     </div>
 </div>
 
-@if($layout==='youtube-video')
-    @include('tyro-login::partials.youtube-video')
-@endif
-
-@if($layout==='animated-birds')
-    @include('tyro-login::partials.animated-birds')
-@endif
+@include('tyro-login::partials.backgrounds')
 
 <style>
     .qr-container svg {

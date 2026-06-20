@@ -16,7 +16,7 @@
 
 ## Features
 
--   **Multiple Layouts** - 7 beautiful layouts: centered, split-left, split-right, fullscreen, card, youtube-video, and animated-birds
+-   **Multiple Layouts** - 9 beautiful layouts: centered, split-left, split-right, fullscreen, card, youtube-video, animated-birds, aurora-waves, and particle-network
 -   **Beautiful Design** - Modern, professional UI out of the box
 -   **Social Login** - OAuth authentication with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack
 -   **Enhanced Security** - Industry-standard security features
@@ -79,7 +79,7 @@ After installation, you can customize the package by editing `config/tyro-login.
 ### Layout Options
 
 ```php
-// Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card', 'youtube-video', 'animated-birds'
+// Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card', 'youtube-video', 'animated-birds', 'aurora-waves', 'particle-network'
 'layout' => env('TYRO_LOGIN_LAYOUT', 'centered'),
 
 // Background image for split and fullscreen layouts
@@ -748,6 +748,44 @@ TYRO_LOGIN_BIRDS_COLOR=#f7f2ec
 
 -   Self-contained canvas animation (no images, no video, no third-party requests)
 -   Theme-aware: warm sky in light mode, dusk tones in dark mode
+-   Lightweight and GPU-friendly
+-   Form maintains glassmorphism effect and remains fully functional
+
+### Aurora Waves Layout
+
+Soft, flowing aurora-like gradient ribbons drift across a dark sky behind a centered glass form. The primary color drives both the background and the frosted form tint.
+
+```env
+TYRO_LOGIN_LAYOUT=aurora-waves
+# Base color (dark recommended) - drives background + form tint (default: '#0b1020')
+TYRO_LOGIN_AURORA_COLOR=#0b1020
+# Animation speed multiplier (default: 1)
+TYRO_LOGIN_AURORA_SPEED=1
+# Ribbon intensity 0 (faint) to 1 (vivid) (default: 0.5)
+TYRO_LOGIN_AURORA_INTENSITY=0.5
+```
+
+### Particle Network Layout
+
+Floating nodes connected by faint lines - a classic "connected tech" look with optional mouse interaction (nodes repel and link to the cursor).
+
+```env
+TYRO_LOGIN_LAYOUT=particle-network
+# Base color (dark recommended) (default: '#0f172a')
+TYRO_LOGIN_PARTICLE_COLOR=#0f172a
+# Particle density on a 1280x720 viewport, scales with area (default: 80)
+TYRO_LOGIN_PARTICLE_DENSITY=80
+# Max distance (px) linking two nodes (default: 130)
+TYRO_LOGIN_PARTICLE_LINK_DISTANCE=130
+# React to the mouse cursor (default: true)
+TYRO_LOGIN_PARTICLE_INTERACTIVE=true
+```
+
+**All animated layouts (animated-birds, aurora-waves, particle-network) share:**
+
+-   Self-contained canvas animation (no images, no video, no third-party requests)
+-   Theme-aware (light/dark) where relevant
+-   One config color drives the background and the frosted glass form tint
 -   Lightweight and GPU-friendly
 -   Form maintains glassmorphism effect and remains fully functional
 
