@@ -736,7 +736,7 @@ TYRO_LOGIN_VIDEO_SOUND=false
 
 ### Animated Birds Layout
 
-A full-screen animated flock of birds flies across the background while the login form stays centered in a glassmorphism card. The animation is pure canvas/JavaScript (no external dependencies, no network requests) and adapts its palette to the active light/dark theme.
+A full-screen animated flock of birds flies across the background while the login form stays centered in an ultra-premium translucent glassmorphism card. The animation is pure canvas/JavaScript (no external dependencies, no network requests) and adapts its palette dynamically to the active light/dark theme (featuring a warm sunrise sky in light mode, and dusk/night sky tones in dark mode with automatically adjusted contrast).
 
 ```env
 TYRO_LOGIN_LAYOUT=animated-birds
@@ -748,6 +748,7 @@ TYRO_LOGIN_BIRDS_COLOR=#f7f2ec
 
 -   Self-contained canvas animation (no images, no video, no third-party requests)
 -   Theme-aware: warm sky in light mode, dusk tones in dark mode
+-   Highly transparent, refined frosted glass card with high-contrast readable elements
 -   Lightweight and GPU-friendly
 -   Form maintains glassmorphism effect and remains fully functional
 
@@ -767,11 +768,11 @@ TYRO_LOGIN_AURORA_INTENSITY=0.5
 
 ### Particle Network Layout
 
-Floating nodes connected by faint lines - a classic "connected tech" look with optional mouse interaction (nodes repel and link to the cursor).
+Floating nodes connected by faint lines - a classic "connected tech" look with optional mouse interaction (nodes repel and link to the cursor). This layout is fully theme-aware: in light mode, it displays a light background with dark particles and connections, and in dark mode, it automatically transitions to a dark background with light particles and connections.
 
 ```env
 TYRO_LOGIN_LAYOUT=particle-network
-# Base color (dark recommended) (default: '#0f172a')
+# Base color for dark mode (default: '#0f172a')
 TYRO_LOGIN_PARTICLE_COLOR=#0f172a
 # Particle density on a 1280x720 viewport, scales with area (default: 80)
 TYRO_LOGIN_PARTICLE_DENSITY=80
@@ -784,8 +785,8 @@ TYRO_LOGIN_PARTICLE_INTERACTIVE=true
 **All animated layouts (animated-birds, aurora-waves, particle-network) share:**
 
 -   Self-contained canvas animation (no images, no video, no third-party requests)
--   Theme-aware (light/dark) where relevant
--   One config color drives the background and the frosted glass form tint
+-   Theme-aware (light/dark) dynamically
+-   One config color drives the background and the frosted glass form tint (or adapts to dark mode)
 -   Lightweight and GPU-friendly
 -   Form maintains glassmorphism effect and remains fully functional
 
