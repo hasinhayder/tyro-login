@@ -66,7 +66,7 @@
         var SPEED = parseFloat(canvas.getAttribute('data-speed')) || 1;
         var BUBBLES = canvas.getAttribute('data-bubbles') === '1';
 
-        // Derived palette from a single color
+        // Always a bright seascape (same in light & dark mode)
         var skyTop = mix(base, WHITE, 0.9);
         var skyMid = mix(base, WHITE, 0.82);
         var skyBottom = mix(base, WHITE, 0.7);
@@ -78,6 +78,8 @@
             { c: mix(base, BLACK, 0.4), a: 0.55, amp: 100, len: 0.0045, speed: 0.0007, yOff: 0.78 },
             { c: mix(base, BLACK, 0.72), a: 0.85, amp: 120, len: 0.0035, speed: 0.00085, yOff: 0.9 }
         ];
+
+        var glowAlpha = 0.5;
 
         function drawWave(layer, time) {
             var baseY = H * layer.yOff;
@@ -152,7 +154,7 @@
 
             // soft sun glow
             var sun = ctx.createRadialGradient(W * 0.5, H * 0.3, 0, W * 0.5, H * 0.3, H * 0.5);
-            sun.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+            sun.addColorStop(0, 'rgba(255, 255, 255, ' + glowAlpha + ')');
             sun.addColorStop(1, 'rgba(255, 255, 255, 0)');
             ctx.fillStyle = sun;
             ctx.fillRect(0, 0, W, H);

@@ -947,6 +947,44 @@
         color: #1f7a8c;
     }
 
+    /* Dark mode: keep the bright background, but darken the form glass + use light text */
+    html.dark .auth-container.tidal .form-card {
+        background: color-mix(in srgb, {{ config('tyro-login.tidal.color', '#1f7a8c') }} 18%, rgba(15, 17, 21, 0.55));
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+        color: #e6f7f5;
+    }
+
+    html.dark .auth-container.tidal .form-card .form-header h2,
+    html.dark .auth-container.tidal .form-card .form-label,
+    html.dark .auth-container.tidal .form-card .checkbox-label,
+    html.dark .auth-container.tidal .form-card .form-footer p {
+        color: #e6f7f5;
+    }
+
+    html.dark .auth-container.tidal .form-card .form-header p {
+        color: rgba(230, 247, 245, 0.7);
+    }
+
+    html.dark .auth-container.tidal .form-card .form-input,
+    html.dark .auth-container.tidal .form-card .captcha-question {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.18);
+        color: #e6f7f5;
+    }
+
+    html.dark .auth-container.tidal .form-card .form-input::placeholder {
+        color: rgba(230, 247, 245, 0.45);
+    }
+
+    html.dark .auth-container.tidal .form-card .form-link {
+        color: #7fe3d8;
+    }
+
+    html.dark .auth-container.tidal .form-card .logo-container .app-logo svg {
+        color: #7fe3d8;
+    }
+
     #tyro-tidal-canvas {
         position: fixed;
         top: 0;
