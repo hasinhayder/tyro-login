@@ -114,7 +114,7 @@ return [
     */
     'video_background' => [
         // YouTube video URL or ID (e.g. 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')
-        'url' => env('TYRO_LOGIN_VIDEO_URL', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+        'url' => env('TYRO_LOGIN_VIDEO_URL', 'https://www.youtube.com/watch?v=JFMY5NxXDhw&t=10'),
 
         // CSS blur amount (e.g. '0px', '4px', '8px')
         'blur' => env('TYRO_LOGIN_VIDEO_BLUR', '0px'),

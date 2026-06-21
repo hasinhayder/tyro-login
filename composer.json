@@ -54,7 +54,7 @@
             ]
         },
         "branch-alias": {
-            "dev-main": "2.4.x-dev"
+            "dev-main": "2.9.x-dev"
         }
     },
     "config": {
