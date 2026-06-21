@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-<a href="https://hasinhayder.github.io/tyro/tyro-login/">Website</a> |
-<a href="https://hasinhayder.github.io/tyro/tyro-login/doc.html">Documentation</a> |
+<a href="https://hasinhayder.github.io/tyro-login/">Website</a> |
+<a href="https://hasinhayder.github.io/tyro-login/doc.html">Documentation</a> |
 <a href="https://github.com/hasinhayder/tyro-login">GitHub</a>
 </p>
 
