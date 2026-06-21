@@ -16,7 +16,7 @@
 
 ## Features
 
--   **Multiple Layouts** - 9 beautiful layouts: centered, split-left, split-right, fullscreen, card, youtube-video, animated-birds, aurora-waves, and particle-network
+-   **Multiple Layouts** - 10 beautiful layouts: centered, split-left, split-right, fullscreen, card, youtube-video, animated-birds, aurora-waves, particle-network, and tidal
 -   **Beautiful Design** - Modern, professional UI out of the box
 -   **Social Login** - OAuth authentication with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack
 -   **Enhanced Security** - Industry-standard security features
@@ -79,7 +79,7 @@ After installation, you can customize the package by editing `config/tyro-login.
 ### Layout Options
 
 ```php
-// Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card', 'youtube-video', 'animated-birds', 'aurora-waves', 'particle-network'
+// Available layouts: 'centered', 'split-left', 'split-right', 'fullscreen', 'card', 'youtube-video', 'animated-birds', 'aurora-waves', 'particle-network', 'tidal'
 'layout' => env('TYRO_LOGIN_LAYOUT', 'centered'),
 
 // Background image for split and fullscreen layouts
@@ -783,7 +783,21 @@ TYRO_LOGIN_PARTICLE_LINK_DISTANCE=130
 TYRO_LOGIN_PARTICLE_INTERACTIVE=true
 ```
 
-**All animated layouts (animated-birds, aurora-waves, particle-network) share:**
+### Tidal Layout
+
+A bright seascape of layered flowing waves and rising bubbles under a soft sky glow, behind a centered frosted glass form. The primary color drives the water (and sky/bubble tint).
+
+```env
+TYRO_LOGIN_LAYOUT=tidal
+# Primary water color (default: '#1f7a8c')
+TYRO_LOGIN_TIDAL_COLOR=#1f7a8c
+# Wave animation speed multiplier (default: 1)
+TYRO_LOGIN_TIDAL_SPEED=1
+# Show rising bubbles (default: true)
+TYRO_LOGIN_TIDAL_BUBBLES=true
+```
+
+**All animated layouts (animated-birds, aurora-waves, particle-network, tidal) share:**
 
 -   Self-contained canvas animation (no images, no video, no third-party requests)
 -   Theme-aware (light/dark) dynamically

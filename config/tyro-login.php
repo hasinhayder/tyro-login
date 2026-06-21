@@ -72,6 +72,10 @@ return [
     |    Centered form with a connected particle constellation background
     |    Perfect for: SaaS, developer tools, tech products
     |
+    | 'tidal'
+    |    Centered form with a bright seascape of flowing waves and bubbles
+    |    Perfect for: Wellness, marine/nature apps, calm creative brands
+    |
     | Environment: TYRO_LOGIN_LAYOUT=centered
     |
     */
@@ -195,6 +199,31 @@ return [
 
         // Whether nodes react to the mouse cursor (repel + link)
         'interactive' => env('TYRO_LOGIN_PARTICLE_INTERACTIVE', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tidal Background
+    |--------------------------------------------------------------------------
+    |
+    | Used when 'layout' is set to 'tidal'.
+    |
+    | A bright seascape: layered flowing waves and rising bubbles under a soft
+    | sky glow. The primary color drives the water (and sky/bubble tint).
+    |
+    | Environment: TYRO_LOGIN_TIDAL_COLOR, TYRO_LOGIN_TIDAL_SPEED,
+    |              TYRO_LOGIN_TIDAL_BUBBLES
+    |
+    */
+    'tidal' => [
+        // Primary water color. Any valid CSS color.
+        'color' => env('TYRO_LOGIN_TIDAL_COLOR', '#1f7a8c'),
+
+        // Wave animation speed multiplier (0.5 = slow, 2 = fast)
+        'speed' => env('TYRO_LOGIN_TIDAL_SPEED', 1),
+
+        // Show rising bubbles (true/false)
+        'bubbles' => env('TYRO_LOGIN_TIDAL_BUBBLES', true),
     ],
 
     /*

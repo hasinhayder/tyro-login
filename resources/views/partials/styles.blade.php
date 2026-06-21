@@ -887,6 +887,83 @@
         }
     }
 
+    /* ========================================
+       Tidal animated layout (bright seascape)
+       ======================================== */
+    .auth-container.tidal {
+        padding: 0;
+        position: relative;
+        overflow: hidden;
+        background-color: {{ config('tyro-login.tidal.color', '#1f7a8c') }};
+    }
+
+    .auth-container.tidal .form-panel {
+        position: relative;
+        z-index: 10;
+    }
+
+    .auth-container.tidal .form-card {
+        background: color-mix(in srgb, {{ config('tyro-login.tidal.color', '#1f7a8c') }} 10%, rgba(255, 255, 255, 0.6));
+        backdrop-filter: blur(20px) saturate(160%);
+        -webkit-backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+        border-radius: 1.75rem;
+        padding: 2.5rem;
+        max-width: 460px;
+        /* the scene is always bright, so force dark text regardless of theme */
+        color: #143b42;
+    }
+
+    /* Force dark-readable text since this layout is a bright seascape */
+    .auth-container.tidal .form-card .form-header h2,
+    .auth-container.tidal .form-card .form-label,
+    .auth-container.tidal .form-card .checkbox-label,
+    .auth-container.tidal .form-card .form-footer p,
+    .auth-container.tidal .form-card {
+        color: #143b42;
+    }
+
+    .auth-container.tidal .form-card .form-header p {
+        color: rgba(20, 59, 66, 0.6);
+    }
+
+    .auth-container.tidal .form-card .form-input,
+    .auth-container.tidal .form-card .captcha-question {
+        background-color: rgba(255, 255, 255, 0.55);
+        border-color: rgba(31, 122, 140, 0.2);
+        color: #0f2e34;
+    }
+
+    .auth-container.tidal .form-card .form-input::placeholder {
+        color: rgba(20, 59, 66, 0.45);
+    }
+
+    .auth-container.tidal .form-card .form-link {
+        color: #1f7a8c;
+    }
+
+    .auth-container.tidal .form-card .logo-container .app-logo svg {
+        color: #1f7a8c;
+    }
+
+    #tyro-tidal-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        display: block;
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+        .auth-container.tidal .form-card {
+            padding: 1.5rem;
+        }
+    }
+
     /* Loading State */
     .btn.loading {
         position: relative;
