@@ -60,7 +60,7 @@
                         </div>
                     </div>
 
-                    <form method="POST" action="{{ route('tyro-login.passkeys.destroy', ['id' => $passkey->getKey()]) }}" onsubmit="return confirm('Remove the passkey \'{{ addslashes($passkey->name ?: 'Unnamed passkey') }}\'? You will not be able to sign in with it afterwards.');">
+                    <form method="POST" action="{{ route('tyro-login.passkeys.destroy', ['id' => $passkey->getKey()]) }}" onsubmit="return confirm('Remove this passkey? You will not be able to sign in with it afterwards.');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="passkey-remove-btn">{{ $removeButtonText }}</button>
