@@ -355,6 +355,47 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Passkeys (WebAuthn)
+    |--------------------------------------------------------------------------
+    |
+    | Passwordless login using passkeys via the `laravel/passkeys` package.
+    |
+    | Requires `composer require laravel/passkeys`, publishing the passkeys
+    | migration, and adding the PasskeyAuthenticatable trait to your User model.
+    | The fastest way to set all of this up is:
+    |
+    |     php artisan tyro-login:install --with-passkeys
+    |
+    | The browser-side ceremony is handled by the `@laravel/passkeys` client,
+    | which is auto-loaded from `cdn_url` (no build step required). Override
+    | `cdn_url` to self-host the client.
+    |
+    */
+    'passkeys' => [
+        // Master switch. Also requires `composer require laravel/passkeys`.
+        // Environment: TYRO_LOGIN_PASSKEYS_ENABLED=true
+        'enabled' => env('TYRO_LOGIN_PASSKEYS_ENABLED', false),
+
+        // Divider shown under the passkey button on the login page
+        'divider_text' => env('TYRO_LOGIN_PASSKEYS_DIVIDER', 'or continue with email'),
+
+        // Login button label
+        'login_button_text' => env('TYRO_LOGIN_PASSKEYS_LOGIN_BUTTON', 'Sign in with a passkey'),
+
+        // Setup page texts
+        'setup_title' => env('TYRO_LOGIN_PASSKEYS_SETUP_TITLE', 'Create a Passkey'),
+        'setup_subtitle' => env('TYRO_LOGIN_PASSKEYS_SETUP_SUBTITLE', 'Set up a passkey for faster, passwordless sign-in.'),
+        'setup_button_text' => env('TYRO_LOGIN_PASSKEYS_SETUP_BUTTON', 'Create passkey'),
+
+        // Path of the auth-guarded setup page (relative to the route prefix)
+        'route' => env('TYRO_LOGIN_PASSKEYS_ROUTE', 'passkeys-setup'),
+
+        // ESM URL for the @laravel/passkeys browser client. Override to self-host.
+        'cdn_url' => env('TYRO_LOGIN_PASSKEYS_CDN', 'https://esm.sh/@laravel/passkeys@0.2.0'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Password Rules
     |--------------------------------------------------------------------------
     |

@@ -32,7 +32,8 @@
         "pestphp/pest-plugin-laravel": "^3.0"
     },
     "suggest": {
-        "laravel/socialite": "^5.0 || ^6.0"
+        "laravel/socialite": "^5.0 || ^6.0",
+        "laravel/passkeys": "Required to enable passkey (WebAuthn) login. Install with `php artisan tyro-login:install --with-passkeys`."
     },
     "autoload": {
         "psr-4": {

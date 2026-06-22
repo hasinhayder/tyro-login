@@ -19,6 +19,7 @@
 -   **Multiple Layouts** - 10 beautiful layouts: centered, split-left, split-right, fullscreen, card, youtube-video, animated-birds, aurora-waves, particle-network, and tidal
 -   **Beautiful Design** - Modern, professional UI out of the box
 -   **Social Login** - OAuth authentication with Google, Facebook, GitHub, Twitter/X, LinkedIn, Bitbucket, GitLab, and Slack
+-   **Passkeys** - Passwordless WebAuthn sign-in (via `laravel/passkeys`) with a one-command setup
 -   **Enhanced Security** - Industry-standard security features
     -   Encrypted OAuth token storage at rest (using Laravel's encryption)
     -   Cryptographically secure OTP generation (Better Randomness)
@@ -62,6 +63,12 @@ For social login support, use:
 
 ```bash
 php artisan tyro-login:install --with-social
+```
+
+To install with passkey (passwordless WebAuthn) login from the start:
+
+```bash
+php artisan tyro-login:install --with-passkeys
 ```
 
 That's it! Visit `/login` to see your new authentication pages.
@@ -296,6 +303,118 @@ Enable and configure 2FA in `config/tyro-login.php`:
 3.  **Recovery Codes:** Upon successful setup, users are shown a set of recovery codes that can be used if they lose access to their device.
 4.  **Challenge Screen:** On subsequent logins, users must provide a TOTP code or a recovery code.
 5.  **Security:** Secrets are encrypted in the database. Users are not fully authenticated until they pass the 2FA challenge.
+
+### Passkeys (Passwordless WebAuthn)
+
+Tyro Login supports passwordless login with passkeys (Face ID, Touch ID, Windows Hello, security keys, etc.) on top of the [`laravel/passkeys`](https://github.com/laravel/passkeys-server) package. When enabled, the login page shows a **"Sign in with a passkey"** button followed by an **"or continue with email"** divider, while logged-in users can register a passkey from the dedicated `/passkeys-setup` page.
+
+> **Requirements:** Passkeys only work over **HTTPS** or `localhost` (a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) is required by WebAuthn), and in a modern browser. The browser client is auto-loaded from a CDN, so no build step is needed.
+
+#### Enabling Passkeys on an Existing Installation
+
+The fastest way is the dedicated setup command, which installs the package, runs the migration, wires up your `User` model, and flips the feature flag in one go:
+
+```bash
+php artisan tyro-login:setup-passkeys
+```
+
+What this command does:
+
+1.  Runs `composer require laravel/passkeys` (if not already installed).
+2.  Publishes and runs the `passkeys` migration (creates the `passkeys` table).
+3.  Sets `TYRO_LOGIN_PASSKEYS_ENABLED=true` in your `.env`.
+
+The command does **not** modify your `User` model — that's a one-time manual step. After it finishes, follow the [Manual Setup](#manual-setup) instructions below to add the `PasskeyAuthenticatable` trait and `PasskeyUser` contract to your `User` model.
+
+Available options:
+
+| Option | Description |
+| --- | --- |
+| `--force` | Overwrite published files / run migration without the production prompt |
+| `--skip-dependency` | Skip the `composer require laravel/passkeys` step |
+| `--skip-migration` | Skip publishing and running the passkeys migration |
+
+#### Manual Setup
+
+If you prefer to do it by hand:
+
+```bash
+# 1. Install the package
+composer require laravel/passkeys
+
+# 2. Publish and run the migration
+php artisan vendor:publish --tag=passkeys-migrations
+php artisan migrate
+```
+
+Then update your `User` model to implement the `PasskeyUser` contract and use the `PasskeyAuthenticatable` trait:
+
+```php
+use Laravel\Passkeys\Contracts\PasskeyUser;
+use Laravel\Passkeys\PasskeyAuthenticatable;
+
+class User extends Authenticatable implements PasskeyUser
+{
+    use PasskeyAuthenticatable;
+    // ...
+}
+```
+
+Finally, enable the feature in your `.env`:
+
+```env
+TYRO_LOGIN_PASSKEYS_ENABLED=true
+```
+
+#### Configuration
+
+```php
+'passkeys' => [
+    // Master switch (also requires laravel/passkeys)
+    'enabled' => env('TYRO_LOGIN_PASSKEYS_ENABLED', false),
+
+    // Divider shown under the passkey button on the login page
+    'divider_text' => env('TYRO_LOGIN_PASSKEYS_DIVIDER', 'or continue with email'),
+
+    // Login button label
+    'login_button_text' => env('TYRO_LOGIN_PASSKEYS_LOGIN_BUTTON', 'Sign in with a passkey'),
+
+    // Setup page texts
+    'setup_title' => env('TYRO_LOGIN_PASSKEYS_SETUP_TITLE', 'Create a Passkey'),
+    'setup_subtitle' => env('TYRO_LOGIN_PASSKEYS_SETUP_SUBTITLE', 'Set up a passkey for faster, passwordless sign-in.'),
+    'setup_button_text' => env('TYRO_LOGIN_PASSKEYS_SETUP_BUTTON', 'Create passkey'),
+
+    // Path of the auth-guarded setup page (relative to the route prefix)
+    'route' => env('TYRO_LOGIN_PASSKEYS_ROUTE', 'passkeys-setup'),
+
+    // ESM URL for the @laravel/passkeys browser client. Override to self-host.
+    'cdn_url' => env('TYRO_LOGIN_PASSKEYS_CDN', 'https://esm.sh/@laravel/passkeys@0.2.0'),
+],
+```
+
+#### How it Works
+
+1.  **Login page** — A "Sign in with a passkey" button appears above the email form (the "or continue with email" divider sits between them). Clicking it triggers the native WebAuthn prompt; on success the user is authenticated and redirected (to `redirects.after_login`). The button is automatically hidden on unsupported browsers, and saved passkeys can also be surfaced via the email input's autofill (conditional UI).
+2.  **Setup page** — Logged-in users visit `/passkeys-setup` to register a passkey (optionally giving it a name like "MacBook"). Registration is performed entirely by the official `@laravel/passkeys` browser client against the routes registered by `laravel/passkeys`.
+3.  **Integration** — Tyro Login automatically aligns `laravel/passkeys` with your app: passkey logins redirect to the same place as email logins, suspended users are blocked (mirroring the email flow), and the setup routes are protected only by the `auth` middleware (no separate password-confirmation step).
+
+#### Self-Hosting the Browser Client
+
+By default the `@laravel/passkeys` client is loaded from a CDN. To self-host it (e.g. for offline/CSP reasons), install and bundle it, then point the config at your asset:
+
+```bash
+npm install @laravel/passkeys
+```
+
+```env
+TYRO_LOGIN_PASSKEYS_CDN=/assets/passkeys.js
+```
+
+#### Notes
+
+-   Passkeys are an **optional** feature and stay disabled by default. Existing installs without the `laravel/passkeys` package are completely unaffected.
+-   Passkey login bypasses TOTP 2FA / email OTP (a passkey is itself a strong authentication factor); those checks still apply to email-based login.
+-   To manage/delete registered passkeys, use the endpoints provided by `laravel-passkeys` (`DELETE /user/passkeys/{id}`).
 
 ### Debug Mode
 
@@ -890,6 +1009,8 @@ Tyro Login provides several artisan commands:
 | --------------------------------------------------- | ----------------------------------------------------- |
 | `php artisan tyro-login:install`                    | Install the package and publish configuration         |
 | `php artisan tyro-login:install --with-social`      | Install with social login (Laravel Socialite) support |
+| `php artisan tyro-login:install --with-passkeys`    | Install with passkey (WebAuthn) login support         |
+| `php artisan tyro-login:setup-passkeys`             | Enable passkeys on an existing installation           |
 | `php artisan tyro-login:publish`                    | Publish config, views, email templates, and assets    |
 | `php artisan tyro-login:publish --emails`           | Publish only email templates                          |
 | `php artisan tyro-login:publish-style`              | Publish styles (theme + components)                   |
@@ -976,6 +1097,9 @@ Tyro Login registers the following routes:
 | GET      | `/otp/cancel`               | `tyro-login.otp.cancel`                | Cancel OTP verification    |
 | GET      | `/auth/{provider}/redirect` | `tyro-login.social.redirect`           | Redirect to OAuth provider |
 | GET      | `/auth/{provider}/callback` | `tyro-login.social.callback`           | Handle OAuth callback      |
+| GET      | `/passkeys-setup` ¹        | `tyro-login.passkeys.setup`            | Passkey registration page  |
+
+¹ The `/passkeys-setup` route is only registered when passkeys are enabled (`TYRO_LOGIN_PASSKEYS_ENABLED=true`) **and** `laravel/passkeys` is installed. The `laravel/passkeys` package itself registers additional API routes (`/passkeys/login`, `/user/passkeys`, etc.) once installed.
 
 ### Customizing Route Prefix
 

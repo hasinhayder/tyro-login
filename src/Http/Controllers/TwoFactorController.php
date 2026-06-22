@@ -41,7 +41,7 @@ class TwoFactorController extends Controller {
 
         // If allow_skip is enabled, the user has an ignore cookie, and their role is not forced, skip setup
         if (! $forcedSetup && config('tyro-login.two_factor.allow_skip', false)) {
-            $cookieName = 'tyro_2fa_ignore_' . $user->id;
+            $cookieName = 'tyro_2fa_ignore_'.$user->id;
             if ($request->cookie($cookieName)) {
                 if (! Auth::check()) {
                     Auth::login($user, $request->session()->get('login.remember', false));
@@ -215,7 +215,7 @@ class TwoFactorController extends Controller {
             $request->session()->regenerate();
         }
 
-        $cookieName = 'tyro_2fa_ignore_' . $user->id;
+        $cookieName = 'tyro_2fa_ignore_'.$user->id;
         $days = (int) config('tyro-login.two_factor.ignore_cookie_days', 30);
         $minutes = $days * 24 * 60;
 

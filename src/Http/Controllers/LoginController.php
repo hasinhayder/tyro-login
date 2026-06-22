@@ -43,6 +43,7 @@ class LoginController extends Controller {
             'captchaQuestion' => $captcha['question'] ?? null,
             'captchaConfig' => config('tyro-login.captcha'),
             'loginField' => $loginField,
+            'passkeysEnabled' => config('tyro-login.passkeys.enabled', false) && class_exists(\Laravel\Passkeys\Passkeys::class),
         ]);
     }
 
@@ -190,7 +191,7 @@ class LoginController extends Controller {
                         }
 
                         if (! $isForced) {
-                            $ignoreCookieName = 'tyro_2fa_ignore_' . $user->id;
+                            $ignoreCookieName = 'tyro_2fa_ignore_'.$user->id;
                             if ($request->cookie($ignoreCookieName)) {
                                 return redirect()->intended(config('tyro-login.redirects.after_login', '/'));
                             }
@@ -893,7 +894,7 @@ class LoginController extends Controller {
 
     /**
      * Check if a user is suspended.
-     * 
+     *
      * Supports both the isSuspended() method and direct suspended_at attribute check
      * for compatibility with different user models.
      */

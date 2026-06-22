@@ -19,6 +19,8 @@ use Illuminate\Support\ServiceProvider;
 class TyroLoginServiceProvider extends ServiceProvider {
     public function register(): void {
         $this->mergeConfigFrom(__DIR__.'/../../config/tyro-login.php', 'tyro-login');
+
+        $this->alignPasskeysConfig();
     }
 
     public function boot(): void {
@@ -28,6 +30,54 @@ class TyroLoginServiceProvider extends ServiceProvider {
         $this->registerCommands();
         $this->registerMigrations();
         $this->configureAuthRedirection();
+
+        $this->registerPasskeysAuthorization();
+    }
+
+    /**
+     * When laravel/passkeys is installed, align its config with tyro-login so
+     * that passkey login redirects to the same place as email login, and so the
+     * management (registration) routes don't depend on a `password.confirm`
+     * route that tyro-login does not register.
+     *
+     * Done in register() so the values are set before laravel/passkeys boots.
+     */
+    protected function alignPasskeysConfig(): void {
+        if (! class_exists(\Laravel\Passkeys\Passkeys::class)) {
+            return;
+        }
+
+        config([
+            'passkeys.redirect' => config('tyro-login.redirects.after_login', '/'),
+            'passkeys.management_middleware' => [],
+        ]);
+    }
+
+    /**
+     * Block passkey login for suspended users, mirroring the email login flow.
+     */
+    protected function registerPasskeysAuthorization(): void {
+        if (! class_exists(\Laravel\Passkeys\Passkeys::class)) {
+            return;
+        }
+
+        if (! config('tyro-login.passkeys.enabled', false)) {
+            return;
+        }
+
+        \Laravel\Passkeys\Passkeys::authorizeLoginUsing(function ($request, $user, $passkey) {
+            $suspended = method_exists($user, 'isSuspended')
+                ? $user->isSuspended()
+                : (bool) ($user->suspended_at ?? false);
+
+            if ($suspended) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'credential' => [config('tyro-login.suspension.message', 'Your account has been suspended. Please contact support for more information.')],
+                ]);
+            }
+
+            return true;
+        });
     }
 
     protected function registerRoutes(): void {
@@ -127,6 +177,7 @@ class TyroLoginServiceProvider extends ServiceProvider {
             \HasinHayder\TyroLogin\Console\Commands\ResetTwoFactorCommand::class,
             \HasinHayder\TyroLogin\Console\Commands\MagicLinkCommand::class,
             \HasinHayder\TyroLogin\Console\Commands\InviteLinkCommand::class,
+            \HasinHayder\TyroLogin\Console\Commands\SetupPasskeysCommand::class,
         ]);
     }
 }

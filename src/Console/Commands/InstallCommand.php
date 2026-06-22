@@ -12,7 +12,8 @@ class InstallCommand extends Command {
      */
     protected $signature = 'tyro-login:install 
                             {--force : Overwrite existing files}
-                            {--with-social : Install with social login support (Laravel Socialite)}';
+                            {--with-social : Install with social login support (Laravel Socialite)}
+                            {--with-passkeys : Install with passkey (WebAuthn) login support (laravel/passkeys)}';
 
     /**
      * The console command description.
@@ -72,6 +73,12 @@ class InstallCommand extends Command {
             $this->installSocialLogin();
         }
 
+        $withPasskeys = $this->option('with-passkeys') || $this->confirm('Would you like to enable passkey (passwordless WebAuthn) login?', false);
+
+        if ($withPasskeys) {
+            $this->installPasskeys();
+        }
+
         $this->info('');
         $this->info('  Tyro Login installed successfully!');
         $this->info('');
@@ -104,6 +111,20 @@ class InstallCommand extends Command {
             $this->info("      'client_secret' => env('GITHUB_CLIENT_SECRET'),");
             $this->info("      'redirect' => env('GITHUB_REDIRECT_URI'),");
             $this->info('  ],');
+            $this->info('');
+        }
+
+        if ($withPasskeys) {
+            $this->info('  Passkey Login Setup:');
+            $this->info('  1. The laravel/passkeys migration has been run');
+            $this->info('  2. TYRO_LOGIN_PASSKEYS_ENABLED=true was added to your .env');
+            $this->info('  3. ⚠ Update your User model (add PasskeyAuthenticatable trait + PasskeyUser contract)');
+            $this->info('     See README → "Passkeys (Passwordless WebAuthn) > Manual Setup"');
+            $this->info('  4. Visit /login to see the "Sign in with a passkey" button');
+            $this->info('  5. Visit /passkeys-setup (while logged in) to register a passkey');
+            $this->info('');
+            $this->info('  The browser client (@laravel/passkeys) is auto-loaded from a CDN.');
+            $this->info('  To self-host it: npm install @laravel/passkeys, then set TYRO_LOGIN_PASSKEYS_CDN.');
             $this->info('');
         }
 
@@ -186,6 +207,18 @@ class InstallCommand extends Command {
      */
     protected function isSocialiteInstalled(): bool {
         return class_exists(\Laravel\Socialite\SocialiteServiceProvider::class);
+    }
+
+    /**
+     * Install passkey (WebAuthn) login components.
+     *
+     * Delegates to the standalone tyro-login:setup-passkeys command so the
+     * setup logic lives in exactly one place (usable by existing installs too).
+     */
+    protected function installPasskeys(): void {
+        $this->call('tyro-login:setup-passkeys', [
+            '--force' => $this->option('force'),
+        ]);
     }
 
     /**

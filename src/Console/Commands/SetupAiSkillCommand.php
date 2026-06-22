@@ -76,6 +76,7 @@ class SetupAiSkillCommand extends Command {
             if (! $relativePath) {
                 $this->warn("   ⚠ Unknown agent: {$agent}");
                 $ok = false;
+
                 continue;
             }
 

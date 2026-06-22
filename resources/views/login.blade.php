@@ -1,6 +1,10 @@
 @extends('tyro-login::layouts.auth')
 
 @section('content')
+@php
+$passkeysEnabled = ($passkeysEnabled ?? false);
+$webauthnToken = $passkeysEnabled ? ' webauthn' : '';
+@endphp
 <div class="auth-container {{ $layout }}" @if($layout==='fullscreen' ) style="background-image: url('{{ $backgroundImage }}');" @endif @if($layout==='youtube-video') id="tyro-youtube-container" @endif>
     @if(in_array($layout, ['split-left', 'split-right']))
     <div class="background-panel" style="background-image: url('{{ $backgroundImage }}');">
@@ -67,6 +71,11 @@
             </style>
             @endif
 
+            <!-- Passkey Login -->
+            @if($passkeysEnabled)
+            @include('tyro-login::partials.passkey-login', ['features' => $features ?? []])
+            @endif
+
             <!-- Login Form -->
             <form method="POST" action="{{ route('tyro-login.login.submit') }}">
                 @csrf
@@ -75,7 +84,7 @@
                 @if(($loginField ?? 'email') === 'both')
                 <div class="form-group">
                     <label for="login" class="form-label">Email or Username</label>
-                    <input type="text" id="login" name="login" class="form-input @error('login') is-invalid @enderror" value="{{ old('login') }}" required autocomplete="username" autofocus placeholder="Email or username">
+                    <input type="text" id="login" name="login" class="form-input @error('login') is-invalid @enderror" value="{{ old('login') }}" required autocomplete="username{{ $webauthnToken }}" autofocus placeholder="Email or username">
                     @error('login')
                     <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -83,7 +92,7 @@
                 @elseif(($loginField ?? 'email') === 'username')
                 <div class="form-group">
                     <label for="username" class="form-label">Username</label>
-                    <input type="text" id="username" name="username" class="form-input @error('username') is-invalid @enderror" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Username">
+                    <input type="text" id="username" name="username" class="form-input @error('username') is-invalid @enderror" value="{{ old('username') }}" required autocomplete="username{{ $webauthnToken }}" autofocus placeholder="Username">
                     @error('username')
                     <span class="error-message">{{ $message }}</span>
                     @enderror
@@ -91,7 +100,7 @@
                 @else
                 <div class="form-group">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" name="email" class="form-input @error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="email@example.com">
+                    <input type="email" id="email" name="email" class="form-input @error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="email{{ $webauthnToken }}" autofocus placeholder="email@example.com">
                     @error('email')
                     <span class="error-message">{{ $message }}</span>
                     @enderror

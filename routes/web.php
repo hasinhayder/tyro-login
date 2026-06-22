@@ -1,6 +1,7 @@
 <?php
 
 use HasinHayder\TyroLogin\Http\Controllers\LoginController;
+use HasinHayder\TyroLogin\Http\Controllers\PasskeyController;
 use HasinHayder\TyroLogin\Http\Controllers\PasswordResetController;
 use HasinHayder\TyroLogin\Http\Controllers\RegisterController;
 use HasinHayder\TyroLogin\Http\Controllers\SocialAuthController;
@@ -122,6 +123,12 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
     Route::get('two-factor/recovery-codes', [TwoFactorController::class, 'showRecoveryCodes'])
         ->name('two-factor.recovery-codes');
+
+    // Passkeys setup (registration). Only registered when enabled + installed.
+    if (config('tyro-login.passkeys.enabled', false) && class_exists(\Laravel\Passkeys\Passkeys::class)) {
+        Route::get(config('tyro-login.passkeys.route', 'passkeys-setup'), [PasskeyController::class, 'showSetup'])
+            ->name('passkeys.setup');
+    }
 
     // 2FA Setup routes (duplicated for authenticated users)
     Route::get('two-factor/setup', [TwoFactorController::class, 'showSetup'])
