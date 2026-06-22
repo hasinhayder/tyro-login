@@ -390,6 +390,15 @@ return [
         // Path of the auth-guarded setup page (relative to the route prefix)
         'route' => env('TYRO_LOGIN_PASSKEYS_ROUTE', 'passkeys-setup'),
 
+        // Path of the auth-guarded manage/remove page (relative to the route prefix)
+        'remove_route' => env('TYRO_LOGIN_PASSKEYS_REMOVE_ROUTE', 'remove-passkeys'),
+
+        // Manage/remove page texts
+        'remove_title' => env('TYRO_LOGIN_PASSKEYS_REMOVE_TITLE', 'Your Passkeys'),
+        'remove_subtitle' => env('TYRO_LOGIN_PASSKEYS_REMOVE_SUBTITLE', 'Review and remove the passkeys linked to your account.'),
+        'remove_button_text' => env('TYRO_LOGIN_PASSKEYS_REMOVE_BUTTON', 'Remove'),
+        'empty_text' => env('TYRO_LOGIN_PASSKEYS_EMPTY_TEXT', 'You don\'t have any passkeys yet.'),
+
         // ESM URL for the @laravel/passkeys browser client. Override to self-host.
         'cdn_url' => env('TYRO_LOGIN_PASSKEYS_CDN', 'https://esm.sh/@laravel/passkeys@0.2.0'),
     ],

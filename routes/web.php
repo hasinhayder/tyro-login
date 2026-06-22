@@ -128,6 +128,12 @@ Route::middleware('auth')->group(function () {
     if (config('tyro-login.passkeys.enabled', false) && class_exists(\Laravel\Passkeys\Passkeys::class)) {
         Route::get(config('tyro-login.passkeys.route', 'passkeys-setup'), [PasskeyController::class, 'showSetup'])
             ->name('passkeys.setup');
+
+        // Passkeys management (list + remove).
+        Route::get(config('tyro-login.passkeys.remove_route', 'remove-passkeys'), [PasskeyController::class, 'showRemove'])
+            ->name('passkeys.remove');
+        Route::delete(config('tyro-login.passkeys.remove_route', 'remove-passkeys').'/{id}', [PasskeyController::class, 'destroy'])
+            ->name('passkeys.destroy');
     }
 
     // 2FA Setup routes (duplicated for authenticated users)

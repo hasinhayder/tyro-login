@@ -387,6 +387,15 @@ TYRO_LOGIN_PASSKEYS_ENABLED=true
     // Path of the auth-guarded setup page (relative to the route prefix)
     'route' => env('TYRO_LOGIN_PASSKEYS_ROUTE', 'passkeys-setup'),
 
+    // Path of the auth-guarded manage/remove page (relative to the route prefix)
+    'remove_route' => env('TYRO_LOGIN_PASSKEYS_REMOVE_ROUTE', 'remove-passkeys'),
+
+    // Manage/remove page texts
+    'remove_title' => env('TYRO_LOGIN_PASSKEYS_REMOVE_TITLE', 'Your Passkeys'),
+    'remove_subtitle' => env('TYRO_LOGIN_PASSKEYS_REMOVE_SUBTITLE', 'Review and remove the passkeys linked to your account.'),
+    'remove_button_text' => env('TYRO_LOGIN_PASSKEYS_REMOVE_BUTTON', 'Remove'),
+    'empty_text' => env('TYRO_LOGIN_PASSKEYS_EMPTY_TEXT', 'You don\'t have any passkeys yet.'),
+
     // ESM URL for the @laravel/passkeys browser client. Override to self-host.
     'cdn_url' => env('TYRO_LOGIN_PASSKEYS_CDN', 'https://esm.sh/@laravel/passkeys@0.2.0'),
 ],
@@ -396,7 +405,8 @@ TYRO_LOGIN_PASSKEYS_ENABLED=true
 
 1.  **Login page** — A "Sign in with a passkey" button appears above the email form (the "or continue with email" divider sits between them). Clicking it triggers the native WebAuthn prompt; on success the user is authenticated and redirected (to `redirects.after_login`). The button is automatically hidden on unsupported browsers, and saved passkeys can also be surfaced via the email input's autofill (conditional UI).
 2.  **Setup page** — Logged-in users visit `/passkeys-setup` to register a passkey (optionally giving it a name like "MacBook"). Registration is performed entirely by the official `@laravel/passkeys` browser client against the routes registered by `laravel/passkeys`.
-3.  **Integration** — Tyro Login automatically aligns `laravel/passkeys` with your app: passkey logins redirect to the same place as email logins, suspended users are blocked (mirroring the email flow), and the setup routes are protected only by the `auth` middleware (no separate password-confirmation step).
+3.  **Manage page** — Logged-in users visit `/remove-passkeys` to see every passkey linked to their account (name, authenticator, added/last-used dates) and remove any of them with one click. Each removal is scoped to the signed-in user.
+4.  **Integration** — Tyro Login automatically aligns `laravel/passkeys` with your app: passkey logins redirect to the same place as email logins, suspended users are blocked (mirroring the email flow), and the setup routes are protected only by the `auth` middleware (no separate password-confirmation step).
 
 #### Self-Hosting the Browser Client
 
@@ -1098,8 +1108,10 @@ Tyro Login registers the following routes:
 | GET      | `/auth/{provider}/redirect` | `tyro-login.social.redirect`           | Redirect to OAuth provider |
 | GET      | `/auth/{provider}/callback` | `tyro-login.social.callback`           | Handle OAuth callback      |
 | GET      | `/passkeys-setup` ¹        | `tyro-login.passkeys.setup`            | Passkey registration page  |
+| GET      | `/remove-passkeys` ¹        | `tyro-login.passkeys.remove`           | List/manage your passkeys  |
+| DELETE   | `/remove-passkeys/{id}` ¹   | `tyro-login.passkeys.destroy`          | Delete a passkey           |
 
-¹ The `/passkeys-setup` route is only registered when passkeys are enabled (`TYRO_LOGIN_PASSKEYS_ENABLED=true`) **and** `laravel/passkeys` is installed. The `laravel/passkeys` package itself registers additional API routes (`/passkeys/login`, `/user/passkeys`, etc.) once installed.
+¹ The `/passkeys-setup`, `/remove-passkeys` and `/remove-passkeys/{id}` routes are only registered when passkeys are enabled (`TYRO_LOGIN_PASSKEYS_ENABLED=true`) **and** `laravel/passkeys` is installed. The `laravel/passkeys` package itself registers additional API routes (`/passkeys/login`, `/user/passkeys`, etc.) once installed.
 
 ### Customizing Route Prefix
 
