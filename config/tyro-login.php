@@ -400,7 +400,8 @@ return [
         'empty_text' => env('TYRO_LOGIN_PASSKEYS_EMPTY_TEXT', 'You don\'t have any passkeys yet.'),
 
         // ESM URL for the @laravel/passkeys browser client. Override to self-host.
-        'cdn_url' => env('TYRO_LOGIN_PASSKEYS_CDN', 'https://esm.sh/@laravel/passkeys@0.2.0'),
+        // No version is pinned so the latest release is always resolved.
+        'cdn_url' => env('TYRO_LOGIN_PASSKEYS_CDN', 'https://esm.sh/@laravel/passkeys'),
     ],
 
     /*
