@@ -368,6 +368,10 @@ TYRO_LOGIN_PASSKEYS_ENABLED=true
 
 #### Configuration
 
+You can automatically sync the latest config values by running `php artisan tyro-login:update-config`
+
+or you can update manually
+
 ```php
 'passkeys' => [
     // Master switch (also requires laravel/passkeys)
