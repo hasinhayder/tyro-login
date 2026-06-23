@@ -20,7 +20,7 @@ class VersionCommand extends Command {
      */
     public function handle(): int {
 
-        $version = '2.11.1'; // Updated default YouTube video background URL
+        $version = '2.12.0'; // Passkeys (WebAuthn) passwordless login release
         $this->info('');
         $this->info('  ╔════════════════════════════════════════╗');
         $this->info('  ║                                        ║');
@@ -40,6 +40,7 @@ class VersionCommand extends Command {
     }
 }
 
+// 2.12.0 - Added passkeys (WebAuthn) passwordless login, setup, and management (compatible with Laravel's native passkeys package)
 // 2.11.1 - Updated default YouTube video background URL
 // 2.11.0 - Added tidal background
 // 2.10.0 - Added Tidal, Animated Birds, Aurora Waves, Particle Network layouts, and global logo border radius option
