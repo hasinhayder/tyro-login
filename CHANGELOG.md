@@ -2,6 +2,27 @@
 
 All notable changes to `tyro-login` will be documented in this file.
 
+## [2.12.0] - 2026-06-23
+
+### Added
+
+-   **Passkeys (WebAuthn) Passwordless Login** - FIDO2/WebAuthn passwordless authentication using Laravel's native passkeys package
+    -   Passwordless login with biometrics, PIN, or security keys
+    -   Passkey setup and management interface
+    -   Compatible with Laravel's first-party passkeys package
+
+## [2.11.1] - 2026-06-21
+
+### Changed
+
+-   Updated default YouTube video background URL
+
+## [2.11.0] - 2026-06-21
+
+### Added
+
+-   **Tidal Background** - New `tidal` layout option featuring an animated underwater/wave-inspired background for authentication pages
+
 ## [2.10.0] - 2026-06-21
 
 ### Added
@@ -12,11 +33,167 @@ All notable changes to `tyro-login` will be documented in this file.
     -   `particle-network`: High-tech connected node constellation network with interactive mouse tracking.
 -   **Branding Adjustments** - Added a global `logo_border_radius` option to the config to allow setting custom border radius (e.g. `'50%'` for fully circular logos) without breaking backward compatibility.
 
+## [2.9.2] - 2026-06-19
+
+### Changed
+
+-   YouTube video background: removed deprecated embed params (`showinfo`, `modestbranding`)
+-   Documented `youtube-nocookie` privacy tradeoff and sound/autoplay limitation
+
+## [2.9.1] - 2026-06-19
+
+### Fixed
+
+-   PHP 8.4 compatibility: use explicit nullable type for `SocialAuthController::handlePostLoginRedirect` fallback parameter
+
+## [2.9.0] - 2026-06-19
+
+### Added
+
+-   **YouTube Video Background** - New layout option with configurable YouTube video as authentication page background
+    -   Configurable blur, overlay color, opacity, and audio settings
+
+## [2.8.2] - 2026-06-05
+
+### Fixed
+
+-   Corrected broken GitHub Pages links in documentation
+
+## [2.8.1] - 2026-06-01
+
+### Added
+
+-   **AI Skill Rules** - Added 6 new AI skill rule files:
+    -   Captcha, invitation, password-policy, registration, verification, password-reset
+-   Aligned all existing skill rules with actual codebase patterns
+
+## [2.8.0] - 2026-06-01
+
+### Added
+
+-   **AI Skill Feature** - New AI-powered skill system for Tyro Login package maintainers to streamline development workflows
+
+## [2.7.1] - 2026-05-18
+
+### Fixed
+
+-   2FA setup routes duplication for Tyro-Dashboard workflow
+-   Expired magic links now show an error banner on login instead of silently failing
+-   Passwordless mode subtitle display fix
+
+## [2.7.0] - 2026-04-25
+
+### Added
+
+-   **Passwordless Mode** - Completely disable password-based login via `TYRO_LOGIN_DISABLE_PASSWORD=true`
+-   **Auto-Submit OTP & 2FA** - OTP and 2FA forms now auto-submit after filling the last digit for a seamless experience
+
+### Fixed
+
+-   Magic link and password reset button text visibility issues
+
+## [2.6.1] - 2026-04-21
+
+### Fixed
+
+-   Suspended users can no longer log in
+
+## [2.6.0] - 2026-04-19
+
+### Added
+
+-   Dark-mode logo support for authentication pages
+
+## [2.5.0] - 2026-04-14
+
+### Added
+
+-   `tyro-login:update-config` Artisan command for updating configuration
+-   `tyro-login:update-style` Artisan command for updating style files
+
+## [2.4.3] - 2026-04-13
+
+### Fixed
+
+-   2FA checks now properly apply to social login and magic link login flows
+
+## [2.4.2] - 2026-03-24
+
+### Added
+
+-   **Forced 2FA by Role** - Option to force specific user roles to set up 2FA via `TYRO_LOGIN_2FA_FORCED_ROLES` config
+    -   Requires 2FA for high-risk accounts while allowing others to skip it
+
+## [2.4.1] - 2026-03-24
+
+### Added
+
+-   **2FA Skip Option** - Users can now skip and ignore 2FA setup for a configurable number of days
+    -   Cookie-based mechanism remembers their choice
+    -   Configurable via `TYRO_LOGIN_2FA_ALLOW_SKIP`
+
+## [2.4.0] - 2026-03-18
+
+### Added
+
+-   Laravel 13 support
+
+## [2.3.4] - 2026-03-15
+
+### Fixed
+
+-   All tests passing consistently
+
+## [2.3.3] - 2026-03-15
+
+### Fixed
+
+-   OTP code generation improvement with proper integer type casting for config values
+
+## [2.3.2] - 2026-03-15
+
+### Fixed
+
+-   Social login now automatically creates an account if the user doesn't exist
+
+## [2.3.1] - 2026-02-06
+
+### Fixed
+
+-   Referral tracking logic bug fix
+
+## [2.3.0] - 2026-02-05
+
+### Added
+
+-   **Invitation/Referral System** - Complete invitation and referral link management
+    -   Automatic referral tracking during registration
+    -   CLI commands for managing invitation links
+    -   Models for data persistence
+
+## [2.2.1] - 2026-02-02
+
+### Fixed
+
+-   Migration loading issue
+
+## [2.2.0] - 2026-01-30
+
+### Added
+
+-   **Magic Link Login UI** - User interface for passwordless magic link login
+
+## [2.1.0] - 2026-01-22
+
+### Added
+
+-   **Magic Link Artisan Command** - CLI command for generating and managing magic login links
+
 ## [2.0.0] - 2025-12-07
 
 ### Added
 
--   **Time-Based Two-Factor Authentication (TOTP)** - Secure 2FA usingauthenticator apps (Google Authenticator, Authy, etc.)
+-   **Time-Based Two-Factor Authentication (TOTP)** - Secure 2FA using authenticator apps (Google Authenticator, Authy, etc.)
     -   Secure setup flow with QR code and manual entry key
     -   Encryption for 2FA secrets and recovery codes in database
     -   Backup recovery codes management (view, copy, download, regenerate)
